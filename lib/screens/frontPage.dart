@@ -14,12 +14,14 @@ class FrontPage extends StatelessWidget {
       backgroundColor: const Color(0xff0077b6),
       body: Stack(
         children: <Widget>[
-          //bg blue circle
-          Transform.translate(
-            offset: Offset(-139.0, 2.0),
-            child: SvgPicture.string(
-              _svg_e8meo3,
-              allowDrawingOutsideViewBox: true,
+          Container(
+            margin: EdgeInsets.only(
+                left: width / 14,
+                right: width / 14,
+                top: height / 20,
+                bottom: height / 20),
+            decoration: BoxDecoration(
+              color: Color(0xff90e0ef).withOpacity(0.5),
             ),
           ),
           //Login button box
@@ -100,7 +102,3 @@ class FrontPage extends StatelessWidget {
     );
   }
 }
-
-//round shape for background
-const String _svg_e8meo3 =
-    '<svg viewBox="-139.0 2.0 691.0 798.0" ><path transform="translate(128.0, -252.0)" d="M 395.5 0 C 536.3143920898438 0 991 278.6384124755859 841 1309 C 861 459.361572265625 586.3143920898438 1798 5.5 1098 C 154.6856231689453 1144 -140 1330.361572265625 0 199 C 0 178.6384124755859 154.6856231689453 0 345.5 0 Z" fill="#90e0ef" fill-opacity="0.47" stroke="none" stroke-width="1" stroke-opacity="0.47" stroke-miterlimit="4" stroke-linecap="butt" /></svg>';
