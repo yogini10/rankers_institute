@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:adobe_xd/page_link.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'loginPage.dart';
+
 class FrontPage extends StatelessWidget {
   FrontPage({
     Key key,
@@ -51,7 +53,7 @@ class FrontPage extends StatelessWidget {
                 PageLinkInfo(
                   ease: Curves.easeOut,
                   duration: 0,
-                  pageBuilder: () => FrontPage(),
+                  pageBuilder: () => LoginPage(),
                 ),
               ],
               child: Text(
