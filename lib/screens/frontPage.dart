@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/page_link.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:rankers_institute/globals.dart' as g;
 import 'loginPage.dart';
 
 class FrontPage extends StatelessWidget {
@@ -10,8 +9,8 @@ class FrontPage extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    double width = g.width;
+    double height = g.height;
     return Scaffold(
       backgroundColor: const Color(0xff0077b6),
       body: Stack(
@@ -89,8 +88,8 @@ class FrontPage extends StatelessWidget {
             child:
                 // Adobe XD layer: 'r-removebg-preview …' (shape)
                 Container(
-              width: 143.0,
-              height: 112.0,
+              width: g.width * 0.4,
+              height: g.height * 0.15,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: const AssetImage('lib/assets/rlogo.png'),
