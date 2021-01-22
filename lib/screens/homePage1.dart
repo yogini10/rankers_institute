@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:rankers_institute/globals.dart' as g;
 
-class homePage1 extends StatelessWidget {
-  homePage1({
+class HomePage extends StatelessWidget {
+  HomePage({
     Key key,
   }) : super(key: key);
   @override
