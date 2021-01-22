@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/widgets/loginfield.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({
@@ -19,123 +21,88 @@ class LoginPage extends StatelessWidget {
             ),
           ),
           Transform.translate(
-            offset: Offset(16.0, 84.0),
+            offset: Offset(g.width * 1.5 / 5, g.height * 0.6 / 5),
             child:
                 // Adobe XD layer: 'r' (shape)
                 Container(
-              width: 380.0,
-              height: 296.0,
+              width: g.width * 0.4,
+              height: g.height * 0.15,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: const AssetImage(''),
+                  image: const AssetImage('lib/assets/rlogo.png'),
                   fit: BoxFit.fill,
                 ),
               ),
             ),
           ),
           Transform.translate(
-            offset: Offset(39.0, 272.0),
-            child: Container(
-              width: 335.0,
-              height: 65.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12.0),
-                color: const Color(0xe3ffffff),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0x24000000),
-                    offset: Offset(0, 3),
-                    blurRadius: 6,
+            offset: Offset(0, g.height * 0.371),
+            child: Padding(
+              padding:
+                  EdgeInsets.only(left: g.width * 0.11, right: g.width * 0.11),
+              child: logPgField(26, 'Enter Username', false),
+            ),
+          ),
+          Transform.translate(
+            offset: Offset(0, g.height * 0.469),
+            child: Padding(
+              padding:
+                  EdgeInsets.only(left: g.width * 0.11, right: g.width * 0.11),
+              child: logPgField(26, 'Enter Password', true),
+            ),
+          ),
+          Transform.translate(
+            offset: Offset(g.width * 0.125, g.height * 0.63),
+            child: RawMaterialButton(
+              onPressed: null,
+              child: Container(
+                width: g.width * 0.75,
+                height: g.height * 0.085,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: g.width * 0.2,
+                      right: g.width * 0.2,
+                      top: g.height * 0.015,
+                      bottom: g.height * 0.015),
+                  child: Text(
+                    'LOGIN',
+                    style: TextStyle(
+                      fontFamily: 'Calibri',
+                      fontSize: 40,
+                      color: const Color(0xffffffff),
+                      fontWeight: FontWeight.w700,
+                    ),
+                    textAlign: TextAlign.left,
                   ),
-                ],
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2.0),
+                  color: const Color(0xe34caf50),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0x24000000),
+                      offset: Offset(0, 3),
+                      blurRadius: 6,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
           Transform.translate(
-            offset: Offset(39.0, 367.0),
-            child: Container(
-              width: 335.0,
-              height: 65.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12.0),
-                color: const Color(0xe3ffffff),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0x24000000),
-                    offset: Offset(0, 3),
-                    blurRadius: 6,
-                  ),
-                ],
+            offset: Offset(g.width * 0.55, g.height * 0.73),
+            child: RawMaterialButton(
+              onPressed: null,
+              child: Text(
+                'Forget Password',
+                style: TextStyle(
+                  fontFamily: 'Calibri',
+                  fontSize: 16,
+                  color: const Color(0xba0e0d0d),
+                  fontWeight: FontWeight.w700,
+                ),
+                textAlign: TextAlign.left,
               ),
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(39.0, 485.0),
-            child: Container(
-              width: 335.0,
-              height: 65.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2.0),
-                color: const Color(0xe34caf50),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0x24000000),
-                    offset: Offset(0, 3),
-                    blurRadius: 6,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(56.0, 293.0),
-            child: Text(
-              'Enter Username',
-              style: TextStyle(
-                fontFamily: 'Lucida Fax',
-                fontSize: 22,
-                color: const Color(0xff707070),
-              ),
-              textAlign: TextAlign.left,
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(56.0, 388.0),
-            child: Text(
-              'Enter Password',
-              style: TextStyle(
-                fontFamily: 'Lucida Fax',
-                fontSize: 22,
-                color: const Color(0xff707070),
-              ),
-              textAlign: TextAlign.left,
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(148.0, 493.0),
-            child: Text(
-              'LOGIN',
-              style: TextStyle(
-                fontFamily: 'Calibri',
-                fontSize: 40,
-                color: const Color(0xffffffff),
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.left,
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(206.0, 550.0),
-            child: Text(
-              'forget password',
-              style: TextStyle(
-                fontFamily: 'Calibri',
-                fontSize: 25,
-                color: const Color(0xba0e0d0d),
-                fontWeight: FontWeight.w700,
-                decoration: TextDecoration.underline,
-              ),
-              textAlign: TextAlign.left,
             ),
           ),
         ],

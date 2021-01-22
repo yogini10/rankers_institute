@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/screens/frontPage.dart';
 
 void main() {
@@ -33,8 +34,20 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: MaterialApp(home: FrontPage(),
-    debugShowCheckedModeBanner: false,
+    g.width = MediaQuery.of(context).size.width;
+    g.height = MediaQuery.of(context).size.height;
+    return SafeArea(
+        child: GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: MaterialApp(
+        home: FrontPage(),
+        debugShowCheckedModeBanner: false,
+      ),
     ));
   }
 }
