@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
 
+//for the textfields in login page that are of same type
 TextFormField logPgField(len, hint, ispass) {
   return TextFormField(
-    style: TextStyle(
-      fontFamily: 'Lucida Fax',
-      fontSize: 22,
-      color: const Color(0xff000000),
-    ),
-    obscureText: ispass,
+    style: g.loginpgstyles(Color(0xff000000)),
+    obscureText: ispass, //if the field is for password
     maxLength: len,
     maxLengthEnforced: true,
     decoration: InputDecoration(
@@ -23,11 +20,7 @@ TextFormField logPgField(len, hint, ispass) {
       filled: true,
       fillColor: const Color(0xe3ffffff),
       hintText: hint,
-      hintStyle: TextStyle(
-        fontFamily: 'Lucida Fax',
-        fontSize: 22,
-        color: const Color(0xff707070),
-      ),
+      hintStyle: g.loginpgstyles(Color(0xff707070)),
     ),
   );
 }

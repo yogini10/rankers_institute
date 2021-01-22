@@ -34,10 +34,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    //for once giving the screen width and height to global variables
     g.width = MediaQuery.of(context).size.width;
     g.height = MediaQuery.of(context).size.height;
     return SafeArea(
+        //not allowing screen behind status bar
         child: GestureDetector(
+      //helping in detection of common gestures on screen
+      //to take focus out of textfield when clicked outside
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
         if (!currentFocus.hasPrimaryFocus) {

@@ -20,6 +20,7 @@ class LoginPage extends StatelessWidget {
               allowDrawingOutsideViewBox: true,
             ),
           ),
+          //ranker's institute icon
           Transform.translate(
             offset: Offset(g.width * 1.5 / 5, g.height * 0.6 / 5),
             child:
@@ -35,6 +36,7 @@ class LoginPage extends StatelessWidget {
               ),
             ),
           ),
+          //text field for username
           Transform.translate(
             offset: Offset(0, g.height * 0.371),
             child: Padding(
@@ -43,6 +45,7 @@ class LoginPage extends StatelessWidget {
               child: logPgField(26, 'Enter Username', false),
             ),
           ),
+          //textfield for password
           Transform.translate(
             offset: Offset(0, g.height * 0.469),
             child: Padding(
@@ -51,6 +54,7 @@ class LoginPage extends StatelessWidget {
               child: logPgField(26, 'Enter Password', true),
             ),
           ),
+          //Login Button
           Transform.translate(
             offset: Offset(g.width * 0.125, g.height * 0.63),
             child: RawMaterialButton(
@@ -89,6 +93,7 @@ class LoginPage extends StatelessWidget {
               ),
             ),
           ),
+          //forgot password action
           Transform.translate(
             offset: Offset(g.width * 0.55, g.height * 0.73),
             child: RawMaterialButton(
@@ -111,5 +116,6 @@ class LoginPage extends StatelessWidget {
   }
 }
 
+//setting the gradient for the screen
 const String _svg_p9qcn6 =
     '<svg viewBox="-131.0 0.0 691.0 798.0" ><defs><radialGradient id="gradient" gradientTransform="matrix(1.0 0.0 0.0 1.0 0.0 0.0)" fx="0.5" fy="0.5" fr="0.0" cx="0.5" cy="0.5" r="0.5"><stop offset="0.0" stop-color="#90e0ef" /><stop offset="1.0" stop-color="#00b4d8" /></radialGradient></defs><path transform="translate(-131.0, 0.0)" d="M 345.5 0 C 536.3143920898438 0 691 178.6384124755859 691 399 C 691 619.361572265625 536.3143920898438 798 345.5 798 C 154.6856231689453 798 0 619.361572265625 0 399 C 0 178.6384124755859 154.6856231689453 0 345.5 0 Z" fill="url(#gradient)" fill-opacity="0.47" stroke="none" stroke-width="1" stroke-opacity="0.47" stroke-miterlimit="4" stroke-linecap="butt" /></svg>';
