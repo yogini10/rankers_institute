@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/screens/homePage1.dart';
 import 'package:rankers_institute/widgets/loginfield.dart';
 
 class LoginPage extends StatelessWidget {
@@ -58,7 +59,14 @@ class LoginPage extends StatelessWidget {
           Transform.translate(
             offset: Offset(g.width * 0.125, g.height * 0.63),
             child: RawMaterialButton(
-              onPressed: null,
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          homePage1(),
+                    ));
+              },
               child: Container(
                 width: g.width * 0.75,
                 height: g.height * 0.085,
