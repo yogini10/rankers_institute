@@ -48,10 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
           currentFocus.unfocus();
         }
       },
-      child: MaterialApp(
-        home: FrontPage(),
-        debugShowCheckedModeBanner: false,
-      ),
+      child: FrontPage(),
     ));
   }
 }

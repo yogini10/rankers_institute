@@ -47,14 +47,16 @@ class FrontPage extends StatelessWidget {
           //Login button text
           Transform.translate(
             offset: Offset(width * 1 / 3, height * 5.37 / 7),
-            child: PageLink(
-              links: [
-                PageLinkInfo(
-                  ease: Curves.easeOut,
-                  duration: 0,
-                  pageBuilder: () => LoginPage(),
-                ),
-              ],
+            child: RawMaterialButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        LoginPage(),
+                  ),
+                );
+              },
               child: Text(
                 'LOGIN',
                 style: TextStyle(
