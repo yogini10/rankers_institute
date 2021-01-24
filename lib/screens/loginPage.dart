@@ -64,7 +64,7 @@ class LoginPage extends StatelessWidget {
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          homePage1(),
+                          HomePage(),
                     ));
               },
               child: Container(
