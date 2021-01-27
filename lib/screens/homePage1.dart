@@ -10,7 +10,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        key: Key('_scaff'),
         drawer: Drawer(
           elevation: 70,
           child: ListView(
@@ -30,7 +29,22 @@ class HomePage extends StatelessWidget {
                 currentAccountPicture: CircleAvatar(
                   backgroundImage: AssetImage('lib/assets/user.png'),
                 ),
-              )
+              ),
+              ListTile(
+                title: Text('Notice Board'),
+              ),
+              ListTile(
+                title: Text('Fees details'),
+              ),
+              ListTile(
+                title: Text('Contact us'),
+              ),
+              ListTile(
+                title: Text('Your Profile'),
+              ),
+              ListTile(
+                title: Text('About us'),
+              ),
             ],
           ),
         ),
@@ -49,7 +63,7 @@ class HomePage extends StatelessWidget {
           backgroundColor: const Color(0xffffffff),
           title: Text(
             'Ranker\'s Institute',
-            style: TextStyle(
+             style: TextStyle(
               fontFamily: 'Lucida Bright',
               fontSize: 25,
               color: const Color(0xff0e0d0d),
