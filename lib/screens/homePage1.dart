@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
           backgroundColor: const Color(0xffffffff),
           title: Text(
             'Ranker\'s Institute',
-            style: TextStyle(
+             style: TextStyle(
               fontFamily: 'Lucida Bright',
               fontSize: 25,
               color: const Color(0xff0e0d0d),
