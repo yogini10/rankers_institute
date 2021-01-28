@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:adobe_xd/page_link.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rankers_institute/screens/homePage1.dart';
 
 class Contactus extends StatelessWidget {
   Contactus({
@@ -238,7 +239,7 @@ class Contactus extends StatelessWidget {
                   transition: LinkTransition.Fade,
                   ease: Curves.easeOut,
                   duration: 0.3,
-                  pageBuilder: () => null(),
+                  pageBuilder: () => HomePage(),
                 ),
               ],
               child: Container(
