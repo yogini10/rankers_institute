@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
 
 //for the textfields in login page that are of same type
-TextFormField logPgField(len, hint, ispass) {
+TextFormField logPgField(len, hint, ctrl, ispass) {
   return TextFormField(
+    controller: ctrl,
     style: g.loginpgstyles(Color(0xff000000)),
     obscureText: ispass, //if the field is for password
     maxLength: len,
