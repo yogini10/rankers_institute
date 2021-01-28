@@ -37,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //for once giving the screen width and height to global variables
     g.width = MediaQuery.of(context).size.width;
     g.height = MediaQuery.of(context).size.height;
+  
     return SafeArea(
         //not allowing screen behind status bar
         child: GestureDetector(

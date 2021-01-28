@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/models/user.dart';
 import 'package:rankers_institute/screens/homePage1.dart';
+import 'package:rankers_institute/services/auth.dart';
 import 'package:rankers_institute/widgets/loginfield.dart';
 
 class LoginPage extends StatelessWidget {
@@ -10,6 +12,8 @@ class LoginPage extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    TextEditingController uName;
+    TextEditingController uPass;
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xff00b4d8),
@@ -44,7 +48,7 @@ class LoginPage extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(
                     left: g.width * 0.11, right: g.width * 0.11),
-                child: logPgField(26, 'Enter Username', false),
+                child: logPgField(26, 'Enter Username', false, uName),
               ),
             ),
             //textfield for password
@@ -53,14 +57,14 @@ class LoginPage extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(
                     left: g.width * 0.11, right: g.width * 0.11),
-                child: logPgField(26, 'Enter Password', true),
+                child: logPgField(26, 'Enter Password', true, uPass),
               ),
             ),
             //Login Button
             Transform.translate(
               offset: Offset(g.width * 0.125, g.height * 0.63),
               child: RawMaterialButton(
-                onPressed: () {
+                onPressed: () async {
                   Navigator.pushReplacement(
                       context,
                       PageRouteBuilder(
