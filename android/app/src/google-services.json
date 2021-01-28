@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "810425946090",
+    "firebase_url": "https://ranker-s-institute-default-rtdb.firebaseio.com",
+    "project_id": "ranker-s-institute",
+    "storage_bucket": "ranker-s-institute.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810425946090:android:e2592fb208a8ae5fae2c93",
+        "android_client_info": {
+          "package_name": "com.example.rankers_institute"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "810425946090-9cgp4grktkg9s41jd028d53cij7uo96s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiQI8OT-jLpnyxWHv0o2NRZ1Uf_iPU3ZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "810425946090-9cgp4grktkg9s41jd028d53cij7uo96s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
