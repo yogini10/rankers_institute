@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/screens/Contacts.dart';
+import 'package:rankers_institute/screens/Fees.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
 
 class HomePage extends StatelessWidget {
@@ -8,6 +10,7 @@ class HomePage extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    //safe are not letting screen behind status bar
     return SafeArea(
       child: Scaffold(
         drawer: Drawer(
@@ -35,6 +38,15 @@ class HomePage extends StatelessWidget {
               ),
               ListTile(
                 title: Text('Fees details'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) =>
+                            Contactus(),
+                      ));
+                },
               ),
               ListTile(
                 title: Text('Contact us'),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/page_link.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/widgets/loading.dart';
 import 'loginPage.dart';
 
 class FrontPage extends StatelessWidget {
@@ -53,7 +54,7 @@ class FrontPage extends StatelessWidget {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        LoginPage(),
+                        LoadingScreen(),
                   ),
                 );
               },
