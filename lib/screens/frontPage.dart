@@ -54,7 +54,7 @@ class FrontPage extends StatelessWidget {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        LoadingScreen(),
+                        LoginPage(),
                   ),
                 );
               },

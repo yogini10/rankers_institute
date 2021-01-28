@@ -1,23 +1,43 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/screens/frontPage.dart';
+import 'package:rankers_institute/widgets/loading.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Ranker\'s Institute'),
+    return FutureBuilder(
+      // Initialize FlutterFire:
+      future: _initialization,
+      builder: (context, snapshot) {
+        // Check for errors
+        // if (snapshot.hasError) {
+        //   return SomethingWentWrong();
+        // }
+
+        // Once complete, show your application
+        if (snapshot.connectionState == ConnectionState.done) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            home: MyHomePage(title: 'Ranker\'s Institute'),
+          );
+        }
+        // Otherwise, show something whilst waiting for initialization to complete
+        return LoadingScreen();
+      },
     );
   }
 }
@@ -37,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //for once giving the screen width and height to global variables
     g.width = MediaQuery.of(context).size.width;
     g.height = MediaQuery.of(context).size.height;
-  
+
     return SafeArea(
         //not allowing screen behind status bar
         child: GestureDetector(
