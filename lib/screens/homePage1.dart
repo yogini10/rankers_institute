@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/screens/Contacts.dart';
 import 'package:rankers_institute/screens/Fees.dart';
+import 'package:rankers_institute/services/auth.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
 
 class HomePage extends StatelessWidget {
@@ -57,6 +58,12 @@ class HomePage extends StatelessWidget {
               ListTile(
                 title: Text('About us'),
               ),
+              ListTile(
+                title: Text('Sign Out'),
+                onTap: () async {
+                  await AuthServices().signOut();
+                },
+              ),
             ],
           ),
         ),
@@ -75,7 +82,7 @@ class HomePage extends StatelessWidget {
           backgroundColor: const Color(0xffffffff),
           title: Text(
             'Ranker\'s Institute',
-             style: TextStyle(
+            style: TextStyle(
               fontFamily: 'Lucida Bright',
               fontSize: 25,
               color: const Color(0xff0e0d0d),

@@ -3,6 +3,11 @@ import 'package:rankers_institute/models/user.dart';
 
 //current user
 User userGlob;
+String uid;
+
+//text controllers for login
+TextEditingController uName = TextEditingController();
+TextEditingController uPass = TextEditingController();
 
 //screen width and height
 double width;

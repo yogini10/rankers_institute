@@ -19,8 +19,6 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    TextEditingController uName;
-    TextEditingController uPass;
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xff00b4d8),
@@ -57,7 +55,8 @@ class _LoginPageState extends State<LoginPage> {
                 child: Padding(
                   padding: EdgeInsets.only(
                       left: g.width * 0.11, right: g.width * 0.11),
-                  child: logPgField(26, 'Enter Username', uName, false, (val) {
+                  child:
+                      logPgField(26, 'Enter Username', g.uName, false, (val) {
                     if (val.isEmpty) {
                       return 'Email ID field must not be empty';
                     }
@@ -74,9 +73,9 @@ class _LoginPageState extends State<LoginPage> {
                 child: Padding(
                   padding: EdgeInsets.only(
                       left: g.width * 0.11, right: g.width * 0.11),
-                  child: logPgField(26, 'Enter Password', uPass, true, (val) {
-                    if (uPass.text.length < 8) {
-                      if (uPass.text.isEmpty) {
+                  child: logPgField(26, 'Enter Password', g.uPass, true, (val) {
+                    if (g.uPass.text.length < 8) {
+                      if (g.uPass.text.isEmpty) {
                         return 'Password field must not be empty';
                       }
                       return 'Password is weak. Must be atleast 8 characters';
@@ -92,10 +91,10 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
                       dynamic result = await _auth.signInWithEmailAndPassword(
-                          uName.text, uPass.text);
+                          g.uName.text, g.uPass.text);
                       if (result == null) {
                         setState(() {
-                          error = 'Invalid email Id provided';
+                          error = 'You are not registered!!!';
                         });
                         g.userGlob = await _auth.currentUser();
                       }
@@ -153,13 +152,13 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Transform.translate(
-                offset: Offset(g.width * 0.05, g.height * 0.73),
+                offset: Offset(g.width * 0.02, g.height * 0.59),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Text(
                       error,
-                      style: TextStyle(color: Colors.blue),
+                      style: TextStyle(color: Colors.red),
                     ),
                   ],
                 ),
