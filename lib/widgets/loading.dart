@@ -9,12 +9,32 @@ class LoadingScreen extends StatefulWidget {
 class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xff90e0ef),
-      body: Center(
-        child: SpinKitRotatingCircle(
-          color: Color(0xffcaf0f8),
-          size: 50.0,
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Color(0xff90e0ef),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(child: Container()),
+              SpinKitRotatingCircle(
+                color: Color(0xffcaf0f8),
+                size: 50.0,
+              ),
+              SizedBox(
+                height: 21,
+              ),
+              Text(
+                'Loading...',
+                style: TextStyle(
+                  fontFamily: 'Lucida Bright',
+                  fontSize: 40,
+                  color: const Color(0xffcaf0f8),
+                ),
+              ),
+              Expanded(child: Container()),
+            ],
+          ),
         ),
       ),
     );
