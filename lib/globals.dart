@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:rankers_institute/models/user.dart';
+
+//current user
+User userGlob;
 
 //screen width and height
 double width;

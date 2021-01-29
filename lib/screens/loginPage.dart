@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rankers_institute/globals.dart' as g;
-import 'package:rankers_institute/models/user.dart';
-import 'package:rankers_institute/screens/homePage1.dart';
 import 'package:rankers_institute/services/auth.dart';
-import 'package:rankers_institute/widgets/loading.dart';
 import 'package:rankers_institute/widgets/loginfield.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,6 +14,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String error = '';
   final AuthServices _auth = AuthServices();
   final _formKey = GlobalKey<FormState>();
   @override
@@ -59,8 +57,15 @@ class _LoginPageState extends State<LoginPage> {
                 child: Padding(
                   padding: EdgeInsets.only(
                       left: g.width * 0.11, right: g.width * 0.11),
-                  child: logPgField(26, 'Enter Username', uName, false,
-                      (val) => val.isEmpty ? 'Username cannot be blank' : null),
+                  child: logPgField(26, 'Enter Username', uName, false, (val) {
+                    if (val.isEmpty) {
+                      return 'Email ID field must not be empty';
+                    }
+                    if (!val.endsWith('.com')) {
+                      return 'Invalid Email ID';
+                    }
+                    return null;
+                  }),
                 ),
               ),
               //textfield for password
@@ -69,13 +74,15 @@ class _LoginPageState extends State<LoginPage> {
                 child: Padding(
                   padding: EdgeInsets.only(
                       left: g.width * 0.11, right: g.width * 0.11),
-                  child: logPgField(
-                      26,
-                      'Enter Password',
-                      uPass,
-                      true,
-                      (val) =>
-                          val.isEmpty ? 'Password  cannot be blank' : null),
+                  child: logPgField(26, 'Enter Password', uPass, true, (val) {
+                    if (uPass.text.length < 8) {
+                      if (uPass.text.isEmpty) {
+                        return 'Password field must not be empty';
+                      }
+                      return 'Password is weak. Must be atleast 8 characters';
+                    }
+                    return null;
+                  }),
                 ),
               ),
               //Login Button
@@ -84,27 +91,14 @@ class _LoginPageState extends State<LoginPage> {
                 child: RawMaterialButton(
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
-                      dynamic result = await _auth.sIgnIn(
-                          User(email: uName.text, password: uPass.text));
+                      dynamic result = await _auth.signInWithEmailAndPassword(
+                          uName.text, uPass.text);
                       if (result == null) {
-                        dynamic result = await _auth.register(
-                            User(email: uName.text, password: uPass.text));
+                        setState(() {
+                          error = 'Invalid email Id provided';
+                        });
+                        g.userGlob = await _auth.currentUser();
                       }
-                      Navigator.pushReplacement(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    HomePage(),
-                          ));
-                    } else {
-                      Navigator.pushReplacement(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    LoadingScreen(),
-                          ));
                     }
                   },
                   child: Container(
@@ -156,6 +150,18 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     textAlign: TextAlign.left,
                   ),
+                ),
+              ),
+              Transform.translate(
+                offset: Offset(g.width * 0.05, g.height * 0.73),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Text(
+                      error,
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ],
                 ),
               ),
             ],
