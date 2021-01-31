@@ -34,6 +34,8 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               primarySwatch: Colors.blue,
+              disabledColor: Colors.black,
+              unselectedWidgetColor: Colors.black,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
             home: MyHomePage(title: 'Ranker\'s Institute'),

@@ -229,31 +229,31 @@ class Contactus extends StatelessWidget {
               ),
             ),
           ),
-          Transform.translate(
-            offset: Offset(216.0, 668.0),
-            child:
-                // Adobe XD layer: 'kisspng-computer-ic…' (shape)
-                PageLink(
-              links: [
-                PageLinkInfo(
-                  transition: LinkTransition.Fade,
-                  ease: Curves.easeOut,
-                  duration: 0.3,
-                  pageBuilder: () => HomePage(),
-                ),
-              ],
-              child: Container(
-                width: 20.0,
-                height: 28.0,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: const AssetImage(''),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // Transform.translate(
+          //   offset: Offset(216.0, 668.0),
+          //   child:
+          //       // Adobe XD layer: 'kisspng-computer-ic…' (shape)
+          //       PageLink(
+          //     links: [
+          //       PageLinkInfo(
+          //         transition: LinkTransition.Fade,
+          //         ease: Curves.easeOut,
+          //         duration: 0.3,
+          //         pageBuilder: () => HomePage(),
+          //       ),
+          //     ],
+          //     child: Container(
+          //       width: 20.0,
+          //       height: 28.0,
+          //       decoration: BoxDecoration(
+          //         image: DecorationImage(
+          //           image: const AssetImage(''),
+          //           fit: BoxFit.fill,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Container(
             width: 414.0,
             height: 70.0,

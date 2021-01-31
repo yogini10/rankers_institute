@@ -61,6 +61,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                     ListTile(
                       title: Text('Contact us'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  Contactus(),
+                            ));
+                      },
                     ),
                     ListTile(
                       title: Text('Your Profile'),

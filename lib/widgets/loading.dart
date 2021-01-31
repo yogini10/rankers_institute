@@ -18,7 +18,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
             children: [
               Expanded(child: Container()),
               SpinKitRotatingCircle(
-                color: Color(0xffcaf0f8),
+                color: Colors.white,
                 size: 50.0,
               ),
               SizedBox(
@@ -29,7 +29,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
                 style: TextStyle(
                   fontFamily: 'Lucida Bright',
                   fontSize: 40,
-                  color: const Color(0xffcaf0f8),
+                  color: Colors.white,
                 ),
               ),
               Expanded(child: Container()),

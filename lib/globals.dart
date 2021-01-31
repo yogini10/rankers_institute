@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rankers_institute/models/user.dart';
 
 //current user
-User userGlob;
-String uid;
+User userGlob = User();
+String uid = '';
 
 //text controllers for login
 TextEditingController uName = TextEditingController();

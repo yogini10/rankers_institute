@@ -59,16 +59,22 @@ class _LoginPageState extends State<LoginPage> {
                       child: Padding(
                         padding: EdgeInsets.only(
                             left: g.width * 0.11, right: g.width * 0.11),
-                        child: logPgField(26, 'Enter Username', g.uName, false,
-                            (val) {
-                          if (val.isEmpty) {
-                            return 'Email ID field must not be empty';
-                          }
-                          if (!val.endsWith('.com')) {
-                            return 'Invalid Email ID';
-                          }
-                          return null;
-                        }),
+                        child: LogPgField(
+                          pass: false,
+                          ctrl: g.uName,
+                          hint: 'Enter Username',
+                          ispass: false,
+                          len: 26,
+                          fun: (val) {
+                            if (val.isEmpty) {
+                              return 'Email ID field must not be empty';
+                            }
+                            if (!val.endsWith('.com')) {
+                              return 'Invalid Email ID';
+                            }
+                            return null;
+                          },
+                        ),
                       ),
                     ),
                     //textfield for password
@@ -77,16 +83,21 @@ class _LoginPageState extends State<LoginPage> {
                       child: Padding(
                         padding: EdgeInsets.only(
                             left: g.width * 0.11, right: g.width * 0.11),
-                        child: logPgField(26, 'Enter Password', g.uPass, true,
-                            (val) {
-                          if (g.uPass.text.length < 8) {
-                            if (g.uPass.text.isEmpty) {
-                              return 'Password field must not be empty';
-                            }
-                            return 'Password is weak. Must be atleast 8 characters';
-                          }
-                          return null;
-                        }),
+                        child: LogPgField(
+                            pass: true,
+                            len: 26,
+                            ctrl: g.uPass,
+                            hint: 'Enter Password',
+                            ispass: true,
+                            fun: (val) {
+                              if (g.uPass.text.length < 8) {
+                                if (g.uPass.text.isEmpty) {
+                                  return 'Password field must not be empty';
+                                }
+                                return 'Password is weak. Must be atleast 8 characters';
+                              }
+                              return null;
+                            }),
                       ),
                     ),
                     //Login Button
@@ -101,9 +112,6 @@ class _LoginPageState extends State<LoginPage> {
                             dynamic result =
                                 await _auth.signInWithEmailAndPassword(
                                     g.uName.text, g.uPass.text);
-                            setState(() {
-                              isload = false;
-                            });
                             if (result == null) {
                               setState(() {
                                 error = 'You are not registered!!!';
