@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class addid extends StatelessWidget {
-  addid({
+class addstudent extends StatelessWidget {
+  addstudent({
     Key key,
   }) : super(key: key);
   @override
@@ -80,13 +80,14 @@ class addid extends StatelessWidget {
               child: Stack(
                 children: <Widget>[
                   Pinned.fromSize(
-                    bounds: Rect.fromLTWH(70.0, 0.0, 148.0, 32.0),
+                    bounds: Rect.fromLTWH(70.0, 0.0, 174.0, 32.0),
                     size: Size(285.5, 434.5),
+                    pinRight: true,
                     pinTop: true,
                     fixedWidth: true,
                     fixedHeight: true,
                     child: Text(
-                      'ADD USER ID ',
+                      'ADD Student ID ',
                       style: TextStyle(
                         fontFamily: 'Segoe UI',
                         fontSize: 24,

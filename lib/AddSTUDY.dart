@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:adobe_xd/blend_mask.dart';
+import './addmanually.dart';
+import 'package:adobe_xd/page_link.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AddSTUDY extends StatelessWidget {
@@ -104,9 +106,19 @@ class AddSTUDY extends StatelessWidget {
             offset: Offset(284.5, 687.5),
             child: BlendMask(
               blendMode: BlendMode.darken,
-              child: SvgPicture.string(
-                _svg_eksclf,
-                allowDrawingOutsideViewBox: true,
+              child: PageLink(
+                links: [
+                  PageLinkInfo(
+                    transition: LinkTransition.Fade,
+                    ease: Curves.easeOut,
+                    duration: 0.3,
+                    pageBuilder: () => addmanually(),
+                  ),
+                ],
+                child: SvgPicture.string(
+                  _svg_eksclf,
+                  allowDrawingOutsideViewBox: true,
+                ),
               ),
             ),
           ),
