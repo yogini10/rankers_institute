@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
-import 'package:flutter_svg/flutter_svg.dart';
 
 class Fees extends StatelessWidget {
   Fees({
