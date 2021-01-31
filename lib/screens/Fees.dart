@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rankers_institute/globals.dart' as g;
 
 class Fees extends StatelessWidget {
   Fees({
@@ -7,168 +8,124 @@ class Fees extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xffcaf0f8),
-      body: Stack(
-        children: <Widget>[
-          Container(
-            width: 414.0,
-            height: 70.0,
-            decoration: BoxDecoration(
-              color: const Color(0xffffffff),
-              border: Border.all(width: 1.0, color: const Color(0xff707070)),
+    return SafeArea(
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: const Color(0xffffffff),
+              title: Text(
+                  'Ranker\'s Institute',
+                  style: TextStyle(
+                    fontFamily: 'Lucida Bright',
+                    fontSize: 25,
+                    color: const Color(0xff0e0d0d),
+                  ),
+                ),
             ),
-          ),
-          Transform.translate(
-            offset: Offset(4.0, 48.0),
-            child: Container(
-              width: 36.0,
-              height: 6.0,
-              decoration: BoxDecoration(
-                color: const Color(0xff1c1616),
-                border: Border.all(width: 1.0, color: const Color(0xff707070)),
+        backgroundColor: const Color(0xffcaf0f8),
+        body: Stack(
+          children: <Widget>[
+            Transform.translate(
+              offset: Offset(30.0, 93.0),
+              child: SvgPicture.string(
+                _svg_80eiyd,
+                allowDrawingOutsideViewBox: true,
               ),
             ),
-          ),
-          Transform.translate(
-            offset: Offset(4.0, 29.0),
-            child: Container(
-              width: 36.0,
-              height: 6.0,
-              decoration: BoxDecoration(
-                color: const Color(0xff1c1616),
-                border: Border.all(width: 1.0, color: const Color(0xff707070)),
-              ),
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(4.0, 10.0),
-            child: Container(
-              width: 36.0,
-              height: 6.0,
-              decoration: BoxDecoration(
-                color: const Color(0xff1c1616),
-                border: Border.all(width: 1.0, color: const Color(0xff707070)),
-              ),
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(102.0, 20.0),
-            child: SizedBox(
-              width: 218.0,
-              height: 30.0,
+            Transform.translate(
+              offset: Offset(183.0, 107.0),
               child: Text(
-                'Ranker\'s Institute',
+                'FEES',
                 style: TextStyle(
-                  fontFamily: 'Lucida Bright',
+                  fontFamily: 'Segoe UI',
                   fontSize: 24,
-                  color: const Color(0xff000000),
-                ),
-                textAlign: TextAlign.left,
-              ),
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(30.0, 93.0),
-            child: SvgPicture.string(
-              _svg_80eiyd,
-              allowDrawingOutsideViewBox: true,
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(183.0, 107.0),
-            child: Text(
-              'FEES',
-              style: TextStyle(
-                fontFamily: 'Segoe UI',
-                fontSize: 24,
-                color: const Color(0xff707070),
-              ),
-              textAlign: TextAlign.left,
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(58.0, 186.0),
-            child: Text(
-              'Name:',
-              style: TextStyle(
-                fontFamily: 'Segoe UI',
-                fontSize: 16,
-                color: const Color(0xff707070),
-              ),
-              textAlign: TextAlign.left,
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(54.5, 236.5),
-            child: SvgPicture.string(
-              _svg_d9h9se,
-              allowDrawingOutsideViewBox: true,
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(55.0, 258.0),
-            child: SizedBox(
-              width: 113.0,
-              height: 34.0,
-              child: Text(
-                'Amount Paid :',
-                style: TextStyle(
-                  fontFamily: 'Segoe UI',
-                  fontSize: 15,
                   color: const Color(0xff707070),
                 ),
                 textAlign: TextAlign.left,
               ),
             ),
-          ),
-          Transform.translate(
-            offset: Offset(55.0, 342.0),
-            child: SizedBox(
-              width: 141.0,
-              height: 21.0,
+            Transform.translate(
+              offset: Offset(58.0, 186.0),
               child: Text(
-                'Remaining Amount:',
+                'Name:',
                 style: TextStyle(
                   fontFamily: 'Segoe UI',
-                  fontSize: 15,
+                  fontSize: 16,
                   color: const Color(0xff707070),
                 ),
                 textAlign: TextAlign.left,
               ),
             ),
-          ),
-          Transform.translate(
-            offset: Offset(54.5, 397.5),
-            child: SvgPicture.string(
-              _svg_6qip3b,
-              allowDrawingOutsideViewBox: true,
-            ),
-          ),
-          Transform.translate(
-            offset: Offset(55.0, 433.0),
-            child: SizedBox(
-              width: 185.0,
-              height: 29.0,
-              child: Text(
-                'Total Amount:',
-                style: TextStyle(
-                  fontFamily: 'Segoe UI',
-                  fontSize: 15,
-                  color: const Color(0xff707070),
-                ),
-                textAlign: TextAlign.left,
+            Transform.translate(
+              offset: Offset(54.5, 236.5),
+              child: SvgPicture.string(
+                _svg_d9h9se,
+                allowDrawingOutsideViewBox: true,
               ),
             ),
-          ),
-          Transform.translate(
-            offset: Offset(58.5, 491.5),
-            child: SvgPicture.string(
-              _svg_slam67,
-              allowDrawingOutsideViewBox: true,
+            Transform.translate(
+              offset: Offset(55.0, 258.0),
+              child: SizedBox(
+                width: 113.0,
+                height: 34.0,
+                child: Text(
+                  'Amount Paid :',
+                  style: TextStyle(
+                    fontFamily: 'Segoe UI',
+                    fontSize: 15,
+                    color: const Color(0xff707070),
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
             ),
-          ),
-        ],
+            Transform.translate(
+              offset: Offset(55.0, 342.0),
+              child: SizedBox(
+                width: 141.0,
+                height: 21.0,
+                child: Text(
+                  'Remaining Amount:',
+                  style: TextStyle(
+                    fontFamily: 'Segoe UI',
+                    fontSize: 15,
+                    color: const Color(0xff707070),
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+            ),
+            Transform.translate(
+              offset: Offset(54.5, 397.5),
+              child: SvgPicture.string(
+                _svg_6qip3b,
+                allowDrawingOutsideViewBox: true,
+              ),
+            ),
+            Transform.translate(
+              offset: Offset(55.0, 433.0),
+              child: SizedBox(
+                width: 185.0,
+                height: 29.0,
+                child: Text(
+                  'Total Amount:',
+                  style: TextStyle(
+                    fontFamily: 'Segoe UI',
+                    fontSize: 15,
+                    color: const Color(0xff707070),
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+            ),
+            Transform.translate(
+              offset: Offset(58.5, 491.5),
+              child: SvgPicture.string(
+                _svg_slam67,
+                allowDrawingOutsideViewBox: true,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
