@@ -4,7 +4,7 @@ import 'package:rankers_institute/models/user.dart';
 class DatabaseServices {
   final String uid;
   final CollectionReference userCollection =
-      FirebaseFirestore.instance.collection('Users');
+      FirebaseFirestore.instance.collection('users');
 
   DatabaseServices({this.uid});
 

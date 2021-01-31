@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rankers_institute/models/user.dart';
-import 'package:rankers_institute/screens/frontPage.dart';
 import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/screens/homePage1.dart';
 import 'package:rankers_institute/screens/loginPage.dart';
