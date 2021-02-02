@@ -122,9 +122,6 @@ class _LoginPageState extends State<LoginPage> {
                               });
                             }
                           }
-                          setState(() {
-                            isload = false;
-                          });
                         },
                         child: Container(
                           width: g.width * 0.75,

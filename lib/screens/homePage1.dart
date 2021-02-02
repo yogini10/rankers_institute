@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/screens/Contacts.dart';
 import 'package:rankers_institute/screens/Fees.dart';
+import 'package:rankers_institute/screens/loc.dart';
 import 'package:rankers_institute/services/auth.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
 import 'package:rankers_institute/widgets/loading.dart';
@@ -26,7 +27,7 @@ class _HomePageState extends State<HomePage> {
             child: Scaffold(
               drawer: Drawer(
                 elevation: 70,
-                child: ListView(
+                child: Column(
                   children: [
                     UserAccountsDrawerHeader(
                       decoration: BoxDecoration(
@@ -76,8 +77,22 @@ class _HomePageState extends State<HomePage> {
                     ),
                     ListTile(
                       title: Text('About us'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  Location(),
+                            ));
+                      },
+                    ),
+                    Expanded(
+                      child: Container(),
                     ),
                     ListTile(
+                      trailing: Icon(Icons.logout),
+                      tileColor: Color(0xffcaf0f8),
                       title: Text('Sign Out'),
                       onTap: () async {
                         setState(() {

@@ -1,11 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:rankers_institute/globals.dart' as g;
-import 'package:rankers_institute/models/user.dart';
 import 'package:rankers_institute/screens/frontPage.dart';
-import 'package:rankers_institute/screens/wrapper.dart';
-import 'package:rankers_institute/services/auth.dart';
 import 'package:rankers_institute/widgets/loading.dart';
 
 void main() {
