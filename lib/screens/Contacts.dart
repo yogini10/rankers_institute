@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/screens/loc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Contactus extends StatelessWidget {
   Contactus({
@@ -231,16 +233,31 @@ class Contactus extends StatelessWidget {
                       children: [
                         IconButton(
                             icon: FaIcon(FontAwesomeIcons.phoneAlt),
-                            onPressed: null),
+                            onPressed: () {
+                              launch('tel://091679 87039');
+                            }),
                         IconButton(
                             icon: FaIcon(FontAwesomeIcons.instagram),
-                            onPressed: null),
+                            onPressed: () {
+                              launch(
+                                  'https://instagram.com/rankersinstitute?igshid=puebgcuvslmz');
+                            }),
                         IconButton(
                             icon: Icon(Icons.location_on_sharp),
-                            onPressed: null),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (context, animation1, animation2) =>
+                                            Location(),
+                                  ));
+                            }),
                         IconButton(
                             icon: FaIcon(FontAwesomeIcons.facebookSquare),
-                            onPressed: null),
+                            onPressed: () {
+                              launch('https://www.facebook.com/rankersinsti/');
+                            }),
                       ],
                     ),
                   ],
