@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rankers_institute/globals.dart' as g;
 
 class Contactus extends StatelessWidget {
@@ -221,6 +222,26 @@ class Contactus extends StatelessWidget {
                           ),
                         ),
                       ),
+                    ),
+                    SizedBox(
+                      height: g.height * 0.03,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            icon: FaIcon(FontAwesomeIcons.phoneAlt),
+                            onPressed: null),
+                        IconButton(
+                            icon: FaIcon(FontAwesomeIcons.instagram),
+                            onPressed: null),
+                        IconButton(
+                            icon: Icon(Icons.location_on_sharp),
+                            onPressed: null),
+                        IconButton(
+                            icon: FaIcon(FontAwesomeIcons.facebookSquare),
+                            onPressed: null),
+                      ],
                     ),
                   ],
                 ),
