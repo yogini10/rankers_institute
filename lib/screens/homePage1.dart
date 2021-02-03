@@ -77,15 +77,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                     ListTile(
                       title: Text('About us'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation1, animation2) =>
-                                  Location(),
-                            ));
-                      },
                     ),
                     Expanded(
                       child: Container(),
