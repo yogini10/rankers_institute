@@ -10,7 +10,7 @@
         android:label="rankers_institute"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyDxDkJ2ZOqs-M9dUlApqd2RVooSQTLSdHM"/>
+               android:value="AIzaSyACw4s05iVBnt7wqfUy_fxGTON-2SA_Llo"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
