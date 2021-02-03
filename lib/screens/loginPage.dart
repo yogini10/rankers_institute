@@ -23,170 +23,178 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return isload
         ? LoadingScreen()
-        : SafeArea(
-            child: Scaffold(
-              backgroundColor: const Color(0xff00b4d8),
-              body: Form(
-                key: _formKey,
-                child: Stack(
-                  children: <Widget>[
-                    Transform.translate(
-                      offset: Offset(-131.0, 0.0),
-                      child: SvgPicture.string(
-                        _svg_p9qcn6,
-                        allowDrawingOutsideViewBox: true,
-                      ),
-                    ),
-                    //ranker's institute icon
-                    Transform.translate(
-                      offset: Offset(g.width * 1.5 / 5, g.height * 0.6 / 5),
-                      child:
-                          // Adobe XD layer: 'r' (shape)
-                          Container(
-                        width: g.width * 0.4,
-                        height: g.height * 0.15,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: const AssetImage('lib/assets/rlogo.png'),
-                            fit: BoxFit.fill,
-                          ),
+        : GestureDetector(
+            onTap: () {
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            },
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: const Color(0xff00b4d8),
+                body: Form(
+                  key: _formKey,
+                  child: Stack(
+                    children: <Widget>[
+                      Transform.translate(
+                        offset: Offset(-131.0, 0.0),
+                        child: SvgPicture.string(
+                          _svg_p9qcn6,
+                          allowDrawingOutsideViewBox: true,
                         ),
                       ),
-                    ),
-                    //text field for username
-                    Transform.translate(
-                      offset: Offset(0, g.height * 0.371),
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            left: g.width * 0.11, right: g.width * 0.11),
-                        child: LogPgField(
-                          pass: false,
-                          ctrl: g.uName,
-                          hint: 'Enter Username',
-                          ispass: false,
-                          len: 26,
-                          fun: (val) {
-                            if (val.isEmpty) {
-                              return 'Email ID field must not be empty';
-                            }
-                            if (!val.endsWith('.com')) {
-                              return 'Invalid Email ID';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                    ),
-                    //textfield for password
-                    Transform.translate(
-                      offset: Offset(0, g.height * 0.48),
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            left: g.width * 0.11, right: g.width * 0.11),
-                        child: LogPgField(
-                            pass: true,
-                            len: 26,
-                            ctrl: g.uPass,
-                            hint: 'Enter Password',
-                            ispass: true,
-                            fun: (val) {
-                              if (g.uPass.text.length < 8) {
-                                if (g.uPass.text.isEmpty) {
-                                  return 'Password field must not be empty';
-                                }
-                                return 'Password is weak. Must be atleast 8 characters';
-                              }
-                              return null;
-                            }),
-                      ),
-                    ),
-                    //Login Button
-                    Transform.translate(
-                      offset: Offset(g.width * 0.125, g.height * 0.63),
-                      child: RawMaterialButton(
-                        onPressed: () async {
-                          setState(() {
-                            isload = true;
-                          });
-                          if (_formKey.currentState.validate()) {
-                            dynamic result =
-                                await _auth.signInWithEmailAndPassword(
-                                    g.uName.text, g.uPass.text);
-                            if (result == null) {
-                              setState(() {
-                                error = 'You are not registered!!!';
-                              });
-                              g.userGlob = await _auth.currentUser();
-                              setState(() {
-                                isload = false;
-                              });
-                            }
-                          }
-                        },
-                        child: Container(
-                          width: g.width * 0.75,
-                          height: g.height * 0.085,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                left: g.width * 0.2,
-                                right: g.width * 0.2,
-                                top: g.height * 0.015,
-                                bottom: g.height * 0.015),
-                            child: Text(
-                              'LOGIN',
-                              style: TextStyle(
-                                fontFamily: 'Calibri',
-                                fontSize: 40,
-                                color: const Color(0xffffffff),
-                                fontWeight: FontWeight.w700,
-                              ),
-                              textAlign: TextAlign.left,
+                      //ranker's institute icon
+                      Transform.translate(
+                        offset: Offset(g.width * 1.5 / 5, g.height * 0.6 / 5),
+                        child:
+                            // Adobe XD layer: 'r' (shape)
+                            Container(
+                          width: g.width * 0.4,
+                          height: g.height * 0.15,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: const AssetImage('lib/assets/rlogo.png'),
+                              fit: BoxFit.fill,
                             ),
                           ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2.0),
-                            color: const Color(0xe34caf50),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0x24000000),
-                                offset: Offset(0, 3),
-                                blurRadius: 6,
+                        ),
+                      ),
+                      //text field for username
+                      Transform.translate(
+                        offset: Offset(0, g.height * 0.371),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: g.width * 0.11, right: g.width * 0.11),
+                          child: LogPgField(
+                            pass: false,
+                            ctrl: g.uName,
+                            hint: 'Enter Username',
+                            ispass: false,
+                            len: 26,
+                            fun: (val) {
+                              if (val.isEmpty) {
+                                return 'Email ID field must not be empty';
+                              }
+                              if (!val.endsWith('.com')) {
+                                return 'Invalid Email ID';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+                      //textfield for password
+                      Transform.translate(
+                        offset: Offset(0, g.height * 0.48),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: g.width * 0.11, right: g.width * 0.11),
+                          child: LogPgField(
+                              pass: true,
+                              len: 26,
+                              ctrl: g.uPass,
+                              hint: 'Enter Password',
+                              ispass: true,
+                              fun: (val) {
+                                if (g.uPass.text.length < 8) {
+                                  if (g.uPass.text.isEmpty) {
+                                    return 'Password field must not be empty';
+                                  }
+                                  return 'Password is weak. Must be atleast 8 characters';
+                                }
+                                return null;
+                              }),
+                        ),
+                      ),
+                      //Login Button
+                      Transform.translate(
+                        offset: Offset(g.width * 0.125, g.height * 0.63),
+                        child: RawMaterialButton(
+                          onPressed: () async {
+                            setState(() {
+                              isload = true;
+                            });
+                            if (_formKey.currentState.validate()) {
+                              dynamic result =
+                                  await _auth.signInWithEmailAndPassword(
+                                      g.uName.text, g.uPass.text);
+                              if (result == null) {
+                                setState(() {
+                                  error = 'You are not registered!!!';
+                                });
+                                g.userGlob = await _auth.currentUser();
+                                setState(() {
+                                  isload = false;
+                                });
+                              }
+                            }
+                          },
+                          child: Container(
+                            width: g.width * 0.75,
+                            height: g.height * 0.085,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: g.width * 0.2,
+                                  right: g.width * 0.2,
+                                  top: g.height * 0.015,
+                                  bottom: g.height * 0.015),
+                              child: Text(
+                                'LOGIN',
+                                style: TextStyle(
+                                  fontFamily: 'Calibri',
+                                  fontSize: 40,
+                                  color: const Color(0xffffffff),
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                textAlign: TextAlign.left,
                               ),
-                            ],
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2.0),
+                              color: const Color(0xe34caf50),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0x24000000),
+                                  offset: Offset(0, 3),
+                                  blurRadius: 6,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    //forgot password action
-                    Transform.translate(
-                      offset: Offset(g.width * 0.55, g.height * 0.73),
-                      child: RawMaterialButton(
-                        onPressed: null,
-                        child: Text(
-                          'Forget Password',
-                          style: TextStyle(
-                            fontFamily: 'Calibri',
-                            fontSize: 16,
-                            color: const Color(0xba0e0d0d),
-                            fontWeight: FontWeight.w700,
+                      //forgot password action
+                      Transform.translate(
+                        offset: Offset(g.width * 0.55, g.height * 0.73),
+                        child: RawMaterialButton(
+                          onPressed: null,
+                          child: Text(
+                            'Forget Password',
+                            style: TextStyle(
+                              fontFamily: 'Calibri',
+                              fontSize: 16,
+                              color: const Color(0xba0e0d0d),
+                              fontWeight: FontWeight.w700,
+                            ),
+                            textAlign: TextAlign.left,
                           ),
-                          textAlign: TextAlign.left,
                         ),
                       ),
-                    ),
-                    Transform.translate(
-                      offset: Offset(g.width * 0.02, g.height * 0.59),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Text(
-                            error,
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ],
+                      Transform.translate(
+                        offset: Offset(g.width * 0.02, g.height * 0.59),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Text(
+                              error,
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
