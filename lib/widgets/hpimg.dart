@@ -13,3 +13,22 @@ Container hpImage(name) {
     ),
   );
 }
+
+Widget bgclass() {
+  return Transform.translate(
+    offset: Offset(-(g.width * 0.5), 0),
+    child: Transform.scale(
+      scale: 2.9,
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: new ColorFilter.mode(
+                Color(0xffcaf0f8).withOpacity(0.7), BlendMode.dstATop),
+            image: const AssetImage('lib/assets/book2.png'),
+            fit: BoxFit.fitWidth,
+          ),
+        ),
+      ),
+    ),
+  );
+}
