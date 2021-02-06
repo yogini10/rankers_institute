@@ -32,3 +32,22 @@ Widget bgclass() {
     ),
   );
 }
+
+Widget bgsubs() {
+  return Transform.translate(
+    offset: Offset(0, 0),
+    child: Transform.scale(
+      scale: 1.5,
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: new ColorFilter.mode(
+                Color(0xffcaf0f8).withOpacity(0.7), BlendMode.dstATop),
+            image: const AssetImage('lib/assets/creative.png'),
+            fit: BoxFit.fitWidth,
+          ),
+        ),
+      ),
+    ),
+  );
+}
