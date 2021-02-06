@@ -1,10 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/screens/errorscr.dart';
 import 'package:rankers_institute/screens/frontPage.dart';
 import 'package:rankers_institute/widgets/loading.dart';
 
 void main() {
+  ErrorWidget.builder = (FlutterErrorDetails details) => SafeArea(
+        child: ErrorScr(),
+      );
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
