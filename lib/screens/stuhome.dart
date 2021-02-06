@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/services/dbser.dart';
-import 'package:rankers_institute/screens/materialcls.dart';
-import 'package:rankers_institute/widgets/bgimgsub.dart';
+import 'package:rankers_institute/screens/smclasses.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
 import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/widgets/loading.dart';
@@ -50,7 +49,7 @@ class _StuHomeState extends State<StuHome> {
                             PageRouteBuilder(
                                 pageBuilder:
                                     (context, animation, secondaryAnimation) =>
-                                        MaterialClass(
+                                        SMClasses(
                                           list: allC,
                                         )),
                           );

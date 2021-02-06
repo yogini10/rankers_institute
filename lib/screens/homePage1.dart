@@ -5,7 +5,6 @@ import 'package:rankers_institute/screens/Fees.dart';
 import 'package:rankers_institute/screens/loc.dart';
 import 'package:rankers_institute/screens/stuhome.dart';
 import 'package:rankers_institute/services/auth.dart';
-import 'package:rankers_institute/widgets/hpimg.dart';
 import 'package:rankers_institute/widgets/loading.dart';
 
 class HomePage extends StatefulWidget {
