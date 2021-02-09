@@ -26,7 +26,8 @@ class _SMClassesState extends State<SMClasses> {
                 isload = true;
               });
               List allS;
-              allS = await DatabaseServices(uid: g.uid).allSubs();
+              allS = await DatabaseServices(uid: g.uid)
+                  .allSubs(maps[index]['class']);
               print(allS);
               Navigator.pushReplacement(
                 context,
