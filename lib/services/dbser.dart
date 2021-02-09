@@ -33,14 +33,16 @@ class DatabaseServices {
   }
 
   Future<List> allClasses() async {
-    return await FirebaseFirestore.instance.collection('classes')
+    return await FirebaseFirestore.instance
+        .collection('classes')
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
   }
 
-  Future<List> allSubs() async {
-    return await FirebaseFirestore.instance.collection('subjects')
-        //.where("class", isEqualTo: cls)
+  Future<List> allSubs(String cls) async {
+    return await FirebaseFirestore.instance
+        .collection('subjects')
+        .where("class", isEqualTo: cls)
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
   }
