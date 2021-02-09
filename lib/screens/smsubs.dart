@@ -42,7 +42,7 @@ class _SMSubState extends State<SMSub> {
                   child: Row(
                     children: [
                       Text(
-                        maps[index]['type'],
+                        maps[index]['subject'],
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w700),
                       )
