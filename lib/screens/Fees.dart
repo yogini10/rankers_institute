@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/widgets/newcontappbar.dart';
 
 class Fees extends StatelessWidget {
   Fees({
@@ -9,30 +10,7 @@ class Fees extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                    size: 30,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  });
-            },
-          ),
-          backgroundColor: const Color(0xffffffff),
-          title: Text(
-            'Ranker\'s Institute',
-            style: TextStyle(
-              fontFamily: 'Lucida Bright',
-              fontSize: 25,
-              color: const Color(0xff0e0d0d),
-            ),
-          ),
-        ),
+        appBar: ncAppBaer(), //new appbar
         backgroundColor: const Color(0xffcaf0f8),
         body: Center(
           child: Container(

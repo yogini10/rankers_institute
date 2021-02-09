@@ -5,6 +5,10 @@ class DatabaseServices {
   final String uid;
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
+  final CollectionReference classColl =
+      FirebaseFirestore.instance.collection('classes');
+  final CollectionReference subColl =
+      FirebaseFirestore.instance.collection('usertype');
 
   DatabaseServices({this.uid});
 
@@ -27,4 +31,24 @@ class DatabaseServices {
   Future<DocumentSnapshot> currentUser() async {
     return await userCollection.doc(uid).get();
   }
+
+  Future<List> allClasses() async {
+    return await FirebaseFirestore.instance.collection('classes')
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+  }
+
+  Future<List> allSubs() async {
+    return await FirebaseFirestore.instance.collection('subjects')
+        //.where("class", isEqualTo: cls)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+  }
 }
+
+//for only 5th standard
+
+// classColl
+//         .where('class', isEqualTo: '5th')
+//         .get()
+//         .then((value) => value.docs.map((e) => e.data()).toList());
