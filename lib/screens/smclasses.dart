@@ -26,7 +26,7 @@ class _SMClassesState extends State<SMClasses> {
                 isload = true;
               });
               List allS;
-              allS = await DatabaseServices(uid: g.uid).allSubs('5th');
+              allS = await DatabaseServices(uid: g.uid).allSubs();
               print(allS);
               Navigator.pushReplacement(
                 context,
