@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class ADDFeesdetail extends StatelessWidget {
   ADDFeesdetail({
@@ -8,7 +7,7 @@ class ADDFeesdetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-          child: Scaffold(
+      child: Scaffold(
         backgroundColor: const Color(0xffcaf0f8),
         body: Stack(
           children: <Widget>[
@@ -192,37 +191,28 @@ class ADDFeesdetail extends StatelessWidget {
             //                   ),
             //                 ),
             //               ),
-                          // Transform.translate(
-                          //   offset: Offset(58.0, 0.0),
-                          //   child: Text(
-                          //     'Add ',
-                          //     style: TextStyle(
-                          //       fontFamily: 'Segoe UI Historic',
-                          //       fontSize: 30,
-                          //       color: const Color(0xff000000),
-                          //     ),
-                          //     textAlign: TextAlign.left,
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ),
-    );
-                // }),
-              // ),
+            // Transform.translate(
+            //   offset: Offset(58.0, 0.0),
+            //   child: Text(
+            //     'Add ',
+            //     style: TextStyle(
+            //       fontFamily: 'Segoe UI Historic',
+            //       fontSize: 30,
+            //       color: const Color(0xff000000),
+            //     ),
+            //     textAlign: TextAlign.left,
+            //   ),
             // ),
-          // ),
-        // ],
-      // ),
+          ],
+        ),
+      ),
+    );
+    // }),
+    // ),
+    // ),
+    // ),
+    // ],
+    // ),
     // );
   }
 }
-
-const String _svg_80eiyd =
-    '<svg viewBox="30.0 93.0 354.0 675.0" ><path transform="translate(30.0, 93.0)" d="M 80 0 L 274 0 C 318.1827697753906 0 354 35.81721878051758 354 80 L 354 595 C 354 639.1828002929688 318.1827697753906 675 274 675 L 80 675 C 35.81721878051758 675 0 639.1828002929688 0 595 L 0 80 C 0 35.81721878051758 35.81721878051758 0 80 0 Z" fill="#ffffff" fill-opacity="0.55" stroke="#707070" stroke-width="1" stroke-opacity="0.55" stroke-miterlimit="4" stroke-linecap="butt" /></svg>';
-const String _svg_z9ec6s =
-    '<svg viewBox="54.7 236.5 283.3 78.0" ><path transform="translate(58.5, 236.5)" d="M -3.76251220703125 0 L 275.521240234375 0" fill="none" stroke="#707070" stroke-width="1" stroke-miterlimit="4" stroke-linecap="butt" /><path transform="translate(55.0, 313.5)" d="M 0 0 L 283 1" fill="none" stroke="#707070" stroke-width="1" stroke-miterlimit="4" stroke-linecap="butt" /></svg>';
-const String _svg_egz1bq =
-    '<svg viewBox="54.7 397.5 283.3 104.5" ><path transform="translate(55.0, 397.5)" d="M 0 0 L 283 1" fill="none" stroke="#707070" stroke-width="1" stroke-miterlimit="4" stroke-linecap="butt" /><path transform="translate(54.74, 501.0)" d="M 0 0 L 283 1" fill="none" stroke="#707070" stroke-width="1" stroke-miterlimit="4" stroke-linecap="butt" /></svg>';
-const String _svg_a3rpbb =
-    '<svg viewBox="54.7 603.0 283.0 1.0" ><path transform="translate(54.74, 603.0)" d="M 0 0 L 283 1" fill="none" stroke="#707070" stroke-width="1" stroke-miterlimit="4" stroke-linecap="butt" /></svg>';
