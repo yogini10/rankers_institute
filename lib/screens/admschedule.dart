@@ -4,7 +4,6 @@ import 'package:rankers_institute/screens/admhome.dart';
 import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
 import 'package:rankers_institute/widgets/loading.dart';
-import 'package:rankers_institute/widgets/loginfield.dart';
 
 class AddUpdateSchedule extends StatefulWidget {
   final List list;

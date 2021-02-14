@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rankers_institute/screens/addstudy.dart';
 import 'package:rankers_institute/screens/admschedule.dart';
 import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
@@ -60,7 +61,28 @@ class _AdmHomeState extends State<AdmHome> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [hpImage('9'), hpImage('7')],
+                    children: [
+                      GestureDetector(
+                        child: hpImage('9'),
+                        onTap: () async {
+                          setState(() {
+                            isload = true;
+                          });
+                          List allC;
+                          allC =
+                              await DatabaseServices(uid: g.uid).allClasses();
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      AdmSmCls(list: allC),
+                            ),
+                          );
+                        },
+                      ),
+                      hpImage('7')
+                    ],
                   ),
                   SizedBox(
                     height: g.height * 0.02,

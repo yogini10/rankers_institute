@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                             context,
                             PageRouteBuilder(
                               pageBuilder: (context, animation1, animation2) =>
-                                  ADDFeesdetail(),
+                                  Fees(),
                             ));
                       },
                     ),

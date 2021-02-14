@@ -67,27 +67,31 @@ class _LogPgFieldState extends State<LogPgField> {
   }
 }
 
-class SchTxtField extends StatefulWidget {
+class TxtField extends StatefulWidget {
+  final String hint;
+
+  const TxtField({Key key, this.hint}) : super(key: key);
   @override
-  _SchTxtFieldState createState() => _SchTxtFieldState();
+  _TxtFieldState createState() => _TxtFieldState();
 }
 
-class _SchTxtFieldState extends State<SchTxtField> {
+class _TxtFieldState extends State<TxtField> {
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return TextField(
       style: g.loginpgstyles(Color(0xff000000)),
       decoration: InputDecoration(
         border: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius: BorderRadius.circular(6.0),
         ),
         contentPadding: EdgeInsets.only(
-            left: g.width * 0.045,
-            right: g.width * 0.045,
-            top: g.height * 0.005,
-            bottom: g.height * 0.005),
+            left: g.width * 0.014,
+            right: g.width * 0.014,
+            top: g.height * 0.001,
+            bottom: g.height * 0.001),
         filled: true,
         fillColor: const Color(0xe3ffffff),
+        hintText: widget.hint,
         hintStyle: g.loginpgstyles(Color(0xff707070)),
       ),
     );
