@@ -97,3 +97,18 @@ class _TxtFieldState extends State<TxtField> {
     );
   }
 }
+
+class ATSInpField extends StatefulWidget {
+  @override
+  _ATSInpFieldState createState() => _ATSInpFieldState();
+}
+
+class _ATSInpFieldState extends State<ATSInpField> {
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      style: g.adduserstyles(Color(0xff000000)),
+      decoration: InputDecoration(isCollapsed: true),
+    );
+  }
+}

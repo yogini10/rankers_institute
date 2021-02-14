@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rankers_institute/screens/adduser.dart';
 import 'package:rankers_institute/screens/addstudy.dart';
 import 'package:rankers_institute/screens/admschedule.dart';
 import 'package:rankers_institute/services/dbser.dart';
@@ -16,9 +17,9 @@ class AdmHome extends StatefulWidget {
 }
 
 class _AdmHomeState extends State<AdmHome> {
+  bool isload = false;
   @override
   Widget build(BuildContext context) {
-    bool isload = false;
     return isload
         ? LoadingScreen()
         : Scaffold(
@@ -89,7 +90,25 @@ class _AdmHomeState extends State<AdmHome> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [hpImage('8'), hpImage('10')],
+                    children: [
+                      GestureDetector(
+                        child: hpImage('8'),
+                        onTap: () async {
+                          setState(() {
+                            isload = true;
+                          });
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      AddUser(),
+                            ),
+                          );
+                        },
+                      ),
+                      hpImage('10'),
+                    ],
                   ),
                 ],
               ),
