@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/screens/Contacts.dart';
 import 'package:rankers_institute/screens/Fees.dart';
+import 'package:rankers_institute/screens/admhome.dart';
 import 'package:rankers_institute/screens/loc.dart';
 import 'package:rankers_institute/screens/stuhome.dart';
 import 'package:rankers_institute/screens/teahome.dart';
@@ -126,7 +127,7 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: const Color(0xffcaf0f8),
               body: MaterialApp(
                 debugShowCheckedModeBanner: false,
-                home: TeaHome(),
+                home: AdmHome(),
               ),
             ),
           );
