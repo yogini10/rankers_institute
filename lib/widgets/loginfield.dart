@@ -67,32 +67,29 @@ class _LogPgFieldState extends State<LogPgField> {
   }
 }
 
-//for the textfields in login page that are of same type
-TextFormField logPgField(len, hint, ctrl, ispass, fun) {
-  return TextFormField(
-    controller: ctrl,
-    validator: fun,
-    style: g.loginpgstyles(Color(0xff000000)),
-    obscureText: ispass, //if the field is for password
-    maxLength: len,
-    maxLengthEnforced: true,
-    decoration: InputDecoration(
-      suffix: IconButton(
-        icon: FaIcon(FontAwesomeIcons.search),
-        onPressed: () {},
+class SchTxtField extends StatefulWidget {
+  @override
+  _SchTxtFieldState createState() => _SchTxtFieldState();
+}
+
+class _SchTxtFieldState extends State<SchTxtField> {
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      style: g.loginpgstyles(Color(0xff000000)),
+      decoration: InputDecoration(
+        border: UnderlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        contentPadding: EdgeInsets.only(
+            left: g.width * 0.045,
+            right: g.width * 0.045,
+            top: g.height * 0.005,
+            bottom: g.height * 0.005),
+        filled: true,
+        fillColor: const Color(0xe3ffffff),
+        hintStyle: g.loginpgstyles(Color(0xff707070)),
       ),
-      border: UnderlineInputBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      contentPadding: EdgeInsets.only(
-          left: g.width * 0.045,
-          right: g.width * 0.045,
-          top: g.height * 0.018,
-          bottom: g.height * 0.018),
-      filled: true,
-      fillColor: const Color(0xe3ffffff),
-      hintText: hint,
-      hintStyle: g.loginpgstyles(Color(0xff707070)),
-    ),
-  );
+    );
+  }
 }

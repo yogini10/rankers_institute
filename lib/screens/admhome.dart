@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rankers_institute/Admschedule.dart';
+import 'package:rankers_institute/screens/admschedule.dart';
 import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
 import 'package:rankers_institute/widgets/loading.dart';
