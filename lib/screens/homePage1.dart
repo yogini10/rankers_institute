@@ -9,7 +9,7 @@ import 'package:rankers_institute/screens/teahome.dart';
 import 'package:rankers_institute/services/auth.dart';
 import 'package:rankers_institute/widgets/loading.dart';
 
-import '../ADDFeesdetail.dart';
+import 'addfeesdetail.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                             context,
                             PageRouteBuilder(
                               pageBuilder: (context, animation1, animation2) =>
-                                  Fees(),
+                                  AddFeesdetail(),
                             ));
                       },
                     ),
