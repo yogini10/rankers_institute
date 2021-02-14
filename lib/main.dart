@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               disabledColor: Colors.black,
               unselectedWidgetColor: Colors.black,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
+              visualDensity: VisualDensity.adaptivePlatformDens   `1V BNOPity,
             ),
             home: MyHomePage(title: 'Ranker\'s Institute'),
           );
