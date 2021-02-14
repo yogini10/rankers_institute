@@ -6,8 +6,9 @@ import 'package:rankers_institute/screens/Fees.dart';
 import 'package:rankers_institute/screens/loc.dart';
 import 'package:rankers_institute/screens/stuhome.dart';
 import 'package:rankers_institute/services/auth.dart';
-import 'package:rankers_institute/widgets/hpimg.dart';
 import 'package:rankers_institute/widgets/loading.dart';
+
+import '../ADDFeesdetail.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({
@@ -58,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                             context,
                             PageRouteBuilder(
                               pageBuilder: (context, animation1, animation2) =>
-                                  Fees(),
+                                  ADDFeesdetail(),
                             ));
                       },
                     ),

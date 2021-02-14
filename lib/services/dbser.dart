@@ -7,6 +7,8 @@ class DatabaseServices {
       FirebaseFirestore.instance.collection('users');
   final CollectionReference classColl =
       FirebaseFirestore.instance.collection('classes');
+  final CollectionReference subColl =
+      FirebaseFirestore.instance.collection('usertype');
 
   DatabaseServices({this.uid});
 
@@ -31,7 +33,16 @@ class DatabaseServices {
   }
 
   Future<List> allClasses() async {
-    return await classColl
+    return await FirebaseFirestore.instance
+        .collection('classes')
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+  }
+
+  Future<List> allSubs(String cls) async {
+    return await FirebaseFirestore.instance
+        .collection('subjects')
+        .where("class", isEqualTo: cls)
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
   }
