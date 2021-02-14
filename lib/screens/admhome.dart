@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/Admschedule.dart';
+import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
 import 'package:rankers_institute/widgets/loading.dart';
 import 'package:rankers_institute/globals.dart' as g;
@@ -38,12 +39,17 @@ class _AdmHomeState extends State<AdmHome> {
                           setState(() {
                             isload = true;
                           });
+                          List allC;
+                          allC =
+                              await DatabaseServices(uid: g.uid).allClasses();
                           Navigator.pushReplacement(
                             context,
                             PageRouteBuilder(
                                 pageBuilder:
                                     (context, animation, secondaryAnimation) =>
-                                        AdmSchedule()),
+                                        AddUpdateSchedule(
+                                          list: allC,
+                                        )),
                           );
                         },
                       ),
