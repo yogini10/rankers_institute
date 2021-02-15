@@ -42,7 +42,7 @@ Widget bgsubs() {
         decoration: BoxDecoration(
           image: DecorationImage(
             colorFilter: new ColorFilter.mode(
-                Color(0xffcaf0f8).withOpacity(0.7), BlendMode.dstATop),
+                Color(0xffcaf0f8).withOpacity(0.3), BlendMode.dstATop),
             image: const AssetImage('lib/assets/creative.png'),
             fit: BoxFit.fitWidth,
           ),

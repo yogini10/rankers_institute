@@ -46,6 +46,14 @@ class DatabaseServices {
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
   }
+
+  Future<List> allSch(String cls) async {
+    return await FirebaseFirestore.instance
+        .collection("schedule")
+        .where("classID", isEqualTo: cls)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+  }
 }
 
 //for only 5th standard

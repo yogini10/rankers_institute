@@ -63,7 +63,7 @@ class _SMSubState extends State<SMSub> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
-      //bgsubs(),
+      bgsubs(),
       Scaffold(
         backgroundColor: Colors.transparent,
         body: Container(

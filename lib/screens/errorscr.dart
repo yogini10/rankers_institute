@@ -23,24 +23,7 @@ class _ErrorScrState extends State<ErrorScr> {
               color: Color(0xff90e0ef).withOpacity(0.5),
             ),
           ),
-          Transform.translate(
-            offset: Offset(0, 0),
-            child: Center(
-                child: Padding(
-              padding: EdgeInsets.only(
-                  left: g.width * 0.1,
-                  right: g.width * 0.1,
-                  top: g.height * 0.5),
-              child: Text(
-                'Please Stand by we are rectifying the error....',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w900,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            )),
-          ),
+
           // background image
           Transform.translate(
             offset: Offset(0.0, g.height * 0.8 / 5),
@@ -56,6 +39,24 @@ class _ErrorScrState extends State<ErrorScr> {
                 ),
               ),
             ),
+          ),
+          Transform.translate(
+            offset: Offset(0, 0),
+            child: Center(
+                child: Padding(
+              padding: EdgeInsets.only(
+                  left: g.width * 0.1,
+                  right: g.width * 0.1,
+                  top: g.height * 0.6),
+              child: Text(
+                'Please Stand by we are rectifying the error....',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w900,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            )),
           ),
           //Logo
           Transform.translate(

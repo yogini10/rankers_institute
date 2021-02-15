@@ -19,3 +19,9 @@ TextStyle loginpgstyles(color) => TextStyle(
       fontSize: 22,
       color: color,
     );
+
+TextStyle adduserstyles(color) => TextStyle(
+      fontFamily: 'Lucida Fax',
+      fontSize: 16,
+      color: color,
+    );
