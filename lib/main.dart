@@ -36,11 +36,11 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               disabledColor: Colors.black,
               unselectedWidgetColor: Colors.black,
-              visualDensity: VisualDensity.adaptivePlatformDens   `1V BNOPity,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
             home: MyHomePage(title: 'Ranker\'s Institute'),
           );
-        }
+        } 
         // Otherwise, show something whilst waiting for initialization to complete
         return LoadingScreen();
       },
