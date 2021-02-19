@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/addmanually.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/models/students.dart';
+import 'package:rankers_institute/models/user.dart';
 import 'package:rankers_institute/screens/Contacts.dart';
-import 'package:rankers_institute/screens/Fees.dart';
 import 'package:rankers_institute/screens/admhome.dart';
-import 'package:rankers_institute/screens/loc.dart';
 import 'package:rankers_institute/screens/stuhome.dart';
-import 'package:rankers_institute/screens/teahome.dart';
 import 'package:rankers_institute/services/auth.dart';
+import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/loading.dart';
 
 import 'addfeesdetail.dart';
@@ -22,9 +22,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  void update() async {
+    var u = await DatabaseServices(uid: g.uid).currentUser();
+    g.userGlob = User(
+        uid: g.uid,
+        email: u.get('email'),
+        password: u.get('password'),
+        usertype: u.get('usertype'));
+
+    var v = await DatabaseServices(uid: g.uid).currentStu();
+    g.stuGlob.classId = v.get('classID');
+    g.stuGlob.name = v.get('name');
+    g.stuGlob.contact = v.get('contact');
+    g.stuGlob.email = v.get('email');
+    g.stuGlob.rollNo = v.get('rollno');
+    setState(() {});
+  }
+
+  bool isload = false;
   @override
   Widget build(BuildContext context) {
-    bool isload = false;
+    update();
     //safe are not letting screen behind status bar
     return isload
         ? LoadingScreen()
@@ -39,11 +57,11 @@ class _HomePageState extends State<HomePage> {
                         color: Color(0xffcaf0f8),
                       ),
                       accountName: Text(
-                        'Student model',
+                        g.stuGlob.name,
                         style: TextStyle(color: Colors.black),
                       ),
                       accountEmail: Text(
-                        'emailmodel@email.com',
+                        g.userGlob.email,
                         style: TextStyle(color: Colors.black),
                       ),
                       currentAccountPicture: CircleAvatar(
@@ -128,7 +146,7 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: const Color(0xffcaf0f8),
               body: MaterialApp(
                 debugShowCheckedModeBanner: false,
-                home: AdmHome(),
+                home: StuHome(),
               ),
             ),
           );

@@ -18,6 +18,7 @@ class _WrapScreensState extends State<WrapScreens> {
       return LoginPage();
     }
     g.uid = user.uid;
+    print(g.uid);
     return HomePage();
   }
 }

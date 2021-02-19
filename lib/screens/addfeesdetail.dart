@@ -99,14 +99,17 @@ class _AddFeesdetailState extends State<AddFeesdetail> {
                     child: RawMaterialButton(
                       onPressed: null,
                       child: Container(
-                        width: g.width * 0.5,
-                        height: g.height * 0.055,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: Color(0xff90e0ef),
-                        ),
-                        child: Center(child: Text('Add Fees Details')),
-                      ),
+                          width: g.width * 0.5,
+                          height: g.height * 0.055,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            color: Color(0xff90e0ef),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Add Fees Details',
+                            ),
+                          )),
                     ),
                   ),
                 ],
