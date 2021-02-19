@@ -22,7 +22,7 @@ class _StuHomeState extends State<StuHome> {
               padding: EdgeInsets.only(
                   left: g.width * 0.03,
                   right: g.width * 0.03,
-                  top: g.height * 0.02),
+                  top: g.height * 0.070),
               child: Column(
                 children: [
                   Row(

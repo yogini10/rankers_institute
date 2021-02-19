@@ -6,6 +6,7 @@ Container hpImage(name) {
     width: g.width * 0.45,
     height: g.height * 0.23,
     decoration: BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(20)),
       image: DecorationImage(
         image: AssetImage('lib/assets/$name.png'),
         fit: BoxFit.fill,

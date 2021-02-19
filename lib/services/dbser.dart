@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rankers_institute/models/students.dart';
 import 'package:rankers_institute/models/user.dart';
 
 class DatabaseServices {
@@ -27,9 +28,51 @@ class DatabaseServices {
     });
   }
 
+  //update student info
+  Future updateStuInfo(Student student, bool isCreating) async {
+    if (isCreating) {
+      return await FirebaseFirestore.instance
+          .collection('student')
+          .doc(uid)
+          .set({
+        'classID': student.classId,
+        'contact': student.contact,
+        'email': student.email,
+        'name': student.name,
+        'rollno': student.rollNo,
+      });
+    }
+    return await FirebaseFirestore.instance
+        .collection('student')
+        .doc(uid)
+        .update({
+      'classID': student.classId,
+      'contact': student.contact,
+      'email': student.email,
+      'name': student.name,
+      'rollno': student.rollNo,
+    });
+  }
+
   //get current user
   Future<DocumentSnapshot> currentUser() async {
     return await userCollection.doc(uid).get();
+  }
+
+  //get student if current
+  Future<DocumentSnapshot> currentStu() async {
+    return await FirebaseFirestore.instance
+        .collection('student')
+        .doc(uid)
+        .get();
+  }
+
+  //get student if current
+  Future<DocumentSnapshot> currentTea() async {
+    return await FirebaseFirestore.instance
+        .collection('teacher')
+        .doc(uid)
+        .get();
   }
 
   Future<List> allClasses() async {
