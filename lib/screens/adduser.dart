@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/models/students.dart';
+import 'package:rankers_institute/models/user.dart';
 import 'package:rankers_institute/screens/admhome.dart';
+import 'package:rankers_institute/services/auth.dart';
+import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/loginfield.dart';
 
 class AddUser extends StatefulWidget {
@@ -36,11 +40,15 @@ class _AddUserState extends State<AddUser> {
                   setState(() {
                     isload = true;
                   });
+                  List allC;
+                  allC = await DatabaseServices(uid: g.uid).allClasses();
                   Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          AddStudents(),
+                          AddStudents(
+                        subs: allC,
+                      ),
                     ),
                   );
                 },
@@ -245,11 +253,16 @@ class _AddTeachersState extends State<AddTeachers> {
 }
 
 class AddStudents extends StatefulWidget {
+  final List subs;
+
+  AddStudents({Key key, this.subs}) : super(key: key);
   @override
   _AddStudentsState createState() => _AddStudentsState();
 }
 
 class _AddStudentsState extends State<AddStudents> {
+  final AuthServices _auth = AuthServices();
+  String dropdownValue3;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -285,6 +298,11 @@ class _AddStudentsState extends State<AddStudents> {
                           size: 30,
                         ),
                         onPressed: () {
+                          g.stuContact.clear();
+                          g.stuEmail.clear();
+                          g.stuID.clear();
+                          g.stuName.clear();
+                          g.stuPass.clear();
                           Navigator.pushReplacement(
                             context,
                             PageRouteBuilder(
@@ -313,7 +331,9 @@ class _AddStudentsState extends State<AddStudents> {
                   SizedBox(
                     height: g.height * 0.01,
                   ),
-                  ATSInpField(),
+                  ATSInpField(
+                    edit: g.stuEmail,
+                  ),
                   SizedBox(
                     height: g.height * 0.03,
                   ),
@@ -321,7 +341,7 @@ class _AddStudentsState extends State<AddStudents> {
                   SizedBox(
                     height: g.height * 0.01,
                   ),
-                  ATSInpField(),
+                  ATSInpField(edit: g.stuPass),
                   SizedBox(
                     height: g.height * 0.03,
                   ),
@@ -329,15 +349,37 @@ class _AddStudentsState extends State<AddStudents> {
                   SizedBox(
                     height: g.height * 0.01,
                   ),
-                  ATSInpField(),
+                  ATSInpField(
+                    edit: g.stuName,
+                  ),
                   SizedBox(
                     height: g.height * 0.03,
                   ),
-                  Text('Class'),
-                  SizedBox(
-                    height: g.height * 0.01,
+                  DropdownButton<String>(
+                    isExpanded: true,
+                    value: dropdownValue3,
+                    elevation: 16,
+                    hint: Text('Class'),
+                    style: g.loginpgstyles(
+                      Color(0xff000000),
+                    ),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        dropdownValue3 = newValue;
+                      });
+                    },
+                    items: widget.subs.map<DropdownMenuItem<String>>((value) {
+                      return DropdownMenuItem<String>(
+                        value: value['class'],
+                        child: Text(
+                          value['class'],
+                          style: g.loginpgstyles(
+                            Color(0xff000000),
+                          ),
+                        ),
+                      );
+                    }).toList(),
                   ),
-                  ATSInpField(),
                   SizedBox(
                     height: g.height * 0.03,
                   ),
@@ -345,21 +387,56 @@ class _AddStudentsState extends State<AddStudents> {
                   SizedBox(
                     height: g.height * 0.01,
                   ),
-                  ATSInpField(),
+                  ATSInpField(
+                    edit: g.stuContact,
+                  ),
                   SizedBox(
                     height: g.height * 0.03,
                   ),
-                  Text('ID'),
+                  Text('Roll no'),
                   SizedBox(
                     height: g.height * 0.01,
                   ),
-                  ATSInpField(),
+                  ATSInpField(
+                    edit: g.stuID,
+                  ),
                   SizedBox(
                     height: g.height * 0.075,
                   ),
                   Center(
                     child: RawMaterialButton(
-                      onPressed: null,
+                      onPressed: () async {
+                        var c = await _auth.registerWithEmailAndPassword(
+                            g.stuEmail.text, g.stuPass.text, 'Admin');
+                        await DatabaseServices(uid: g.uid).updateUserInfo(
+                            User(
+                                uid: c,
+                                email: g.stuEmail.text,
+                                password: g.stuPass.text,
+                                usertype: 'Admin'),
+                            false);
+                        await DatabaseServices(uid: g.uid).updateStuInfo(
+                            Student(
+                                classId: dropdownValue3,
+                                contact: g.stuContact.text,
+                                email: g.stuEmail.text,
+                                name: g.stuName.text,
+                                rollNo: g.stuID.text,
+                                stuId: c),
+                            true);
+                        g.stuContact.clear();
+                        g.stuEmail.clear();
+                        g.stuID.clear();
+                        g.stuName.clear();
+                        g.stuPass.clear();
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      AdmHome()),
+                        );
+                      },
                       child: Container(
                         width: g.width * 0.5,
                         height: g.height * 0.055,
