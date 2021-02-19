@@ -3,12 +3,14 @@ import 'package:rankers_institute/addmanually.dart';
 import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/screens/Contacts.dart';
 import 'package:rankers_institute/screens/Fees.dart';
+import 'package:rankers_institute/screens/admhome.dart';
 import 'package:rankers_institute/screens/loc.dart';
 import 'package:rankers_institute/screens/stuhome.dart';
+import 'package:rankers_institute/screens/teahome.dart';
 import 'package:rankers_institute/services/auth.dart';
 import 'package:rankers_institute/widgets/loading.dart';
 
-import '../ADDFeesdetail.dart';
+import 'addfeesdetail.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({
@@ -59,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                             context,
                             PageRouteBuilder(
                               pageBuilder: (context, animation1, animation2) =>
-                                  ADDFeesdetail(),
+                                  AddFeesdetail(),
                             ));
                       },
                     ),
@@ -126,7 +128,7 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: const Color(0xffcaf0f8),
               body: MaterialApp(
                 debugShowCheckedModeBanner: false,
-                home: StuHome(),
+                home: AdmHome(),
               ),
             ),
           );

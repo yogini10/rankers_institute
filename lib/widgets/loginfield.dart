@@ -67,32 +67,48 @@ class _LogPgFieldState extends State<LogPgField> {
   }
 }
 
-//for the textfields in login page that are of same type
-TextFormField logPgField(len, hint, ctrl, ispass, fun) {
-  return TextFormField(
-    controller: ctrl,
-    validator: fun,
-    style: g.loginpgstyles(Color(0xff000000)),
-    obscureText: ispass, //if the field is for password
-    maxLength: len,
-    maxLengthEnforced: true,
-    decoration: InputDecoration(
-      suffix: IconButton(
-        icon: FaIcon(FontAwesomeIcons.search),
-        onPressed: () {},
+class TxtField extends StatefulWidget {
+  final String hint;
+
+  const TxtField({Key key, this.hint}) : super(key: key);
+  @override
+  _TxtFieldState createState() => _TxtFieldState();
+}
+
+class _TxtFieldState extends State<TxtField> {
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      style: g.loginpgstyles(Color(0xff000000)),
+      decoration: InputDecoration(
+        border: UnderlineInputBorder(
+          borderRadius: BorderRadius.circular(6.0),
+        ),
+        contentPadding: EdgeInsets.only(
+            left: g.width * 0.014,
+            right: g.width * 0.014,
+            top: g.height * 0.001,
+            bottom: g.height * 0.001),
+        filled: true,
+        fillColor: const Color(0xe3ffffff),
+        hintText: widget.hint,
+        hintStyle: g.loginpgstyles(Color(0xff707070)),
       ),
-      border: UnderlineInputBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      contentPadding: EdgeInsets.only(
-          left: g.width * 0.045,
-          right: g.width * 0.045,
-          top: g.height * 0.018,
-          bottom: g.height * 0.018),
-      filled: true,
-      fillColor: const Color(0xe3ffffff),
-      hintText: hint,
-      hintStyle: g.loginpgstyles(Color(0xff707070)),
-    ),
-  );
+    );
+  }
+}
+
+class ATSInpField extends StatefulWidget {
+  @override
+  _ATSInpFieldState createState() => _ATSInpFieldState();
+}
+
+class _ATSInpFieldState extends State<ATSInpField> {
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      style: g.adduserstyles(Color(0xff000000)),
+      decoration: InputDecoration(isCollapsed: true),
+    );
+  }
 }
