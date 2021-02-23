@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as f;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/models/user.dart' as m;
 import 'package:rankers_institute/services/dbser.dart';
 
@@ -63,16 +65,37 @@ class AuthServices {
   //register with email and password
   Future registerWithEmailAndPassword(
       String email, String password, String usertype) async {
+    String e, p;
+    e = g.userGlob.email;
+    p = g.userGlob.password;
+    FirebaseApp app = await Firebase.initializeApp(
+        name: 'Secondary', options: Firebase.app().options);
+    f.User user;
     try {
-      f.UserCredential result = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      f.User user = result.user;
+      f.UserCredential result = await f.FirebaseAuth.instanceFor(app: app)
+          .createUserWithEmailAndPassword(email: email, password: password);
+      user = result.user;
       DatabaseServices(uid: user.uid).updateUserInfo(
-          m.User(email: email, password: password, usertype: usertype), true);
-      return userInApp(user);
+          m.User(
+              email: email,
+              password: password,
+              usertype: usertype,
+              uid: user.uid),
+          true);
     } catch (e) {
+      await app.delete();
       return null;
     }
+
+    await app.delete();
+    try {
+      f.UserCredential result2 =
+          await _auth.signInWithEmailAndPassword(email: e, password: p);
+      f.User user2 = result2.user;
+    } catch (e) {
+      print('hello');
+    }
+    return userInApp(user);
   }
 
   //sign out
