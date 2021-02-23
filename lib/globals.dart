@@ -21,6 +21,16 @@ TextEditingController stuEmail = TextEditingController(text: "");
 TextEditingController stuContact = TextEditingController(text: "");
 TextEditingController stuID = TextEditingController(text: "");
 
+//text controller for adding teacher
+TextEditingController teaName = TextEditingController(text: "");
+TextEditingController teaPass = TextEditingController(text: "");
+TextEditingController teaEmail = TextEditingController(text: "");
+TextEditingController teaContact = TextEditingController(text: "");
+TextEditingController teaSubject = TextEditingController(text: "");
+TextEditingController teaContactno = TextEditingController(text: "");
+TextEditingController teaID = TextEditingController(text: "");
+
+
 //screen width and height
 double width;
 double height;
