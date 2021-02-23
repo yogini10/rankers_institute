@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rankers_institute/addmanually.dart';
 import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/models/students.dart';
 import 'package:rankers_institute/models/user.dart';
@@ -91,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                             context,
                             PageRouteBuilder(
                               pageBuilder: (context, animation1, animation2) =>
-                                  addmanually(),
+                                  Contactus(),
                             ));
                       },
                     ),

@@ -186,7 +186,7 @@ class _AddTeachersState extends State<AddTeachers> {
                   SizedBox(
                     height: g.height * 0.01,
                   ),
-                  ATSInpField(),
+                  ATSInpField(edit: g.teaEmail),
                   SizedBox(
                     height: g.height * 0.03,
                   ),
@@ -194,7 +194,7 @@ class _AddTeachersState extends State<AddTeachers> {
                   SizedBox(
                     height: g.height * 0.01,
                   ),
-                  ATSInpField(),
+                  ATSInpField(edit: g.teaPass),
                   SizedBox(
                     height: g.height * 0.03,
                   ),
@@ -202,7 +202,7 @@ class _AddTeachersState extends State<AddTeachers> {
                   SizedBox(
                     height: g.height * 0.01,
                   ),
-                  ATSInpField(),
+                  ATSInpField(edit: g.teaName),
                   SizedBox(
                     height: g.height * 0.03,
                   ),
@@ -210,7 +210,7 @@ class _AddTeachersState extends State<AddTeachers> {
                   SizedBox(
                     height: g.height * 0.01,
                   ),
-                  ATSInpField(),
+                  ATSInpField(edit: g.teaSubject),
                   SizedBox(
                     height: g.height * 0.03,
                   ),
@@ -218,7 +218,7 @@ class _AddTeachersState extends State<AddTeachers> {
                   SizedBox(
                     height: g.height * 0.01,
                   ),
-                  ATSInpField(),
+                  ATSInpField(edit: g.teaContactno),
                   SizedBox(
                     height: g.height * 0.03,
                   ),
@@ -226,7 +226,7 @@ class _AddTeachersState extends State<AddTeachers> {
                   SizedBox(
                     height: g.height * 0.01,
                   ),
-                  ATSInpField(),
+                  ATSInpField(edit: g.teaID),
                   SizedBox(
                     height: g.height * 0.075,
                   ),
