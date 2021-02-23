@@ -15,13 +15,13 @@ class DatabaseServices {
 
   Future updateUserInfo(User user, bool isCreating) async {
     if (isCreating) {
-      return await userCollection.doc(uid).set({
+      return await userCollection.doc(user.uid).set({
         'email': user.email,
         'password': user.password,
         'usertype': user.usertype,
       });
     }
-    return await userCollection.doc(uid).update({
+    return await userCollection.doc(user.uid).update({
       'email': user.email,
       'password': user.password,
       'usertype': user.usertype,
@@ -33,7 +33,7 @@ class DatabaseServices {
     if (isCreating) {
       return await FirebaseFirestore.instance
           .collection('student')
-          .doc(uid)
+          .doc(student.stuId)
           .set({
         'classID': student.classId,
         'contact': student.contact,
@@ -44,7 +44,7 @@ class DatabaseServices {
     }
     return await FirebaseFirestore.instance
         .collection('student')
-        .doc(uid)
+        .doc(student.stuId)
         .update({
       'classID': student.classId,
       'contact': student.contact,

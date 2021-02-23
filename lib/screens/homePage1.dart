@@ -30,12 +30,12 @@ class _HomePageState extends State<HomePage> {
         password: u.get('password'),
         usertype: u.get('usertype'));
 
-    var v = await DatabaseServices(uid: g.uid).currentStu();
-    g.stuGlob.classId = v.get('classID');
-    g.stuGlob.name = v.get('name');
-    g.stuGlob.contact = v.get('contact');
-    g.stuGlob.email = v.get('email');
-    g.stuGlob.rollNo = v.get('rollno');
+    // var v = await DatabaseServices(uid: g.uid).currentStu();
+    // g.stuGlob.classId = v.get('classID');
+    // g.stuGlob.name = v.get('name');
+    // g.stuGlob.contact = v.get('contact');
+    // g.stuGlob.email = v.get('email');
+    // g.stuGlob.rollNo = v.get('rollno');
     setState(() {});
   }
 
@@ -146,7 +146,7 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: const Color(0xffcaf0f8),
               body: MaterialApp(
                 debugShowCheckedModeBanner: false,
-                home: StuHome(),
+                home: AdmHome(),
               ),
             ),
           );

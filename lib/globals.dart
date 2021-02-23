@@ -4,21 +4,22 @@ import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/user.dart';
 
 //current user
-User userGlob = User();
-Student stuGlob = Student();
-Teacher teaGlob = Teacher();
+User userGlob = User(email: "", password: "", uid: "", usertype: "");
+Student stuGlob = Student(
+    classId: "", contact: "", email: "", name: "", rollNo: "", stuId: "");
+Teacher teaGlob = Teacher(subject: "", tId: "", teacherName: "");
 String uid = '';
 
 //text controllers for login
-TextEditingController uName = TextEditingController();
-TextEditingController uPass = TextEditingController();
+TextEditingController uName = TextEditingController(text: "");
+TextEditingController uPass = TextEditingController(text: "");
 
 //text controller for adding student
-TextEditingController stuName = TextEditingController();
-TextEditingController stuPass = TextEditingController();
-TextEditingController stuEmail = TextEditingController();
-TextEditingController stuContact = TextEditingController();
-TextEditingController stuID = TextEditingController();
+TextEditingController stuName = TextEditingController(text: "");
+TextEditingController stuPass = TextEditingController(text: "");
+TextEditingController stuEmail = TextEditingController(text: "");
+TextEditingController stuContact = TextEditingController(text: "");
+TextEditingController stuID = TextEditingController(text: "");
 
 //screen width and height
 double width;
