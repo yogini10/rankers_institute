@@ -44,7 +44,8 @@ class _AdmHomeState extends State<AdmHome> {
                           List allC;
                           allC =
                               await DatabaseServices(uid: g.uid).allClasses();
-                          Navigator.pushReplacement(
+                          isload = false;
+                          Navigator.push(
                             context,
                             PageRouteBuilder(
                                 pageBuilder:
@@ -72,7 +73,8 @@ class _AdmHomeState extends State<AdmHome> {
                           List allC;
                           allC =
                               await DatabaseServices(uid: g.uid).allClasses();
-                          Navigator.pushReplacement(
+                          isload = false;
+                          Navigator.push(
                             context,
                             PageRouteBuilder(
                               pageBuilder:
@@ -97,7 +99,8 @@ class _AdmHomeState extends State<AdmHome> {
                           setState(() {
                             isload = true;
                           });
-                          Navigator.pushReplacement(
+                          isload = false;
+                          Navigator.push(
                             context,
                             PageRouteBuilder(
                               pageBuilder:

@@ -96,6 +96,11 @@ class DatabaseServices {
         .get();
   }
 
+  //get admin if current
+  Future<DocumentSnapshot> currentAdm() async {
+    return await FirebaseFirestore.instance.collection('admin').doc(uid).get();
+  }
+
   Future<List> allClasses() async {
     return await FirebaseFirestore.instance
         .collection('classes')
