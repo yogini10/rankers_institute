@@ -21,7 +21,7 @@ TextEditingController stuEmail = TextEditingController(text: "");
 TextEditingController stuContact = TextEditingController(text: "");
 TextEditingController stuID = TextEditingController(text: "");
 
-//text controller for adding student
+//text controller for adding teacher
 TextEditingController teaName = TextEditingController(text: "");
 TextEditingController teaPass = TextEditingController(text: "");
 TextEditingController teaEmail = TextEditingController(text: "");
