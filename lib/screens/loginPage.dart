@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                             ctrl: g.uName,
                             hint: 'Enter Username',
                             ispass: false,
-                            len: 26,
+                            len: 36,
                             fun: (val) {
                               if (val.isEmpty) {
                                 return 'Email ID field must not be empty';
