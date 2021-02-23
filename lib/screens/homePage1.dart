@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/models/admin.dart';
 import 'package:rankers_institute/models/students.dart';
+import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/user.dart';
 import 'package:rankers_institute/screens/Contacts.dart';
 import 'package:rankers_institute/screens/Fees.dart';
@@ -24,21 +26,56 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   void update() async {
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
     var u = await DatabaseServices(uid: g.uid).currentUser();
     g.userGlob = User(
         uid: g.uid,
         email: u.get('email'),
         password: u.get('password'),
         usertype: u.get('usertype'));
-
-    setState(() {});
+    if (g.userGlob.usertype == 'Student') {
+      var stu = await DatabaseServices(uid: g.uid).currentStu();
+      g.stuGlob = Student(
+          classId: stu.get('classID'),
+          contact: stu.get('contact'),
+          email: stu.get('email'),
+          name: stu.get('name'),
+          rollNo: stu.get('rollno'),
+          stuId: g.uid);
+      g.name = g.stuGlob.name;
+    } else if (g.userGlob.usertype == 'Teacher') {
+      var tea = await DatabaseServices(uid: g.uid).currentTea();
+      g.teaGlob = Teacher(
+        subject: tea.get('subject'),
+        tId: g.uid,
+        teacherName: tea.get('teachername'),
+      );
+      g.name = g.teaGlob.teacherName;
+    } else if (g.userGlob.usertype == 'Admin') {
+      var adm = await DatabaseServices(uid: g.uid).currentAdm();
+      g.admGlob = Admin(
+        admId: g.uid,
+        contact: adm.get('contact'),
+        email: adm.get('email'),
+        name: adm.get('name'),
+      );
+      g.name = g.admGlob.name;
+    }
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   bool isload = false;
   @override
   Widget build(BuildContext context) {
-    update();
+    try {
+      update();
+    } catch (e) {
+      print('hello');
+    }
     //safe are not letting screen behind status bar
     return isload
         ? LoadingScreen()
@@ -53,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                         color: Color(0xffcaf0f8),
                       ),
                       accountName: Text(
-                        g.stuGlob.name,
+                        g.name,
                         style: TextStyle(color: Colors.black),
                       ),
                       accountEmail: Text(
