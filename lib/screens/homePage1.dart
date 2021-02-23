@@ -3,8 +3,10 @@ import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/models/students.dart';
 import 'package:rankers_institute/models/user.dart';
 import 'package:rankers_institute/screens/Contacts.dart';
+import 'package:rankers_institute/screens/Fees.dart';
 import 'package:rankers_institute/screens/admhome.dart';
 import 'package:rankers_institute/screens/stuhome.dart';
+import 'package:rankers_institute/screens/teahome.dart';
 import 'package:rankers_institute/services/auth.dart';
 import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/loading.dart';
@@ -22,6 +24,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   void update() async {
+    setState(() {});
     var u = await DatabaseServices(uid: g.uid).currentUser();
     g.userGlob = User(
         uid: g.uid,
@@ -29,12 +32,6 @@ class _HomePageState extends State<HomePage> {
         password: u.get('password'),
         usertype: u.get('usertype'));
 
-    // var v = await DatabaseServices(uid: g.uid).currentStu();
-    // g.stuGlob.classId = v.get('classID');
-    // g.stuGlob.name = v.get('name');
-    // g.stuGlob.contact = v.get('contact');
-    // g.stuGlob.email = v.get('email');
-    // g.stuGlob.rollNo = v.get('rollno');
     setState(() {});
   }
 
@@ -78,7 +75,9 @@ class _HomePageState extends State<HomePage> {
                             context,
                             PageRouteBuilder(
                               pageBuilder: (context, animation1, animation2) =>
-                                  AddFeesdetail(),
+                                  g.userGlob.usertype == 'Admin'
+                                      ? AddFeesdetail()
+                                      : Fees(),
                             ));
                       },
                     ),
@@ -111,10 +110,11 @@ class _HomePageState extends State<HomePage> {
                         setState(() {
                           isload = true;
                         });
-                        await AuthServices().signOut();
-                        setState(() {
-                          isload = false;
-                        });
+                        try {
+                          await AuthServices().signOut();
+                        } catch (e) {
+                          print('hi');
+                        }
                       },
                     ),
                   ],
@@ -144,9 +144,14 @@ class _HomePageState extends State<HomePage> {
               ),
               backgroundColor: const Color(0xffcaf0f8),
               body: MaterialApp(
-                debugShowCheckedModeBanner: false,
-                home: AdmHome(),
-              ),
+                  debugShowCheckedModeBanner: false,
+                  home: g.userGlob.usertype == 'Admin'
+                      ? AdmHome()
+                      : g.userGlob.usertype == 'Teacher'
+                          ? TeaHome()
+                          : g.userGlob.usertype == 'Student'
+                              ? StuHome()
+                              : LoadingScreen()),
             ),
           );
   }

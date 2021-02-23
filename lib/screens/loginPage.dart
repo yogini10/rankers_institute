@@ -119,6 +119,8 @@ class _LoginPageState extends State<LoginPage> {
                               dynamic result =
                                   await _auth.signInWithEmailAndPassword(
                                       g.uName.text, g.uPass.text);
+                              g.uName.clear();
+                              g.uPass.clear();
                               if (result == null) {
                                 setState(() {
                                   error = 'You are not registered!!!';

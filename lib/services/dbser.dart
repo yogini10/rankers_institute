@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rankers_institute/models/students.dart';
+import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/user.dart';
 
 class DatabaseServices {
@@ -54,6 +55,26 @@ class DatabaseServices {
     });
   }
 
+  //update teacher info
+  Future updateTeaInfo(Teacher tea, bool isCreating) async {
+    if (isCreating) {
+      return await FirebaseFirestore.instance
+          .collection('teacher')
+          .doc(tea.tId)
+          .set({
+        'subject': tea.subject,
+        'teachername': tea.teacherName,
+      });
+    }
+    return await FirebaseFirestore.instance
+        .collection('teacher')
+        .doc(tea.tId)
+        .update({
+      'subject': tea.subject,
+      'teachername': tea.teacherName,
+    });
+  }
+
   //get current user
   Future<DocumentSnapshot> currentUser() async {
     return await userCollection.doc(uid).get();
@@ -67,7 +88,7 @@ class DatabaseServices {
         .get();
   }
 
-  //get student if current
+  //get teacher if current
   Future<DocumentSnapshot> currentTea() async {
     return await FirebaseFirestore.instance
         .collection('teacher')

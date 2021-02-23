@@ -27,9 +27,6 @@ TextEditingController teaPass = TextEditingController(text: "");
 TextEditingController teaEmail = TextEditingController(text: "");
 TextEditingController teaContact = TextEditingController(text: "");
 TextEditingController teaSubject = TextEditingController(text: "");
-TextEditingController teaContactno = TextEditingController(text: "");
-TextEditingController teaID = TextEditingController(text: "");
-
 
 //screen width and height
 double width;

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/models/students.dart';
+import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/user.dart';
 import 'package:rankers_institute/screens/admhome.dart';
 import 'package:rankers_institute/services/auth.dart';
@@ -123,134 +124,161 @@ class AddTeachers extends StatefulWidget {
 }
 
 class _AddTeachersState extends State<AddTeachers> {
+  final AuthServices _auth = AuthServices();
+  bool isload = false;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: const Color(0xffcaf0f8),
-        body: Center(
-          child: Container(
-            height: g.height * 0.8,
-            width: g.width * 0.85,
-            color: Color(0xffffffff).withOpacity(0.55),
-            child: Padding(
-              padding: EdgeInsets.only(
-                top: g.height * 0,
-                left: g.width * 0.075,
-                right: g.width * 0.075,
-              ),
-              child: ListView(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.home,
-                          color: Colors.black,
-                          size: 30,
+    return isload
+        ? LoadingScreen()
+        : GestureDetector(
+            onTap: () {
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            },
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              backgroundColor: const Color(0xffcaf0f8),
+              body: Center(
+                child: Container(
+                  height: g.height * 0.8,
+                  width: g.width * 0.85,
+                  color: Color(0xffffffff).withOpacity(0.55),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: g.height * 0,
+                      left: g.width * 0.075,
+                      right: g.width * 0.075,
+                    ),
+                    child: ListView(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                Icons.home,
+                                color: Colors.black,
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                g.teaContact.clear();
+                                g.teaEmail.clear();
+                                g.teaName.clear();
+                                g.teaPass.clear();
+                                g.teaSubject.clear();
+                                Navigator.pushReplacement(
+                                  context,
+                                  PageRouteBuilder(
+                                      pageBuilder: (context, animation,
+                                              secondaryAnimation) =>
+                                          AdmHome()),
+                                );
+                              },
+                            ),
+                            Expanded(child: Container()),
+                            Center(
+                              child: Text(
+                                'Add Teacher',
+                                style: g.loginpgstyles(
+                                  Color(0xff000000),
+                                ),
+                              ),
+                            ),
+                            Expanded(child: Container()),
+                          ],
                         ),
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
+                        SizedBox(
+                          height: g.height * 0.05,
+                        ),
+                        Text('Email'),
+                        SizedBox(
+                          height: g.height * 0.01,
+                        ),
+                        ATSInpField(edit: g.teaEmail),
+                        SizedBox(
+                          height: g.height * 0.03,
+                        ),
+                        Text('Password'),
+                        SizedBox(
+                          height: g.height * 0.01,
+                        ),
+                        ATSInpField(edit: g.teaPass),
+                        SizedBox(
+                          height: g.height * 0.03,
+                        ),
+                        Text('Name'),
+                        SizedBox(
+                          height: g.height * 0.01,
+                        ),
+                        ATSInpField(edit: g.teaName),
+                        SizedBox(
+                          height: g.height * 0.03,
+                        ),
+                        Text('Subject'),
+                        SizedBox(
+                          height: g.height * 0.01,
+                        ),
+                        ATSInpField(edit: g.teaSubject),
+                        SizedBox(
+                          height: g.height * 0.03,
+                        ),
+                        Text('Contact no'),
+                        SizedBox(
+                          height: g.height * 0.01,
+                        ),
+                        ATSInpField(edit: g.teaContact),
+                        SizedBox(
+                          height: g.height * 0.03,
+                        ),
+                        SizedBox(
+                          height: g.height * 0.075,
+                        ),
+                        Center(
+                          child: RawMaterialButton(
+                            onPressed: () async {
+                              isload = true;
+                              var c = await _auth.registerWithEmailAndPassword(
+                                  g.teaEmail.text, g.teaPass.text, 'Teacher');
+                              await DatabaseServices(uid: g.uid).updateTeaInfo(
+                                  Teacher(
+                                      teacherName: g.teaName.text,
+                                      subject: g.teaSubject.text,
+                                      tId: c.uid),
+                                  true);
+                              g.teaContact.clear();
+                              g.teaEmail.clear();
+                              g.teaName.clear();
+                              g.teaPass.clear();
+                              g.teaSubject.clear();
+                              Navigator.pushReplacement(
+                                context,
+                                PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
                                         AdmHome()),
-                          );
-                        },
-                      ),
-                      Expanded(child: Container()),
-                      Center(
-                        child: Text(
-                          'Add Teacher',
-                          style: g.loginpgstyles(
-                            Color(0xff000000),
+                              );
+                            },
+                            child: Container(
+                              width: g.width * 0.5,
+                              height: g.height * 0.055,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                color: Color(0xff90e0ef),
+                              ),
+                              child: Center(child: Text('Add Teacher')),
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(child: Container()),
-                    ],
-                  ),
-                  SizedBox(
-                    height: g.height * 0.05,
-                  ),
-                  Text('Email'),
-                  SizedBox(
-                    height: g.height * 0.01,
-                  ),
-                  ATSInpField(edit: g.teaEmail),
-                  SizedBox(
-                    height: g.height * 0.03,
-                  ),
-                  Text('Password'),
-                  SizedBox(
-                    height: g.height * 0.01,
-                  ),
-                  ATSInpField(edit: g.teaPass),
-                  SizedBox(
-                    height: g.height * 0.03,
-                  ),
-                  Text('Name'),
-                  SizedBox(
-                    height: g.height * 0.01,
-                  ),
-                  ATSInpField(edit: g.teaName),
-                  SizedBox(
-                    height: g.height * 0.03,
-                  ),
-                  Text('Subject'),
-                  SizedBox(
-                    height: g.height * 0.01,
-                  ),
-                  ATSInpField(edit: g.teaSubject),
-                  SizedBox(
-                    height: g.height * 0.03,
-                  ),
-                  Text('Contact no'),
-                  SizedBox(
-                    height: g.height * 0.01,
-                  ),
-                  ATSInpField(edit: g.teaContactno),
-                  SizedBox(
-                    height: g.height * 0.03,
-                  ),
-                  Text('ID'),
-                  SizedBox(
-                    height: g.height * 0.01,
-                  ),
-                  ATSInpField(edit: g.teaID),
-                  SizedBox(
-                    height: g.height * 0.075,
-                  ),
-                  Center(
-                    child: RawMaterialButton(
-                      onPressed: null,
-                      child: Container(
-                        width: g.width * 0.5,
-                        height: g.height * 0.055,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: Color(0xff90e0ef),
-                        ),
-                        child: Center(child: Text('Add Teacher')),
-                      ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }
 
