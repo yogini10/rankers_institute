@@ -73,39 +73,49 @@ class _AddUpdateScheduleState extends State<AddUpdateSchedule> {
   Widget build(BuildContext context) {
     return isload
         ? LoadingScreen()
-        : Stack(children: [
-            bgclass(),
-            Scaffold(
-              backgroundColor: Colors.transparent,
-              body: Container(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    top: g.height * 0.07,
-                  ),
-                  child: ListView(
-                    children: lcmat(widget.list),
+        : WillPopScope(
+            onWillPop: () {
+              setState(() {
+                isload = true;
+              });
+              Navigator.pop(context, false);
+              return Future.value(false);
+            },
+            child: Stack(children: [
+              bgclass(),
+              Scaffold(
+                backgroundColor: Colors.transparent,
+                body: Container(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: g.height * 0.07,
+                    ),
+                    child: ListView(
+                      children: lcmat(widget.list),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Transform.translate(
-              offset: Offset(0, 0),
-              child: IconButton(
-                icon: Icon(
-                  Icons.home,
-                  size: 40,
+              Transform.translate(
+                offset: Offset(0, 0),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.home,
+                    size: 40,
+                  ),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  AdmHome()),
+                    );
+                  },
                 ),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            AdmHome()),
-                  );
-                },
               ),
-            ),
-          ]);
+            ]),
+          );
   }
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rankers_institute/models/admin.dart';
 import 'package:rankers_institute/models/students.dart';
 import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/user.dart';
@@ -8,7 +9,9 @@ User userGlob = User(email: "", password: "", uid: "", usertype: "");
 Student stuGlob = Student(
     classId: "", contact: "", email: "", name: "", rollNo: "", stuId: "");
 Teacher teaGlob = Teacher(subject: "", tId: "", teacherName: "");
+Admin admGlob = Admin(admId: '', contact: '', email: '', name: '');
 String uid = '';
+String name = '';
 
 //text controllers for login
 TextEditingController uName = TextEditingController(text: "");
@@ -27,9 +30,6 @@ TextEditingController teaPass = TextEditingController(text: "");
 TextEditingController teaEmail = TextEditingController(text: "");
 TextEditingController teaContact = TextEditingController(text: "");
 TextEditingController teaSubject = TextEditingController(text: "");
-TextEditingController teaContactno = TextEditingController(text: "");
-TextEditingController teaID = TextEditingController(text: "");
-
 
 //screen width and height
 double width;

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/models/admin.dart';
 import 'package:rankers_institute/models/students.dart';
+import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/user.dart';
 import 'package:rankers_institute/screens/Contacts.dart';
+import 'package:rankers_institute/screens/Fees.dart';
 import 'package:rankers_institute/screens/admhome.dart';
 import 'package:rankers_institute/screens/stuhome.dart';
+import 'package:rankers_institute/screens/teahome.dart';
 import 'package:rankers_institute/services/auth.dart';
 import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/loading.dart';
@@ -22,26 +26,56 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   void update() async {
+    if (mounted) {
+      setState(() {});
+    }
     var u = await DatabaseServices(uid: g.uid).currentUser();
     g.userGlob = User(
         uid: g.uid,
         email: u.get('email'),
         password: u.get('password'),
         usertype: u.get('usertype'));
-
-    // var v = await DatabaseServices(uid: g.uid).currentStu();
-    // g.stuGlob.classId = v.get('classID');
-    // g.stuGlob.name = v.get('name');
-    // g.stuGlob.contact = v.get('contact');
-    // g.stuGlob.email = v.get('email');
-    // g.stuGlob.rollNo = v.get('rollno');
-    setState(() {});
+    if (g.userGlob.usertype == 'Student') {
+      var stu = await DatabaseServices(uid: g.uid).currentStu();
+      g.stuGlob = Student(
+          classId: stu.get('classID'),
+          contact: stu.get('contact'),
+          email: stu.get('email'),
+          name: stu.get('name'),
+          rollNo: stu.get('rollno'),
+          stuId: g.uid);
+      g.name = g.stuGlob.name;
+    } else if (g.userGlob.usertype == 'Teacher') {
+      var tea = await DatabaseServices(uid: g.uid).currentTea();
+      g.teaGlob = Teacher(
+        subject: tea.get('subject'),
+        tId: g.uid,
+        teacherName: tea.get('teachername'),
+      );
+      g.name = g.teaGlob.teacherName;
+    } else if (g.userGlob.usertype == 'Admin') {
+      var adm = await DatabaseServices(uid: g.uid).currentAdm();
+      g.admGlob = Admin(
+        admId: g.uid,
+        contact: adm.get('contact'),
+        email: adm.get('email'),
+        name: adm.get('name'),
+      );
+      g.name = g.admGlob.name;
+    }
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   bool isload = false;
   @override
   Widget build(BuildContext context) {
-    update();
+    try {
+      update();
+    } catch (e) {
+      print('hello');
+    }
     //safe are not letting screen behind status bar
     return isload
         ? LoadingScreen()
@@ -56,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                         color: Color(0xffcaf0f8),
                       ),
                       accountName: Text(
-                        g.stuGlob.name,
+                        g.name,
                         style: TextStyle(color: Colors.black),
                       ),
                       accountEmail: Text(
@@ -78,7 +112,9 @@ class _HomePageState extends State<HomePage> {
                             context,
                             PageRouteBuilder(
                               pageBuilder: (context, animation1, animation2) =>
-                                  AddFeesdetail(),
+                                  g.userGlob.usertype == 'Admin'
+                                      ? AddFeesdetail()
+                                      : Fees(),
                             ));
                       },
                     ),
@@ -111,10 +147,11 @@ class _HomePageState extends State<HomePage> {
                         setState(() {
                           isload = true;
                         });
-                        await AuthServices().signOut();
-                        setState(() {
-                          isload = false;
-                        });
+                        try {
+                          await AuthServices().signOut();
+                        } catch (e) {
+                          print('hi');
+                        }
                       },
                     ),
                   ],
@@ -144,9 +181,14 @@ class _HomePageState extends State<HomePage> {
               ),
               backgroundColor: const Color(0xffcaf0f8),
               body: MaterialApp(
-                debugShowCheckedModeBanner: false,
-                home: AdmHome(),
-              ),
+                  debugShowCheckedModeBanner: false,
+                  home: g.userGlob.usertype == 'Admin'
+                      ? AdmHome()
+                      : g.userGlob.usertype == 'Teacher'
+                          ? TeaHome()
+                          : g.userGlob.usertype == 'Student'
+                              ? StuHome()
+                              : LoadingScreen()),
             ),
           );
   }
