@@ -123,6 +123,21 @@ class DatabaseServices {
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
   }
+
+  //update schedule
+  Future updateSch(classs, time, subject, day) async {
+    var v = await FirebaseFirestore.instance
+        .collection('schedule')
+        .where('class', isEqualTo: classs)
+        .where('day', isEqualTo: day)
+        .get();
+    return await FirebaseFirestore.instance
+        .collection('schedule')
+        .doc(v.docs[0].id)
+        .update({
+      time: subject,
+    });
+  }
 }
 
 //for only 5th standard
