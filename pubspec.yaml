@@ -60,6 +60,7 @@ flutter:
   assets:
     - lib/assets/frontpageimg.png
     - lib/assets/
+    - lib/assets/aboutus/
     #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

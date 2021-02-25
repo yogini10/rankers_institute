@@ -235,15 +235,15 @@ class _AddorUpdateSchState extends State<AddorUpdateSch> {
                     });
                   },
                   items: <String>[
-                    '9 A.M to 10 A.M',
-                    '10 A.M to 11 A.M',
-                    '11 A.M to 12 P.M',
-                    '12 P.M to 1 P.M',
-                    '1 P.M to 2 P.M',
-                    '2 P.M to 3 P.M',
-                    '3 P.M to 4 P.M',
-                    '4 P.M to 5 P.M',
-                    '5 P.M to 6 P.M'
+                    '9 AM to 10 AM',
+                    '10 AM to 11 AM',
+                    '11 AM to 12 PM',
+                    '12 PM to 1 PM',
+                    '1 PM to 2 PM',
+                    '2 PM to 3 PM',
+                    '3 PM to 4 PM',
+                    '4 PM to 5 PM',
+                    '5 PM to 6 PM'
                   ].map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -289,7 +289,13 @@ class _AddorUpdateSchState extends State<AddorUpdateSch> {
                 ),
                 Center(
                   child: RawMaterialButton(
-                    onPressed: null,
+                    onPressed: () async {
+                      await DatabaseServices(uid: g.uid).updateSch(
+                          widget.subs[0]['class'],
+                          dropdownValue2,
+                          dropdownValue3,
+                          dropdownValue);
+                    },
                     child: Container(
                       width: g.width * 0.5,
                       height: g.height * 0.055,

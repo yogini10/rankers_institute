@@ -6,6 +6,7 @@ import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/user.dart';
 import 'package:rankers_institute/screens/Contacts.dart';
 import 'package:rankers_institute/screens/Fees.dart';
+import 'package:rankers_institute/screens/aboutus.dart';
 import 'package:rankers_institute/screens/admhome.dart';
 import 'package:rankers_institute/screens/stuhome.dart';
 import 'package:rankers_institute/screens/teahome.dart';
@@ -135,6 +136,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                     ListTile(
                       title: Text('About us'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  AboutUs(),
+                            ));
+                      },
                     ),
                     Expanded(
                       child: Container(),
