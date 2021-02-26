@@ -118,8 +118,8 @@ class DatabaseServices {
 
   Future<List> allSch(String cls) async {
     return await FirebaseFirestore.instance
-        .collection("schedule")
-        .where("classID", isEqualTo: cls)
+        .collection("schedule ")
+        .where("class", isEqualTo: cls)
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
   }
@@ -127,12 +127,12 @@ class DatabaseServices {
   //update schedule
   Future updateSch(classs, time, subject, day) async {
     var v = await FirebaseFirestore.instance
-        .collection('schedule')
+        .collection('schedule ')
         .where('class', isEqualTo: classs)
         .where('day', isEqualTo: day)
         .get();
     return await FirebaseFirestore.instance
-        .collection('schedule')
+        .collection('schedule ')
         .doc(v.docs[0].id)
         .update({
       time: subject,
