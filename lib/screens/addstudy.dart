@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:rankers_institute/screens/admhome.dart';
 import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
@@ -216,7 +217,9 @@ class _AddManuallyState extends State<AddManually> {
                   ),
                   Center(
                     child: RawMaterialButton(
-                      onPressed: null,
+                      onPressed: () async {
+                        final path = await FlutterDocumentPicker.openDocument();
+                      },
                       child: Container(
                         width: g.width * 0.5,
                         height: g.height * 0.055,
