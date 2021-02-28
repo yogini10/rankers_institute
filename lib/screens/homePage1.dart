@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/models/admin.dart';
+import 'package:rankers_institute/models/feesm.dart';
 import 'package:rankers_institute/models/students.dart';
 import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/user.dart';
@@ -38,6 +39,7 @@ class _HomePageState extends State<HomePage> {
         usertype: u.get('usertype'));
     if (g.userGlob.usertype == 'Student') {
       var stu = await DatabaseServices(uid: g.uid).currentStu();
+      var fee = await DatabaseServices(uid: g.uid).getFees();
       g.stuGlob = Student(
           classId: stu.get('classID'),
           contact: stu.get('contact'),
@@ -45,6 +47,10 @@ class _HomePageState extends State<HomePage> {
           name: stu.get('name'),
           rollNo: stu.get('rollno'),
           stuId: g.uid);
+      g.feesM = FeesM(
+          amtpaid: fee.get('amtpaid'),
+          amttotal: fee.get('amttotal'),
+          username: fee.get('username'));
       g.name = g.stuGlob.name;
     } else if (g.userGlob.usertype == 'Teacher') {
       var tea = await DatabaseServices(uid: g.uid).currentTea();
@@ -105,20 +111,26 @@ class _HomePageState extends State<HomePage> {
                     ListTile(
                       title: Text('Notice Board'),
                     ),
-                    ListTile(
-                      title: Text('Fees details'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation1, animation2) =>
-                                  g.userGlob.usertype == 'Admin'
-                                      ? AddFeesdetail()
-                                      : Fees(),
-                            ));
-                      },
-                    ),
+                    g.userGlob.usertype != 'Teacher'
+                        ? ListTile(
+                            title: Text('Fees details'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              isload = true;
+                              Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (context, animation1, animation2) =>
+                                            g.userGlob.usertype == 'Admin'
+                                                ? AddFeesdetail()
+                                                : Fees(
+                                                    fees: g.feesM,
+                                                  ),
+                                  ));
+                            },
+                          )
+                        : Container(),
                     ListTile(
                       title: Text('Contact us'),
                       onTap: () {
