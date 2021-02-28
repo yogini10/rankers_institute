@@ -465,6 +465,8 @@ class _AddStudentsState extends State<AddStudents> {
                                       rollNo: g.stuID.text,
                                       stuId: c.uid),
                                   true);
+                              await DatabaseServices(uid: g.uid)
+                                  .addFees(g.stuEmail.text, dropdownValue3);
                               g.stuContact.clear();
                               g.stuEmail.clear();
                               g.stuID.clear();

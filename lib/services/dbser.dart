@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rankers_institute/models/students.dart';
 import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/user.dart';
+import 'package:rankers_institute/globals.dart' as g;
 
 class DatabaseServices {
   final String uid;
@@ -73,6 +74,41 @@ class DatabaseServices {
       'subject': tea.subject,
       'teachername': tea.teacherName,
     });
+  }
+
+  //add material
+  Future updateMaterial(String clss, String link, String subject) async {
+    return await FirebaseFirestore.instance
+        .collection('material')
+        .doc()
+        .set({'subjectID': subject, 'classID': clss, 'materialLink': link});
+  }
+
+  //addlec
+  Future updateLecture(String name, String rollno) async {}
+
+  //add fees details
+  Future addFees(String email, String clss) async {
+    var v = await FirebaseFirestore.instance
+        .collection('student')
+        .where('email', isEqualTo: email)
+        .get();
+    return await FirebaseFirestore.instance
+        .collection('fees')
+        .doc(v.docs[0].id)
+        .set({'amtpaid': 0, 'amttotal': g.fees[clss], 'username': email});
+  }
+
+  //update fees details
+  Future updateFees(String email, int amtpaid, String subject) async {
+    var v = await FirebaseFirestore.instance
+        .collection('student')
+        .where('email', isEqualTo: email)
+        .get();
+    return await FirebaseFirestore.instance
+        .collection('fees')
+        .doc(v.docs[0].id)
+        .update({'amtpaid': amtpaid});
   }
 
   //get current user

@@ -1,5 +1,8 @@
+import 'dart:io';
+import 'package:path/path.dart' as p;
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:rankers_institute/screens/admhome.dart';
 import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
@@ -91,12 +94,8 @@ class _AdmSmClsState extends State<AdmSmCls> {
                   size: 40,
                 ),
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            AdmHome()),
-                  );
+                  isload = true;
+                  Navigator.pop(context);
                 },
               ),
             ),
@@ -116,141 +115,172 @@ class AddManually extends StatefulWidget {
 }
 
 class _AddManuallyState extends State<AddManually> {
+  Future uploadFile(File f) async {
+    try {
+      await FirebaseStorage.instance
+          .ref('materials/${p.basename(f.path)}')
+          .putFile(f);
+      String downloadURL = await FirebaseStorage.instance
+          .ref('materials/${p.basename(f.path)}')
+          .getDownloadURL();
+      return downloadURL;
+    } on FirebaseException catch (e) {
+      print('hello');
+      return null;
+    }
+  }
+
+  bool isload = false;
   String dropdownValue3;
+  File file;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: const Color(0xffcaf0f8),
-        body: Center(
-          child: Container(
-            height: g.height * 0.8,
-            width: g.width * 0.85,
-            color: Color(0xffffffff).withOpacity(0.55),
-            child: Padding(
-              padding: EdgeInsets.only(
-                top: g.height * 0,
-                left: g.width * 0.075,
-                right: g.width * 0.075,
-              ),
-              child: ListView(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.home,
-                          color: Colors.black,
-                          size: 30,
+    return isload
+        ? LoadingScreen()
+        : GestureDetector(
+            onTap: () {
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            },
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              backgroundColor: const Color(0xffcaf0f8),
+              body: Center(
+                child: Container(
+                  height: g.height * 0.8,
+                  width: g.width * 0.85,
+                  color: Color(0xffffffff).withOpacity(0.55),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: g.height * 0,
+                      left: g.width * 0.075,
+                      right: g.width * 0.075,
+                    ),
+                    child: ListView(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                Icons.home,
+                                color: Colors.black,
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  PageRouteBuilder(
+                                      pageBuilder: (context, animation,
+                                              secondaryAnimation) =>
+                                          AdmHome()),
+                                );
+                              },
+                            ),
+                            Expanded(child: Container()),
+                            Center(
+                              child: Text(
+                                'Add Material',
+                                style: g.loginpgstyles(
+                                  Color(0xff000000),
+                                ),
+                              ),
+                            ),
+                            Expanded(child: Container()),
+                          ],
                         ),
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        AdmHome()),
-                          );
-                        },
-                      ),
-                      Expanded(child: Container()),
-                      Center(
-                        child: Text(
-                          'Add Material',
+                        SizedBox(
+                          height: g.height * 0.05,
+                        ),
+                        Text(
+                          file == null ? "" : p.basename(file.path),
+                          style: g.loginpgstyles(Colors.black),
+                        ),
+                        SizedBox(
+                          height: g.height * 0.03,
+                        ),
+                        Text(
+                          widget.subs[0]['class'] + ' Class',
+                          style: g.loginpgstyles(Colors.black),
+                        ),
+                        SizedBox(
+                          height: g.height * 0.03,
+                        ),
+                        DropdownButton<String>(
+                          isExpanded: true,
+                          value: dropdownValue3,
+                          elevation: 16,
+                          hint: Text('Subject'),
                           style: g.loginpgstyles(
                             Color(0xff000000),
                           ),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              dropdownValue3 = newValue;
+                            });
+                          },
+                          items: widget.subs
+                              .map<DropdownMenuItem<String>>((value) {
+                            return DropdownMenuItem<String>(
+                              value: value['subject'],
+                              child: Text(
+                                value['subject'],
+                                style: g.loginpgstyles(
+                                  Color(0xff000000),
+                                ),
+                              ),
+                            );
+                          }).toList(),
                         ),
-                      ),
-                      Expanded(child: Container()),
-                    ],
-                  ),
-                  SizedBox(
-                    height: g.height * 0.05,
-                  ),
-                  TxtField(hint: 'Name of Material'),
-                  SizedBox(
-                    height: g.height * 0.03,
-                  ),
-                  Text(
-                    widget.subs[0]['class'] + ' Class',
-                    style: g.loginpgstyles(Colors.black),
-                  ),
-                  SizedBox(
-                    height: g.height * 0.03,
-                  ),
-                  DropdownButton<String>(
-                    isExpanded: true,
-                    value: dropdownValue3,
-                    elevation: 16,
-                    hint: Text('Subject'),
-                    style: g.loginpgstyles(
-                      Color(0xff000000),
-                    ),
-                    onChanged: (String newValue) {
-                      setState(() {
-                        dropdownValue3 = newValue;
-                      });
-                    },
-                    items: widget.subs.map<DropdownMenuItem<String>>((value) {
-                      return DropdownMenuItem<String>(
-                        value: value['subject'],
-                        child: Text(
-                          value['subject'],
-                          style: g.loginpgstyles(
-                            Color(0xff000000),
+                        SizedBox(
+                          height: g.height * 0.1,
+                        ),
+                        Center(
+                          child: RawMaterialButton(
+                            onPressed: () async {
+                              file = await FilePicker.getFile();
+                            },
+                            child: Container(
+                              width: g.width * 0.5,
+                              height: g.height * 0.055,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                color: Color(0xff90e0ef),
+                              ),
+                              child: Center(child: Text('Choose a File')),
+                            ),
                           ),
                         ),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(
-                    height: g.height * 0.1,
-                  ),
-                  Center(
-                    child: RawMaterialButton(
-                      onPressed: () async {
-                        final path = await FlutterDocumentPicker.openDocument();
-                      },
-                      child: Container(
-                        width: g.width * 0.5,
-                        height: g.height * 0.055,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: Color(0xff90e0ef),
+                        Center(
+                          child: RawMaterialButton(
+                            onPressed: () async {
+                              isload = true;
+                              var url = await uploadFile(file);
+                              DatabaseServices(uid: g.uid).updateMaterial(
+                                  widget.subs[0]['class'], url, dropdownValue3);
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              width: g.width * 0.5,
+                              height: g.height * 0.055,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                color: Color(0xff90e0ef),
+                              ),
+                              child: Center(child: Text('Add the material')),
+                            ),
+                          ),
                         ),
-                        child: Center(child: Text('Choose a File')),
-                      ),
+                      ],
                     ),
                   ),
-                  Center(
-                    child: RawMaterialButton(
-                      onPressed: null,
-                      child: Container(
-                        width: g.width * 0.5,
-                        height: g.height * 0.055,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: Color(0xff90e0ef),
-                        ),
-                        child: Center(child: Text('Add the material')),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }

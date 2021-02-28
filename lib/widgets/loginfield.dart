@@ -69,8 +69,9 @@ class _LogPgFieldState extends State<LogPgField> {
 
 class TxtField extends StatefulWidget {
   final String hint;
+  final TextEditingController ctrl;
 
-  const TxtField({Key key, this.hint}) : super(key: key);
+  const TxtField({Key key, this.hint, this.ctrl}) : super(key: key);
   @override
   _TxtFieldState createState() => _TxtFieldState();
 }
@@ -79,7 +80,7 @@ class _TxtFieldState extends State<TxtField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      style: g.loginpgstyles(Color(0xff000000)),
+      controller: widget.ctrl,
       decoration: InputDecoration(
         border: UnderlineInputBorder(
           borderRadius: BorderRadius.circular(6.0),
@@ -92,7 +93,6 @@ class _TxtFieldState extends State<TxtField> {
         filled: true,
         fillColor: const Color(0xe3ffffff),
         hintText: widget.hint,
-        hintStyle: g.loginpgstyles(Color(0xff707070)),
       ),
     );
   }
