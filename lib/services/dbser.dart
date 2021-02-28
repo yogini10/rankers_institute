@@ -99,8 +99,13 @@ class DatabaseServices {
         .set({'amtpaid': 0, 'amttotal': g.fees[clss], 'username': email});
   }
 
+  //get fees
+  Future<DocumentSnapshot> getFees() async {
+    return await FirebaseFirestore.instance.collection('fees').doc(uid).get();
+  }
+
   //update fees details
-  Future updateFees(String email, int amtpaid, String subject) async {
+  Future updateFees(String email, int amtpaid) async {
     var v = await FirebaseFirestore.instance
         .collection('student')
         .where('email', isEqualTo: email)

@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/models/feesm.dart';
 import 'package:rankers_institute/widgets/newcontappbar.dart';
 
-class Fees extends StatelessWidget {
+class Fees extends StatefulWidget {
+  final FeesM fees;
   Fees({
     Key key,
+    this.fees,
   }) : super(key: key);
+
+  @override
+  _FeesState createState() => _FeesState();
+}
+
+class _FeesState extends State<Fees> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -60,7 +69,7 @@ class Fees extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        'Dummy Student Name',
+                        g.stuGlob.name,
                         style: TextStyle(
                           fontFamily: 'Segoe UI',
                           fontSize: 18,
@@ -96,7 +105,7 @@ class Fees extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        'Dummy Amount Paid',
+                        widget.fees.amtpaid.toString(),
                         style: TextStyle(
                           fontFamily: 'Segoe UI',
                           fontSize: 18,
@@ -132,7 +141,7 @@ class Fees extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        'Dummy Remaining amount',
+                        (widget.fees.amttotal - widget.fees.amtpaid).toString(),
                         style: TextStyle(
                           fontFamily: 'Segoe UI',
                           fontSize: 18,
@@ -168,7 +177,7 @@ class Fees extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        'Dummy Total Amount',
+                        widget.fees.amttotal.toString(),
                         style: TextStyle(
                           fontFamily: 'Segoe UI',
                           fontSize: 18,

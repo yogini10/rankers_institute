@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/models/admin.dart';
+import 'package:rankers_institute/models/feesm.dart';
 import 'package:rankers_institute/models/students.dart';
 import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/user.dart';
 
 //current user
 User userGlob = User(email: "", password: "", uid: "", usertype: "");
+FeesM feesM = FeesM(amtpaid: 0, amttotal: 0, username: "");
 Student stuGlob = Student(
     classId: "", contact: "", email: "", name: "", rollNo: "", stuId: "");
 Teacher teaGlob = Teacher(subject: "", tId: "", teacherName: "");
@@ -23,6 +25,7 @@ TextEditingController stuPass = TextEditingController(text: "");
 TextEditingController stuEmail = TextEditingController(text: "");
 TextEditingController stuContact = TextEditingController(text: "");
 TextEditingController stuID = TextEditingController(text: "");
+TextEditingController stuAmtPaid = TextEditingController(text: "");
 
 //text controller for adding teacher
 TextEditingController teaName = TextEditingController(text: "");

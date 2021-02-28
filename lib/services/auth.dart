@@ -86,7 +86,6 @@ class AuthServices {
       await app.delete();
       return null;
     }
-    await _auth.signOut();
     await app.delete();
     try {
       f.UserCredential result2 =
