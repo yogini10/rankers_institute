@@ -31,9 +31,26 @@ TextEditingController teaEmail = TextEditingController(text: "");
 TextEditingController teaContact = TextEditingController(text: "");
 TextEditingController teaSubject = TextEditingController(text: "");
 
+//text controller for lecture adding
+TextEditingController leclink = TextEditingController(text: "");
+
 //screen width and height
 double width;
 double height;
+
+//fees of students
+Map fees = {
+  '5th': 10000,
+  '6th': 10000,
+  '7th': 10000,
+  '8th': 10000,
+  '9th': 10000,
+  '10th': 10000,
+  '11th sci': 10000,
+  '11th com': 10000,
+  '12th sci': 10000,
+  '12th com': 10000,
+};
 
 //login page textfield's textstyles common with color varient
 TextStyle loginpgstyles(color) => TextStyle(

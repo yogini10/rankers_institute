@@ -3,9 +3,11 @@ import 'package:rankers_institute/screens/adduser.dart';
 import 'package:rankers_institute/screens/addstudy.dart';
 import 'package:rankers_institute/screens/admschedule.dart';
 import 'package:rankers_institute/services/dbser.dart';
+import 'package:rankers_institute/widgets/addlecture.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
 import 'package:rankers_institute/widgets/loading.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/widgets/loginfield.dart';
 
 class AdmHome extends StatefulWidget {
   AdmHome({
@@ -18,6 +20,7 @@ class AdmHome extends StatefulWidget {
 
 class _AdmHomeState extends State<AdmHome> {
   bool isload = false;
+
   @override
   Widget build(BuildContext context) {
     return isload
@@ -84,7 +87,74 @@ class _AdmHomeState extends State<AdmHome> {
                           );
                         },
                       ),
-                      hpImage('7')
+                      GestureDetector(
+                        child: hpImage('7'),
+                        onTap: () async {
+                          List allC;
+                          allC =
+                              await DatabaseServices(uid: g.uid).allClasses();
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              String dropdownValue3;
+                              return StatefulBuilder(
+                                  builder: (context, setState) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    FocusScopeNode currentFocus =
+                                        FocusScope.of(context);
+                                    if (!currentFocus.hasPrimaryFocus) {
+                                      currentFocus.unfocus();
+                                    }
+                                  },
+                                  child: AlertDialog(
+                                    title: Text('Add Lecture'),
+                                    content: SingleChildScrollView(
+                                      child: ListBody(
+                                        children: <Widget>[
+                                          TxtField(
+                                            ctrl: g.leclink,
+                                            hint: "Lecture Link",
+                                          ),
+                                          DropdownButton<String>(
+                                            isExpanded: true,
+                                            value: dropdownValue3,
+                                            elevation: 16,
+                                            hint: Text('Class'),
+                                            onChanged: (String newValue) {
+                                              setState(() {
+                                                dropdownValue3 = newValue;
+                                              });
+                                            },
+                                            items: allC
+                                                .map<DropdownMenuItem<String>>(
+                                                    (value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value['class'],
+                                                child: Text(
+                                                  value['class'],
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        child: Text('Approve'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
+                            },
+                          );
+                        },
+                      )
                     ],
                   ),
                   SizedBox(
