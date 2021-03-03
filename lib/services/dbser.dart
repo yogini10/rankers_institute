@@ -165,6 +165,33 @@ class DatabaseServices {
         .then((value) => value.docs.map((e) => e.data()).toList());
   }
 
+  //all Tests
+  Future<List> allTests(String cls) async {
+    List s = await FirebaseFirestore.instance
+        .collection("test")
+        .where("classID", isEqualTo: cls)
+        .get()
+        .then((value) => value.docs
+            .map((e) => e.get("subjectID"))
+            .toList()
+            .toSet()
+            .toList());
+    s.sort();
+    return s;
+  }
+
+  //all test tests
+  Future<List> allTeststes(String cls) async {
+    List s = await FirebaseFirestore.instance
+        .collection("test")
+        .where("classID", isEqualTo: cls)
+        .get()
+        .then((value) =>
+            value.docs.map((e) => e.get("testType")).toList().toSet().toList());
+    s.sort();
+    return s;
+  }
+
   //update schedule
   Future updateSch(classs, time, subject, day) async {
     var v = await FirebaseFirestore.instance
@@ -178,6 +205,25 @@ class DatabaseServices {
         .update({
       time: subject,
     });
+  }
+
+  //add marks
+  Future addMarks(email, marks, sub, test, cls) async {
+    var v = await FirebaseFirestore.instance
+        .collection('student')
+        .where('classID', isEqualTo: cls)
+        .where('email', isEqualTo: email)
+        .get();
+    var t = await FirebaseFirestore.instance
+        .collection('test')
+        .where('classID', isEqualTo: cls)
+        .where('subjectID', isEqualTo: sub)
+        .where('testType', isEqualTo: test)
+        .get();
+    await FirebaseFirestore.instance
+        .collection('marks')
+        .doc(v.docs[0].id)
+        .set({'marks': marks, 'studentID': email, 'testID': t.docs[0].id});
   }
 }
 
