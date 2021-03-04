@@ -85,7 +85,25 @@ class DatabaseServices {
   }
 
   //addlec
-  Future updateLecture(String name, String rollno) async {}
+  Future updateLecture(String link, String cls) async {
+    var v = await FirebaseFirestore.instance
+        .collection('currentLec')
+        .where('classID', isEqualTo: cls)
+        .get();
+    return await FirebaseFirestore.instance
+        .collection('currentLec')
+        .doc(v.docs[0].id)
+        .update({'link': link});
+  }
+
+  //get link
+  Future getLink(String cls) async {
+    return await FirebaseFirestore.instance
+        .collection('currentLec')
+        .where('classID', isEqualTo: cls)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+  }
 
   //add fees details
   Future addFees(String email, String clss) async {
