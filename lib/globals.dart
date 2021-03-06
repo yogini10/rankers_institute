@@ -8,8 +8,8 @@ import 'package:rankers_institute/models/user.dart';
 //current user
 User userGlob = User(email: "", password: "", uid: "", usertype: "");
 FeesM feesM = FeesM(amtpaid: 0, amttotal: 0, username: "");
-Student stuGlob = Student(
-    classId: "", contact: "", email: "", name: "", rollNo: "", stuId: "");
+Student stuGlob =
+    Student(classId: "", contact: "", name: "", rollNo: "", stuId: "");
 Teacher teaGlob = Teacher(subject: "", tId: "", teacherName: "");
 Admin admGlob = Admin(admId: '', contact: '', email: '', name: '');
 String uid = '';

@@ -39,7 +39,6 @@ class DatabaseServices {
           .set({
         'classID': student.classId,
         'contact': student.contact,
-        'email': student.email,
         'name': student.name,
         'rollno': student.rollNo,
       });
@@ -50,7 +49,6 @@ class DatabaseServices {
         .update({
       'classID': student.classId,
       'contact': student.contact,
-      'email': student.email,
       'name': student.name,
       'rollno': student.rollNo,
     });
@@ -114,7 +112,7 @@ class DatabaseServices {
     return await FirebaseFirestore.instance
         .collection('fees')
         .doc(v.docs[0].id)
-        .set({'amtpaid': 0, 'amttotal': g.fees[clss], 'username': email});
+        .set({'amtpaid': 0, 'amttotal': g.fees[clss]});
   }
 
   //get fees
@@ -165,6 +163,16 @@ class DatabaseServices {
         .collection('classes')
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
+  }
+
+  //all subs of all classes
+  Future allSubClass() async {
+    return await FirebaseFirestore.instance.collection('subjects').get().then(
+        (value) => value.docs
+            .map((e) => e.data()['subject'])
+            .toList()
+            .toSet()
+            .toList());
   }
 
   Future<List> allSubs(String cls) async {
@@ -227,9 +235,8 @@ class DatabaseServices {
 
   //add marks
   Future addMarks(email, marks, sub, test, cls) async {
-    var v = await FirebaseFirestore.instance
-        .collection('student')
-        .where('classID', isEqualTo: cls)
+    var u = await FirebaseFirestore.instance
+        .collection('users')
         .where('email', isEqualTo: email)
         .get();
     var t = await FirebaseFirestore.instance
@@ -238,10 +245,8 @@ class DatabaseServices {
         .where('subjectID', isEqualTo: sub)
         .where('testType', isEqualTo: test)
         .get();
-    await FirebaseFirestore.instance
-        .collection('marks')
-        .doc(v.docs[0].id)
-        .set({'marks': marks, 'studentID': email, 'testID': t.docs[0].id});
+    await FirebaseFirestore.instance.collection('marks').doc().set(
+        {'marks': marks, 'studentID': u.docs[0].id, 'testID': t.docs[0].id});
   }
 }
 

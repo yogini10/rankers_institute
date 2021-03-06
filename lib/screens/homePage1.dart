@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rankers_institute/MYprofileteacher.dart';
 import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/models/admin.dart';
 import 'package:rankers_institute/models/feesm.dart';
@@ -34,23 +35,20 @@ class _HomePageState extends State<HomePage> {
     var u = await DatabaseServices(uid: g.uid).currentUser();
     g.userGlob = User(
         uid: g.uid,
-        email: u.get('email'),
         password: u.get('password'),
-        usertype: u.get('usertype'));
+        usertype: u.get('usertype'),
+        email: u.get('email'));
     if (g.userGlob.usertype == 'Student') {
       var stu = await DatabaseServices(uid: g.uid).currentStu();
       var fee = await DatabaseServices(uid: g.uid).getFees();
       g.stuGlob = Student(
           classId: stu.get('classID'),
           contact: stu.get('contact'),
-          email: stu.get('email'),
           name: stu.get('name'),
           rollNo: stu.get('rollno'),
           stuId: g.uid);
-      g.feesM = FeesM(
-          amtpaid: fee.get('amtpaid'),
-          amttotal: fee.get('amttotal'),
-          username: fee.get('username'));
+      g.feesM =
+          FeesM(amtpaid: fee.get('amtpaid'), amttotal: fee.get('amttotal'));
       g.name = g.stuGlob.name;
     } else if (g.userGlob.usertype == 'Teacher') {
       var tea = await DatabaseServices(uid: g.uid).currentTea();
@@ -117,6 +115,8 @@ class _HomePageState extends State<HomePage> {
                             onTap: () {
                               Navigator.pop(context);
                               isload = true;
+                              setState(() {});
+                              isload = false;
                               Navigator.push(
                                   context,
                                   PageRouteBuilder(
@@ -145,6 +145,22 @@ class _HomePageState extends State<HomePage> {
                     ),
                     ListTile(
                       title: Text('Your Profile'),
+                      onTap: () async {
+                        if (g.userGlob.usertype == 'Teacher') {
+                          List allS =
+                              await DatabaseServices(uid: g.uid).allSubClass();
+                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation1, animation2) =>
+                                        MYprofileteacher(
+                                  subs: allS,
+                                ),
+                              ));
+                        }
+                      },
                     ),
                     ListTile(
                       title: Text('About us'),

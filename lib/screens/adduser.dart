@@ -460,7 +460,6 @@ class _AddStudentsState extends State<AddStudents> {
                                   Student(
                                       classId: dropdownValue3,
                                       contact: g.stuContact.text,
-                                      email: g.stuEmail.text,
                                       name: g.stuName.text,
                                       rollNo: g.stuID.text,
                                       stuId: c.uid),
