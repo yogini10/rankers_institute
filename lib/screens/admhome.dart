@@ -116,7 +116,7 @@ class _AdmHomeState extends State<AdmHome> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              String dropdownValue3;
+                              String classid;
                               return StatefulBuilder(
                                   builder: (context, setState) {
                                 return GestureDetector(
@@ -138,12 +138,12 @@ class _AdmHomeState extends State<AdmHome> {
                                           ),
                                           DropdownButton<String>(
                                             isExpanded: true,
-                                            value: dropdownValue3,
+                                            value: classid,
                                             elevation: 16,
                                             hint: Text('Class'),
                                             onChanged: (String newValue) {
                                               setState(() {
-                                                dropdownValue3 = newValue;
+                                                classid = newValue;
                                               });
                                             },
                                             items: allC
@@ -162,8 +162,12 @@ class _AdmHomeState extends State<AdmHome> {
                                     ),
                                     actions: <Widget>[
                                       FlatButton(
-                                        child: Text('Approve'),
+                                        child: Text('Add'),
                                         onPressed: () {
+                                          g.leclink.clear();
+                                          DatabaseServices(uid: g.uid)
+                                              .updateLecture(
+                                                  g.leclink.text, classid);
                                           Navigator.of(context).pop();
                                         },
                                       ),

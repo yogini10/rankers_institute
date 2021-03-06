@@ -7,7 +7,9 @@ import 'package:rankers_institute/widgets/loading.dart';
 
 void main() {
   ErrorWidget.builder = (FlutterErrorDetails details) => SafeArea(
-        child: ErrorScr(),
+        child: ErrorScr(
+          error: details.toString(),
+        ),
       );
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());

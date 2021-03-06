@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/screens/smclasses.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
 import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/widgets/loading.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StuHome extends StatefulWidget {
   @override
@@ -63,7 +65,47 @@ class _StuHomeState extends State<StuHome> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [hpImage('5'), hpImage('Online Lecture')],
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          List link;
+                          link = await DatabaseServices(uid: g.uid)
+                              .getLink(g.stuGlob.classId);
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return StatefulBuilder(
+                                  builder: (context, setState) {
+                                return AlertDialog(
+                                  title: Text('Current Lecture'),
+                                  content: SingleChildScrollView(
+                                    child: RawMaterialButton(
+                                      onPressed: () {
+                                        launch(link[0]['link']);
+                                      },
+                                      child: Text(
+                                        link[0]['link'],
+                                        style: TextStyle(color: Colors.blue),
+                                      ),
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: Text('Ok'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              });
+                            },
+                          );
+                        },
+                        child: hpImage('5'),
+                      ),
+                      hpImage('Online Lecture')
+                    ],
                   ),
                 ],
               ),
