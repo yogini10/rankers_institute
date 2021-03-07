@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/newcontappbar.dart';
 
 class MYprofilestudent extends StatefulWidget {
@@ -60,7 +61,14 @@ class _MYprofilestudentState extends State<MYprofilestudent> {
                         ),
                         IconButton(
                             icon: FaIcon(FontAwesomeIcons.arrowRight),
-                            onPressed: null)
+                            onPressed: () async {
+                              g.stuGlob.name = g.stuName.text;
+                              await DatabaseServices(uid: g.uid)
+                                  .updateStuInfo(g.stuGlob, false);
+                              setState(() {
+                                isEditName = false;
+                              });
+                            })
                       ],
                     )
                   : Row(
@@ -70,8 +78,10 @@ class _MYprofilestudentState extends State<MYprofilestudent> {
                         IconButton(
                             icon: Icon(Icons.edit),
                             onPressed: () {
-                              g.teaName.text = g.teaGlob.teacherName;
-                              setState(() {});
+                              g.stuName.text = g.stuGlob.name;
+                              setState(() {
+                                isEditName = true;
+                              });
                             })
                       ],
                     ),
@@ -85,14 +95,21 @@ class _MYprofilestudentState extends State<MYprofilestudent> {
                         Container(
                           width: g.width * 0.6,
                           child: TextField(
-                            controller: g.teaEmail,
+                            controller: g.stuEmail,
                             decoration:
                                 InputDecoration(border: InputBorder.none),
                           ),
                         ),
                         IconButton(
                             icon: FaIcon(FontAwesomeIcons.arrowRight),
-                            onPressed: null)
+                            onPressed: () async {
+                              g.userGlob.email = g.stuEmail.text;
+                              await DatabaseServices(uid: g.uid)
+                                  .updateUserInfo(g.userGlob, false);
+                              setState(() {
+                                isEditEmail = false;
+                              });
+                            })
                       ],
                     )
                   : Row(
@@ -103,7 +120,7 @@ class _MYprofilestudentState extends State<MYprofilestudent> {
                             icon: Icon(Icons.edit),
                             onPressed: () {
                               setState(() {
-                                g.teaEmail.text = g.userGlob.email;
+                                g.stuEmail.text = g.userGlob.email;
                                 isEditEmail = true;
                               });
                             })
@@ -126,14 +143,28 @@ class _MYprofilestudentState extends State<MYprofilestudent> {
                         ),
                         IconButton(
                             icon: FaIcon(FontAwesomeIcons.arrowRight),
-                            onPressed: null)
+                            onPressed: () async {
+                              g.stuGlob.contact = g.stuContact.text;
+                              await DatabaseServices(uid: g.uid)
+                                  .updateStuInfo(g.stuGlob, false);
+                              setState(() {
+                                isEditContact = false;
+                              });
+                            })
                       ],
                     )
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(g.stuGlob.contact),
-                        IconButton(icon: Icon(Icons.edit), onPressed: null)
+                        IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              setState(() {
+                                g.stuContact.text = g.stuGlob.contact;
+                                isEditContact = true;
+                              });
+                            })
                       ],
                     ),
               SizedBox(
@@ -146,7 +177,7 @@ class _MYprofilestudentState extends State<MYprofilestudent> {
                 ],
               ),
               SizedBox(
-                height: g.height * 0.065,
+                height: g.height * 0.057,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
