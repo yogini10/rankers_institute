@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rankers_institute/MYprofileteacher.dart';
+import 'package:rankers_institute/MYprofilestudent.dart';
+import 'package:rankers_institute/screens/MYprofileteacher.dart';
 import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/models/admin.dart';
 import 'package:rankers_institute/models/feesm.dart';
@@ -158,6 +159,19 @@ class _HomePageState extends State<HomePage> {
                                         MYprofileteacher(
                                   subs: allS,
                                 ),
+                              ));
+                        } else if (g.userGlob.usertype == 'Student') {
+                          // List allS =
+                          //     await DatabaseServices(uid: g.uid).allSubClass();
+                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation1, animation2) =>
+                                        MYprofilestudent(
+                                            //subs: allS,
+                                            ),
                               ));
                         }
                       },
