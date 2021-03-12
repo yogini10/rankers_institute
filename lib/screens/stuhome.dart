@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+import 'package:rankers_institute/screens/schedule.dart';
 import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/screens/smclasses.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
@@ -29,7 +30,27 @@ class _StuHomeState extends State<StuHome> {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [hpImage('1'), hpImage('2')],
+                    children: [
+                      hpImage('1'),
+                      GestureDetector(
+                        child: hpImage('2'),
+                        onTap: () async {
+                          setState(() {
+                            isload = true;
+                          });
+                          List allC;
+                          allC =
+                              await DatabaseServices(uid: g.uid).allClasses();
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        ScheduleStu()),
+                          );
+                        },
+                      )
+                    ],
                   ),
                   SizedBox(
                     height: g.height * 0.02,

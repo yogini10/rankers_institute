@@ -64,7 +64,6 @@ class _HomePageState extends State<HomePage> {
       g.admGlob = Admin(
         admId: g.uid,
         contact: adm.get('contact'),
-        email: adm.get('email'),
         name: adm.get('name'),
       );
       g.name = g.admGlob.name;

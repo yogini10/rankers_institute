@@ -215,6 +215,7 @@ class DatabaseServices {
         .then((value) =>
             value.docs.map((e) => e.get("testType")).toList().toSet().toList());
     s.sort();
+
     return s;
   }
 
