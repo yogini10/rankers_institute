@@ -213,8 +213,10 @@ class DatabaseServices {
         .where("classID", isEqualTo: cls)
         .get()
         .then((value) =>
-            value.docs.map((e) => e.get("testType")).toList().toSet().toList());
-    s.sort();
+            value.docs.map((e) => e.data()).toList().toSet().toList());
+    // s.sort();
+    // get("testType")
+    print(s);
     return s;
   }
 
