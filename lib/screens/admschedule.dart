@@ -299,7 +299,7 @@ class _AddorUpdateSchState extends State<AddorUpdateSch> {
                             await DatabaseServices(uid: g.uid).updateSch(
                                 widget.subs[0]['class'],
                                 dropdownValue2,
-                                dropdownValue3,
+                                dropdownValue3 == null ? "" : dropdownValue3,
                                 dropdownValue);
                             Navigator.pushReplacement(
                               context,
