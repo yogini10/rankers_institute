@@ -39,14 +39,18 @@ class _StuHomeState extends State<StuHome> {
                             isload = true;
                           });
                           List allC;
-                          allC =
-                              await DatabaseServices(uid: g.uid).allClasses();
-                          Navigator.pushReplacement(
+                          allC = await DatabaseServices(uid: g.uid)
+                              .getSched(g.stuGlob.classId);
+                          isload = false;
+                          print(allC);
+                          Navigator.push(
                             context,
                             PageRouteBuilder(
                                 pageBuilder:
                                     (context, animation, secondaryAnimation) =>
-                                        ScheduleStu()),
+                                        ScheduleStu(
+                                          sch: allC,
+                                        )),
                           );
                         },
                       )
@@ -67,6 +71,7 @@ class _StuHomeState extends State<StuHome> {
                           List allC;
                           allC =
                               await DatabaseServices(uid: g.uid).allClasses();
+
                           Navigator.pushReplacement(
                             context,
                             PageRouteBuilder(

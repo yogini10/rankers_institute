@@ -202,7 +202,9 @@ class DatabaseServices {
             .toList()
             .toSet()
             .toList());
-    s.sort();
+    //s.sort();
+    //.get("subjectID")
+    s.length == 0 ? print('hey') : print(s);
     return s;
   }
 
@@ -214,8 +216,9 @@ class DatabaseServices {
         .get()
         .then((value) =>
             value.docs.map((e) => e.get("testType")).toList().toSet().toList());
-    s.sort();
-
+    //s.sort();
+    //.get("testType")
+    print(s);
     return s;
   }
 
@@ -232,6 +235,15 @@ class DatabaseServices {
         .update({
       time: subject,
     });
+  }
+
+  Future<List<Map>> getSched(String cls) async {
+    var v = await FirebaseFirestore.instance
+        .collection('schedule ')
+        .where('class', isEqualTo: cls)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+    return v;
   }
 
   //add marks
