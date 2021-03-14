@@ -118,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                             if (_formKey.currentState.validate()) {
                               dynamic result =
                                   await _auth.signInWithEmailAndPassword(
-                                      g.uName.text, g.uPass.text);
+                                      g.uName.text.trim(), g.uPass.text.trim());
                               g.uName.clear();
                               g.uPass.clear();
                               if (result == null) {
