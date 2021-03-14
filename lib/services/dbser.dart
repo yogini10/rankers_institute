@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:rankers_institute/models/students.dart';
 import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/user.dart';
@@ -152,15 +153,66 @@ class DatabaseServices {
       'dtitle': dtitle,
       'studentID': g.uid,
       'subject': subject,
-      'fileID': file
+      'fileID': file,
+      'isSolved': false
     });
   }
 
-  //get doubts
+  //update doubt
+  Future solDoubt(link) async {
+    var v = await FirebaseFirestore.instance
+        .collection('doubt')
+        .where('fileID', isEqualTo: link)
+        .get()
+        .then((value) => value.docs.map((e) => e).toList());
+    return await FirebaseFirestore.instance
+        .collection('doubt')
+        .doc(v[0].id)
+        .update({'isSolved': true});
+  }
+
+  //add solution
+  Future addSoln(link, file) async {
+    var v = await FirebaseFirestore.instance
+        .collection('doubt')
+        .where('fileID', isEqualTo: link)
+        .get()
+        .then((value) => value.docs.map((e) => e).toList());
+    return await FirebaseFirestore.instance
+        .collection('solution')
+        .doc(v[0].id)
+        .set({'doubtID': v[0].id, 'solFile': file, 'teacherID': g.uid});
+  }
+
+  //get doubts students
   Future<List> getDoubtSt() async {
     return await FirebaseFirestore.instance
         .collection('doubt')
         .where('studentID', isEqualTo: g.uid)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+  }
+
+  //get solution
+  Future<Map> getSoln(link) async {
+    var v = await FirebaseFirestore.instance
+        .collection('doubt')
+        .where('fileID', isEqualTo: link)
+        .get()
+        .then((value) => value.docs.map((e) => e).toList());
+    return await FirebaseFirestore.instance
+        .collection('solution')
+        .doc(v[0].id)
+        .get()
+        .then((value) => value.data());
+  }
+
+  //get doubts teacher
+  Future<List> getDoubtTe() async {
+    return await FirebaseFirestore.instance
+        .collection('doubt')
+        .where('subject', isEqualTo: g.teaGlob.subject)
+        .where('isSolved', isEqualTo: false)
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
   }

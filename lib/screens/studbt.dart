@@ -22,13 +22,17 @@ class _StuDoubtState extends State<StuDoubt> {
       return Column(
         children: [
           ListTile(
-            onTap: () {
+            onTap: () async {
+              Map allS;
+              allS = await DatabaseServices(uid: g.uid)
+                  .getSoln(map[index]['fileID']);
               Navigator.push(
                 context,
                 PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
                         StuFullDoubt(
                           doubt: map[index],
+                          soln: allS,
                         )),
               );
             },
@@ -59,7 +63,9 @@ class _StuDoubtState extends State<StuDoubt> {
                           Icon(Icons.image),
                           Icon(
                             Icons.message,
-                            color: Colors.green,
+                            color: map[index]['isSolved']
+                                ? Colors.green
+                                : Colors.red,
                           )
                         ],
                       ),
@@ -79,12 +85,13 @@ class _StuDoubtState extends State<StuDoubt> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffcaf0f8),
-      body: ListView(
-        children: getlist(widget.doubts),
-      ),
-      // body: Center(
-      //   child: Text('ADD ANY DOUBT...'),
-      // ),
+      body: widget.doubts == null || widget.doubts.isEmpty
+          ? Center(
+              child: Text('ADD ANY DOUBT...'),
+            )
+          : ListView(
+              children: getlist(widget.doubts),
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           List allS;
@@ -110,8 +117,9 @@ class _StuDoubtState extends State<StuDoubt> {
 
 class StuFullDoubt extends StatefulWidget {
   final Map doubt;
+  final Map soln;
 
-  const StuFullDoubt({Key key, this.doubt}) : super(key: key);
+  const StuFullDoubt({Key key, this.doubt, this.soln}) : super(key: key);
   @override
   _StuFullDoubtState createState() => _StuFullDoubtState();
 }
@@ -123,19 +131,25 @@ class _StuFullDoubtState extends State<StuFullDoubt> {
       backgroundColor: const Color(0xffcaf0f8),
       body: ListView(
         children: [
-          Padding(
-            padding: EdgeInsets.only(
+          Container(
+            color: Colors.white.withOpacity(0.5),
+            child: Padding(
+              padding: EdgeInsets.only(
                 left: g.width * 0.15,
                 right: g.width * 0.15,
-                bottom: g.height * 0.05),
-            child: Row(
-              children: [
-                Text(
-                  widget.doubt['dtitle'],
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
-                ),
-              ],
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    widget.doubt['dtitle'],
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+                  ),
+                ],
+              ),
             ),
+          ),
+          SizedBox(
+            height: g.height * 0.05,
           ),
           Padding(
             padding: EdgeInsets.only(
@@ -165,22 +179,57 @@ class _StuFullDoubtState extends State<StuFullDoubt> {
           SizedBox(
             height: g.height * 0.02,
           ),
-          RawMaterialButton(
-            onPressed: null,
-            child: Container(
-              height: g.height * 0.07,
-              width: g.width * 0.5,
-              decoration: BoxDecoration(
-                color: Color(0xff0077b6).withOpacity(0.5),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                  child: Text(
-                'Show solution',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              )),
-            ),
-          )
+          widget.soln != null
+              ? RawMaterialButton(
+                  onPressed: () {
+                    launch(widget.soln['solFile']);
+                  },
+                  child: Container(
+                    height: g.height * 0.07,
+                    width: g.width * 0.5,
+                    decoration: BoxDecoration(
+                      color: Color(0xff0077b6).withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                        child: Text(
+                      'Show solution',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                    )),
+                  ),
+                )
+              : Container(),
+          SizedBox(
+            height: g.height * 0.02,
+          ),
+          widget.doubt['isSolved'] == false && widget.soln != null
+              ? RawMaterialButton(
+                  onPressed: () {
+                    DatabaseServices(uid: g.uid)
+                        .solDoubt(widget.doubt['fileID']);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    height: g.height * 0.07,
+                    width: g.width * 0.5,
+                    decoration: BoxDecoration(
+                      color: Color(0xff007700).withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                        child: Text(
+                      'Doubt Solved',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                    )),
+                  ),
+                )
+              : Container(),
+          widget.doubt['isSolved'] == false && widget.soln != null
+              ? Center(child: Text('Only click, if Doubt Solved'))
+              : Container(),
         ],
       ),
     );
