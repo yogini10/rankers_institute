@@ -145,6 +145,26 @@ class DatabaseServices {
         .get();
   }
 
+  //add doubt
+  Future addDoubt(detail, dtitle, file, subject) async {
+    return await FirebaseFirestore.instance.collection('doubt').doc().set({
+      'details': detail,
+      'dtitle': dtitle,
+      'studentID': g.uid,
+      'subject': subject,
+      'fileID': file
+    });
+  }
+
+  //get doubts
+  Future<List> getDoubtSt() async {
+    return await FirebaseFirestore.instance
+        .collection('doubt')
+        .where('studentID', isEqualTo: g.uid)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+  }
+
   //get teacher if current
   Future<DocumentSnapshot> currentTea() async {
     return await FirebaseFirestore.instance

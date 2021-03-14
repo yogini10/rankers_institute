@@ -38,6 +38,10 @@ TextEditingController teaSubject = TextEditingController(text: "");
 //text controller for lecture adding
 TextEditingController leclink = TextEditingController(text: "");
 
+//text controller for add doubt
+TextEditingController title = TextEditingController(text: "");
+TextEditingController details = TextEditingController(text: "");
+
 //screen width and height
 double width;
 double height;

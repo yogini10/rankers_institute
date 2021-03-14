@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:rankers_institute/screens/schedule.dart';
+import 'package:rankers_institute/screens/studbt.dart';
 import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/screens/smclasses.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
@@ -83,7 +84,23 @@ class _StuHomeState extends State<StuHome> {
                           );
                         },
                       ),
-                      hpImage('4')
+                      GestureDetector(
+                        onTap: () async {
+                          List allDbt;
+                          allDbt =
+                              await DatabaseServices(uid: g.uid).getDoubtSt();
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        StuDoubt(
+                                          doubts: allDbt,
+                                        )),
+                          );
+                        },
+                        child: hpImage('4'),
+                      )
                     ],
                   ),
                   SizedBox(
@@ -107,7 +124,9 @@ class _StuHomeState extends State<StuHome> {
                                   content: SingleChildScrollView(
                                     child: RawMaterialButton(
                                       onPressed: () {
-                                        launch(link[0]['link']);
+                                        link[0]['link'] != ''
+                                            ? launch(link[0]['link'])
+                                            : setState(() {});
                                       },
                                       child: Text(
                                         link[0]['link'],
