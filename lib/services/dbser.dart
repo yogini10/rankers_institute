@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:rankers_institute/models/students.dart';
 import 'package:rankers_institute/models/teachers.dart';
+import 'package:rankers_institute/models/test.dart';
 import 'package:rankers_institute/models/user.dart';
 import 'package:rankers_institute/globals.dart' as g;
 
@@ -191,6 +192,41 @@ class DatabaseServices {
         .where('studentID', isEqualTo: g.uid)
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
+  }
+
+  //get tests of student
+  Future<List<TestData>> getTest(arg, value) async {
+    var u = await FirebaseFirestore.instance
+        .collection('test')
+        .where(arg, isEqualTo: value)
+        .where('classID', isEqualTo: g.stuGlob.classId)
+        .get()
+        .then((value) => value.docs.map((e) => e.id).toList());
+    var u1 = await FirebaseFirestore.instance
+        .collection('test')
+        .where(arg, isEqualTo: value)
+        .where('classID', isEqualTo: g.stuGlob.classId)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+    if (u.isEmpty) {
+      return [];
+    }
+    var v = await FirebaseFirestore.instance
+        .collection('marks')
+        .where('studentID', isEqualTo: g.uid)
+        .where('testID', whereIn: u)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+    List<TestData> ret = [];
+    TestData t;
+    for (int i = 0; i < v.length; i++) {
+      t = TestData(
+          marks: int.parse(v[i]['marks']),
+          test: u1[u.indexOf(v[i]['testID'])]['testType'],
+          sub: value);
+      ret.add(t);
+    }
+    return (ret);
   }
 
   //get solution

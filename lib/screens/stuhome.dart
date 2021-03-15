@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+import 'package:rankers_institute/screens/analysis.dart';
 import 'package:rankers_institute/screens/schedule.dart';
 import 'package:rankers_institute/screens/studbt.dart';
 import 'package:rankers_institute/services/dbser.dart';
@@ -32,7 +33,32 @@ class _StuHomeState extends State<StuHome> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      hpImage('1'),
+                      GestureDetector(
+                          onTap: () async {
+                            isload = true;
+                            setState(() {});
+                            final Map testdata = {};
+                            List allS = await DatabaseServices(uid: g.uid)
+                                .allSubs(g.stuGlob.classId);
+                            for (int i = 0; i < allS.length; i++) {
+                              var v = await DatabaseServices(uid: g.uid)
+                                  .getTest('subjectID', allS[i]['subject']);
+                              if (v.isNotEmpty) {
+                                testdata[allS[i]['subject']] = v;
+                              }
+                            }
+                            isload = false;
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      StuAnalysis(
+                                        testd: testdata,
+                                      )),
+                            );
+                          },
+                          child: hpImage('1')),
                       GestureDetector(
                         child: hpImage('2'),
                         onTap: () async {
