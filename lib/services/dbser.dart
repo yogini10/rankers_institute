@@ -229,6 +229,68 @@ class DatabaseServices {
     return (ret);
   }
 
+  //get particular subjects
+  Future<List> getcls() async {
+    return await FirebaseFirestore.instance
+        .collection('subjects')
+        .where('subject', isEqualTo: g.teaGlob.subject)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()['class']).toList());
+  }
+
+  //get test data teacher
+  Future<List> getTestt(arg, value) async {
+    var u = await FirebaseFirestore.instance
+        .collection('test')
+        .where(arg, isEqualTo: value)
+        .where('subjectID', isEqualTo: g.teaGlob.subject)
+        .get()
+        .then((value) => value.docs.map((e) => e.id).toList());
+    var u1 = await FirebaseFirestore.instance
+        .collection('test')
+        .where(arg, isEqualTo: value)
+        .where('subjectID', isEqualTo: g.teaGlob.subject)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+    if (u.isEmpty) {
+      return [];
+    }
+    var v = await FirebaseFirestore.instance
+        .collection('marks')
+        .where('testID', whereIn: u)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+    List<TestTea> ret = [];
+    List ret2 = [];
+    List ret3 = [];
+    TestTea t;
+    for (int i = 0; i < v.length; i++) {
+      var x = await FirebaseFirestore.instance
+          .collection('student')
+          .doc(v[i]['studentID'])
+          .get()
+          .then((value) => value.data());
+      t = TestTea(
+          marks: int.parse(v[i]['marks']),
+          test: u1[u.indexOf(v[i]['testID'])]['testType'],
+          classID: value,
+          name: x['rollno']);
+      ret.add(t);
+      ret2.add(x['rollno']);
+    }
+    ret2.toSet().toList();
+    for (int i = 0; i < ret2.length; i++) {
+      List<TestTea> li = [];
+      for (int j = 0; j < ret.length; j++) {
+        if (ret[j].name == ret2[i]) {
+          li.add(ret[j]);
+        }
+      }
+      ret3.add(li);
+    }
+    return (ret3);
+  }
+
   //get solution
   Future<Map> getSoln(link) async {
     var v = await FirebaseFirestore.instance
@@ -248,7 +310,7 @@ class DatabaseServices {
     return await FirebaseFirestore.instance
         .collection('doubt')
         .where('subject', isEqualTo: g.teaGlob.subject)
-        .where('isSolved', isEqualTo: false)
+        //.where('isSolved', isEqualTo: true)
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
   }
