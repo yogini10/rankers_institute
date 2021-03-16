@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:rankers_institute/screens/teaanalysis.dart';
 import 'package:rankers_institute/screens/teadbt.dart';
 import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
 import 'package:rankers_institute/widgets/loading.dart';
 import 'package:rankers_institute/globals.dart' as g;
 
-class TeaHome extends StatelessWidget {
+class TeaHome extends StatefulWidget {
   TeaHome({
     Key key,
   }) : super(key: key);
+
+  @override
+  _TeaHomeState createState() => _TeaHomeState();
+}
+
+class _TeaHomeState extends State<TeaHome> {
   @override
   Widget build(BuildContext context) {
     bool isload = false;
@@ -25,7 +32,35 @@ class TeaHome extends StatelessWidget {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [hpImage('1'), hpImage('2')],
+                    children: [
+                      GestureDetector(
+                          onTap: () async {
+                            isload = true;
+                            setState(() {});
+                            final Map testdata = {};
+                            List allT =
+                                await DatabaseServices(uid: g.uid).getcls();
+                            for (int i = 0; i < allT.length; i++) {
+                              var v = await DatabaseServices(uid: g.uid)
+                                  .getTestt('classID', allT[i]);
+                              if (v.isNotEmpty) {
+                                testdata[allT[i]] = v;
+                              }
+                            }
+                            isload = false;
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      TeaAnalysis(
+                                        testd: testdata,
+                                      )),
+                            );
+                          },
+                          child: hpImage('1')),
+                      hpImage('2')
+                    ],
                   ),
                   SizedBox(
                     height: g.height * 0.02,
