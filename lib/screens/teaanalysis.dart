@@ -44,7 +44,14 @@ class _TeaAnalysisState extends State<TeaAnalysis> {
           child: ListView(
             children: [
               Container(
-                color: Colors.white.withOpacity(0.7),
+                decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                  BoxShadow(
+                    color: const Color(0x24000000),
+                    spreadRadius: 7,
+                    offset: Offset(6, 3),
+                    blurRadius: 12,
+                  ),
+                ]),
                 child: DropdownButton<String>(
                   isExpanded: true,
                   value: dropdownValue3,

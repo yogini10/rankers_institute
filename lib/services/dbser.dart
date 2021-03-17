@@ -5,6 +5,7 @@ import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/test.dart';
 import 'package:rankers_institute/models/user.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class DatabaseServices {
   final String uid;
@@ -157,6 +158,27 @@ class DatabaseServices {
       'fileID': file,
       'isSolved': false
     });
+  }
+
+  //add notice
+  Future addNotice(detail, dtitle, file) async {
+    DateTime now = new DateTime.now();
+    return await FirebaseFirestore.instance.collection('notices').doc().set({
+      'details': detail,
+      'title': dtitle,
+      'fileID': file,
+      'date': now.day,
+      'month': now.month,
+      'year': now.year
+    });
+  }
+
+  //get notices
+  Future<List> getNotices() async {
+    return await FirebaseFirestore.instance
+        .collection('notices')
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
   }
 
   //update doubt

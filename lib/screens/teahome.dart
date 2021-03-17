@@ -16,9 +16,9 @@ class TeaHome extends StatefulWidget {
 }
 
 class _TeaHomeState extends State<TeaHome> {
+  bool isload = false;
   @override
   Widget build(BuildContext context) {
-    bool isload = false;
     return isload
         ? LoadingScreen()
         : Scaffold(
@@ -35,8 +35,9 @@ class _TeaHomeState extends State<TeaHome> {
                     children: [
                       GestureDetector(
                           onTap: () async {
-                            isload = true;
-                            setState(() {});
+                            setState(() {
+                              isload = true;
+                            });
                             final Map testdata = {};
                             List allT =
                                 await DatabaseServices(uid: g.uid).getcls();
