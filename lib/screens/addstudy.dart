@@ -30,7 +30,7 @@ class _AdmSmClsState extends State<AdmSmCls> {
               List allS;
               allS = await DatabaseServices(uid: g.uid)
                   .allSubs(maps[index]['class']);
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
                 PageRouteBuilder(
                   pageBuilder: (context, animation, secondaryAnimation) =>
@@ -170,13 +170,8 @@ class _AddManuallyState extends State<AddManually> {
                                 size: 30,
                               ),
                               onPressed: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  PageRouteBuilder(
-                                      pageBuilder: (context, animation,
-                                              secondaryAnimation) =>
-                                          AdmHome()),
-                                );
+                                Navigator.pop(context);
+                                Navigator.pop(context);
                               },
                             ),
                             Expanded(child: Container()),
@@ -261,6 +256,7 @@ class _AddManuallyState extends State<AddManually> {
                               var url = await uploadFile(file);
                               DatabaseServices(uid: g.uid).updateMaterial(
                                   widget.subs[0]['class'], url, dropdownValue3);
+                              Navigator.pop(context);
                               Navigator.pop(context);
                             },
                             child: Container(
