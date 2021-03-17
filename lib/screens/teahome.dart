@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:rankers_institute/screens/addstudy.dart';
+import 'package:rankers_institute/screens/schedule.dart';
 import 'package:rankers_institute/screens/teaanalysis.dart';
 import 'package:rankers_institute/screens/teadbt.dart';
 import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
 import 'package:rankers_institute/widgets/loading.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/widgets/loginfield.dart';
 
 class TeaHome extends StatefulWidget {
   TeaHome({
@@ -60,7 +63,21 @@ class _TeaHomeState extends State<TeaHome> {
                             );
                           },
                           child: hpImage('1')),
-                      hpImage('2')
+                      GestureDetector(
+                          onTap: () async {
+                            List allS =
+                                await DatabaseServices(uid: g.uid).allClasses();
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      TeaSchedule(
+                                        list: allS,
+                                      )),
+                            );
+                          },
+                          child: hpImage('2'))
                     ],
                   ),
                   SizedBox(
@@ -69,7 +86,25 @@ class _TeaHomeState extends State<TeaHome> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      hpImage('3'),
+                      GestureDetector(
+                          onTap: () async {
+                            setState(() {
+                              isload = true;
+                            });
+                            List allC;
+                            allC =
+                                await DatabaseServices(uid: g.uid).allClasses();
+                            isload = false;
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        AdmSmCls(list: allC),
+                              ),
+                            );
+                          },
+                          child: hpImage('3')),
                       GestureDetector(
                         onTap: () async {
                           List allDbt;
@@ -94,7 +129,80 @@ class _TeaHomeState extends State<TeaHome> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [hpImage('5'), hpImage('Online Lecture')],
+                    children: [
+                      GestureDetector(
+                          onTap: () async {
+                            List allC;
+                            allC =
+                                await DatabaseServices(uid: g.uid).allClasses();
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                String classid;
+                                return StatefulBuilder(
+                                    builder: (context, setState) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      FocusScopeNode currentFocus =
+                                          FocusScope.of(context);
+                                      if (!currentFocus.hasPrimaryFocus) {
+                                        currentFocus.unfocus();
+                                      }
+                                    },
+                                    child: AlertDialog(
+                                      title: Text('Add Lecture'),
+                                      content: SingleChildScrollView(
+                                        child: ListBody(
+                                          children: <Widget>[
+                                            TxtField(
+                                              ctrl: g.leclink,
+                                              hint: "Lecture Link",
+                                            ),
+                                            DropdownButton<String>(
+                                              isExpanded: true,
+                                              value: classid,
+                                              elevation: 16,
+                                              hint: Text('Class'),
+                                              onChanged: (String newValue) {
+                                                setState(() {
+                                                  classid = newValue;
+                                                });
+                                              },
+                                              items: allC.map<
+                                                      DropdownMenuItem<String>>(
+                                                  (value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value['class'],
+                                                  child: Text(
+                                                    value['class'],
+                                                  ),
+                                                );
+                                              }).toList(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          child: Text('Add'),
+                                          onPressed: () {
+                                            g.leclink.clear();
+                                            DatabaseServices(uid: g.uid)
+                                                .updateLecture(
+                                                    g.leclink.text, classid);
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                });
+                              },
+                            );
+                          },
+                          child: hpImage('5')),
+                      hpImage('Online Lecture')
+                    ],
                   ),
                 ],
               ),

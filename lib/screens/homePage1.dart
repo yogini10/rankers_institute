@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rankers_institute/Notice.dart';
+import 'package:rankers_institute/screens/Notice.dart';
 import 'package:rankers_institute/screens/MYprofilestudent.dart';
 import 'package:rankers_institute/screens/MYprofileteacher.dart';
 import 'package:rankers_institute/globals.dart' as g;
