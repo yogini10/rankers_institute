@@ -38,7 +38,7 @@ TextEditingController teaSubject = TextEditingController(text: "");
 //text controller for lecture adding
 TextEditingController leclink = TextEditingController(text: "");
 
-//text controller for add doubt
+//text controller for add doubt and notice
 TextEditingController title = TextEditingController(text: "");
 TextEditingController details = TextEditingController(text: "");
 
