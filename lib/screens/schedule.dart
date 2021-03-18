@@ -397,6 +397,7 @@ class _TeaScheduleState extends State<TeaSchedule> {
               List allS;
               allS = await DatabaseServices(uid: g.uid)
                   .getSched(maps[index]['class']);
+              print(allS);
               isload = false;
               Navigator.push(
                 context,
