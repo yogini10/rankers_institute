@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                               if (val.isEmpty) {
                                 return 'Email ID field must not be empty';
                               }
-                              if (!val.endsWith('.com')) {
+                              if (!val.trim().endsWith('.com')) {
                                 return 'Invalid Email ID';
                               }
                               return null;
@@ -112,10 +112,10 @@ class _LoginPageState extends State<LoginPage> {
                         offset: Offset(g.width * 0.125, g.height * 0.63),
                         child: RawMaterialButton(
                           onPressed: () async {
-                            setState(() {
-                              isload = true;
-                            });
                             if (_formKey.currentState.validate()) {
+                              setState(() {
+                                isload = true;
+                              });
                               dynamic result =
                                   await _auth.signInWithEmailAndPassword(
                                       g.uName.text.trim(), g.uPass.text.trim());
@@ -167,22 +167,22 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       //forgot password action
-                      Transform.translate(
-                        offset: Offset(g.width * 0.55, g.height * 0.73),
-                        child: RawMaterialButton(
-                          onPressed: null,
-                          child: Text(
-                            'Forget Password',
-                            style: TextStyle(
-                              fontFamily: 'Calibri',
-                              fontSize: 16,
-                              color: const Color(0xba0e0d0d),
-                              fontWeight: FontWeight.w700,
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                      ),
+                      // Transform.translate(
+                      //   offset: Offset(g.width * 0.55, g.height * 0.73),
+                      //   child: RawMaterialButton(
+                      //     onPressed: null,
+                      //     child: Text(
+                      //       'Forget Password',
+                      //       style: TextStyle(
+                      //         fontFamily: 'Calibri',
+                      //         fontSize: 16,
+                      //         color: const Color(0xba0e0d0d),
+                      //         fontWeight: FontWeight.w700,
+                      //       ),
+                      //       textAlign: TextAlign.left,
+                      //     ),
+                      //   ),
+                      // ),
                       Transform.translate(
                         offset: Offset(g.width * 0.02, g.height * 0.59),
                         child: Row(
