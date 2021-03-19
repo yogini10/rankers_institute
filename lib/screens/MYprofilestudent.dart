@@ -188,24 +188,6 @@ class _MYprofilestudentState extends State<MYprofilestudent> {
             ],
           ),
         ),
-        // body: Stack(
-        //   children: <Widget>[
-        //
-        //
-        //     Transform.translate(
-        //       offset: Offset(69.0, 587.0),
-        //       child: Text(
-        //         'ID',
-        //         style: TextStyle(
-        //           fontFamily: 'Segoe UI',
-        //           fontSize: 13,
-        //           color: const Color(0xff707070),
-        //         ),
-        //         textAlign: TextAlign.left,
-        //       ),
-        //     ),
-        //   ],
-        // ),
       ),
     );
   }

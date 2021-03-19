@@ -45,6 +45,8 @@ TextEditingController details = TextEditingController(text: "");
 //screen width and height
 double width;
 double height;
+String contact;
+String email;
 
 //fees of students
 Map fees = {

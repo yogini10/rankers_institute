@@ -32,9 +32,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   void update() async {
     if (mounted) {
-      setState(() {});
+      setState(() {
+        //isload = true;
+      });
+    } else {
+      setState(() {
+        isload = true;
+      });
     }
     var u = await DatabaseServices(uid: g.uid).currentUser();
+    var j = await DatabaseServices(uid: g.uid).getinfo();
+    g.contact = j[0]['ctno'];
+    g.email = j[0]['email'];
     g.userGlob = User(
         uid: g.uid,
         password: u.get('password'),
@@ -70,7 +79,9 @@ class _HomePageState extends State<HomePage> {
       g.name = g.admGlob.name;
     }
     if (mounted) {
-      setState(() {});
+      setState(() {
+        isload = false;
+      });
     }
   }
 
@@ -96,11 +107,11 @@ class _HomePageState extends State<HomePage> {
                         color: Color(0xffcaf0f8),
                       ),
                       accountName: Text(
-                        g.name,
+                        g.name == null ? '' : g.name,
                         style: TextStyle(color: Colors.black),
                       ),
                       accountEmail: Text(
-                        g.userGlob.email,
+                        g.userGlob.email == null ? '' : g.userGlob.email,
                         style: TextStyle(color: Colors.black),
                       ),
                       currentAccountPicture: CircleAvatar(
@@ -109,9 +120,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                     ListTile(
                       onTap: () async {
+                        setState(() {
+                          isload = true;
+                        });
                         Navigator.pop(context);
                         var allC;
                         allC = await DatabaseServices(uid: g.uid).getNotices();
+                        isload = false;
                         Navigator.push(
                             context,
                             PageRouteBuilder(
@@ -129,9 +144,10 @@ class _HomePageState extends State<HomePage> {
                         ? ListTile(
                             title: Text('Fees details'),
                             onTap: () {
+                              setState(() {
+                                isload = true;
+                              });
                               Navigator.pop(context);
-                              isload = true;
-                              setState(() {});
                               isload = false;
                               Navigator.push(
                                   context,
@@ -155,46 +171,59 @@ class _HomePageState extends State<HomePage> {
                             context,
                             PageRouteBuilder(
                               pageBuilder: (context, animation1, animation2) =>
-                                  Contactus(),
+                                  g.userGlob.usertype == 'Admin'
+                                      ? AdmContact()
+                                      : Contactus(),
                             ));
                       },
                     ),
-                    ListTile(
-                      title: Text('Your Profile'),
-                      onTap: () async {
-                        if (g.userGlob.usertype == 'Teacher') {
-                          List allS =
-                              await DatabaseServices(uid: g.uid).allSubClass();
-                          Navigator.pop(context);
-                          Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation1, animation2) =>
-                                        MYprofileteacher(
-                                  subs: allS,
-                                ),
-                              ));
-                        } else if (g.userGlob.usertype == 'Student') {
-                          // List allS =
-                          //     await DatabaseServices(uid: g.uid).allSubClass();
-                          Navigator.pop(context);
-                          Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation1, animation2) =>
-                                        MYprofilestudent(
-                                            //subs: allS,
-                                            ),
-                              ));
-                        }
-                      },
-                    ),
+                    g.userGlob.usertype != 'Admin'
+                        ? ListTile(
+                            title: Text('Your Profile'),
+                            onTap: () async {
+                              setState(() {
+                                isload = true;
+                              });
+                              if (g.userGlob.usertype == 'Teacher') {
+                                List allS = await DatabaseServices(uid: g.uid)
+                                    .allSubClass();
+                                Navigator.pop(context);
+                                isload = false;
+                                Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder:
+                                          (context, animation1, animation2) =>
+                                              MYprofileteacher(
+                                        subs: allS,
+                                      ),
+                                    ));
+                              } else if (g.userGlob.usertype == 'Student') {
+                                // List allS =
+                                //     await DatabaseServices(uid: g.uid).allSubClass();
+                                Navigator.pop(context);
+                                isload = false;
+                                Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder:
+                                          (context, animation1, animation2) =>
+                                              MYprofilestudent(
+                                                  //subs: allS,
+                                                  ),
+                                    ));
+                              }
+                            },
+                          )
+                        : Container(),
                     ListTile(
                       title: Text('About us'),
                       onTap: () {
+                        setState(() {
+                          isload = true;
+                        });
                         Navigator.pop(context);
+                        isload = false;
                         Navigator.push(
                             context,
                             PageRouteBuilder(
