@@ -39,7 +39,7 @@ class _AboutUsState extends State<AboutUs> {
         onPanUpdate: (details) {
           if (details.delta.dx > g.width * 0.02) {
             if (widget.index != 0) {
-              Navigator.pushReplacement(
+              Navigator.pop(
                 context,
                 PageRouteBuilder(
                   pageBuilder: (context, animation1, animation2) => AboutUs(
@@ -63,7 +63,7 @@ class _AboutUsState extends State<AboutUs> {
             }
           } else if (details.delta.dx < -(g.width * 0.02)) {
             if (widget.index != 8) {
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation1, animation2) => AboutUs(
