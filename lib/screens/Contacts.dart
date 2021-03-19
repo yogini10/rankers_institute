@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/screens/loc.dart';
+import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/newcontappbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Contactus extends StatelessWidget {
+class Contactus extends StatefulWidget {
   Contactus({
     Key key,
   }) : super(key: key);
+
+  @override
+  _ContactusState createState() => _ContactusState();
+}
+
+class _ContactusState extends State<Contactus> {
+  String error = '';
   @override
   Widget build(BuildContext context) {
     int maxlines = 5;
@@ -83,7 +92,9 @@ class Contactus extends StatelessWidget {
                       height: g.height * 0.005,
                     ),
                     Text(
-                      'Dummy Student Name',
+                      g.userGlob.usertype == 'Teacher'
+                          ? g.teaGlob.teacherName
+                          : g.stuGlob.name,
                       style: TextStyle(
                         fontFamily: 'Segoe UI',
                         fontSize: 18,
@@ -106,7 +117,7 @@ class Contactus extends StatelessWidget {
                       height: g.height * 0.005,
                     ),
                     Text(
-                      'Dummy email',
+                      g.userGlob.email,
                       style: TextStyle(
                         fontFamily: 'Segoe UI',
                         fontSize: 18,
@@ -128,14 +139,16 @@ class Contactus extends StatelessWidget {
                     SizedBox(
                       height: g.height * 0.005,
                     ),
-                    Text(
-                      'Dummy contact',
-                      style: TextStyle(
-                        fontFamily: 'Segoe UI',
-                        fontSize: 18,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
+                    g.userGlob.usertype == 'Student'
+                        ? Text(
+                            g.stuGlob.contact,
+                            style: TextStyle(
+                              fontFamily: 'Segoe UI',
+                              fontSize: 18,
+                            ),
+                            textAlign: TextAlign.left,
+                          )
+                        : Container(),
                     SizedBox(
                       height: g.height * 0.025,
                     ),
@@ -157,6 +170,7 @@ class Contactus extends StatelessWidget {
                         maxLines: maxlines,
                         maxLength: 280,
                         autofocus: false,
+                        controller: g.details,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.0),
@@ -173,7 +187,30 @@ class Contactus extends StatelessWidget {
                       ),
                     ),
                     RawMaterialButton(
-                      onPressed: null,
+                      onPressed: () async {
+                        if (g.details.text.isEmpty) {
+                          setState(() {
+                            error = 'Cannot send Empty Mail';
+                          });
+                        } else {
+                          setState(() {
+                            error = '';
+                          });
+                          final Email email = Email(
+                              subject: 'Feedback: Rankers Institute',
+                              recipients: ['gauravgarmode16@gmail.com'],
+                              body: g.details.text);
+                          String platformResponse = '';
+                          try {
+                            await FlutterEmailSender.send(email);
+                            platformResponse = 'success';
+                          } catch (error) {
+                            platformResponse = error.toString();
+                          }
+                          g.details.clear();
+                          Navigator.pop(context);
+                        }
+                      },
                       child: Container(
                         height: g.height * 0.04,
                         width: g.width * 0.3,
@@ -192,7 +229,7 @@ class Contactus extends StatelessWidget {
                         ]),
                         child: Center(
                           child: Text(
-                            'SUBMIT',
+                            'Send',
                             style: TextStyle(
                               fontFamily: 'Segoe UI',
                               fontSize: 13,
@@ -201,6 +238,12 @@ class Contactus extends StatelessWidget {
                             textAlign: TextAlign.left,
                           ),
                         ),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        error,
+                        style: TextStyle(color: Colors.red),
                       ),
                     ),
                     SizedBox(
@@ -242,6 +285,130 @@ class Contactus extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AdmContact extends StatefulWidget {
+  @override
+  _AdmContactState createState() => _AdmContactState();
+}
+
+class _AdmContactState extends State<AdmContact> {
+  bool isEditName = false;
+  bool isEditEmail = false;
+  bool isEditContact = false;
+  bool isEditSub = false;
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        appBar: ncAppBaer(),
+        backgroundColor: const Color(0xffcaf0f8),
+        body: Padding(
+          padding: EdgeInsets.only(
+              top: g.height * 0.025, left: g.width * 0.1, right: g.width * 0.1),
+          child: ListView(
+            children: [
+              Center(
+                child: Container(
+                  width: g.width * 0.4,
+                  height: g.height * 0.2,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(g.width * 0.2),
+                    image: DecorationImage(
+                      image: const AssetImage('lib/assets/user.png'),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: g.height * 0.075,
+              ),
+              isEditEmail
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: g.width * 0.6,
+                          child: TextField(
+                            controller: g.stuEmail,
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
+                          ),
+                        ),
+                        IconButton(
+                            icon: FaIcon(FontAwesomeIcons.arrowRight),
+                            onPressed: () async {
+                              g.email = g.stuEmail.text;
+                              await DatabaseServices(uid: g.uid)
+                                  .updateInfo(g.contact, g.email);
+                              setState(() {
+                                isEditEmail = false;
+                              });
+                            })
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(g.email),
+                        IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              setState(() {
+                                g.stuEmail.text = g.email;
+                                isEditEmail = true;
+                              });
+                            })
+                      ],
+                    ),
+              SizedBox(
+                height: g.height * 0.035,
+              ),
+              isEditContact
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: g.width * 0.6,
+                          child: TextField(
+                            controller: g.stuContact,
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
+                          ),
+                        ),
+                        IconButton(
+                            icon: FaIcon(FontAwesomeIcons.arrowRight),
+                            onPressed: () async {
+                              g.contact = g.stuContact.text;
+                              await DatabaseServices(uid: g.uid)
+                                  .updateInfo(g.contact, g.email);
+                              setState(() {
+                                isEditContact = false;
+                              });
+                            })
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(g.contact),
+                        IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () async {
+                              setState(() {
+                                g.stuContact.text = g.contact;
+                                isEditContact = true;
+                              });
+                            })
+                      ],
+                    ),
+            ],
           ),
         ),
       ),

@@ -438,6 +438,23 @@ class DatabaseServices {
     return v;
   }
 
+  //get center info
+  Future<List> getinfo() async {
+    return await FirebaseFirestore.instance
+        .collection('center')
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+  }
+
+  //update center info
+  Future updateInfo(ctno, email) async {
+    var j = await FirebaseFirestore.instance.collection('center').get();
+    return await FirebaseFirestore.instance
+        .collection('center')
+        .doc(j.docs[0].id)
+        .update({'ctno': ctno, 'email': email});
+  }
+
   //add marks
   Future addMarks(email, marks, sub, test, cls) async {
     var u = await FirebaseFirestore.instance
