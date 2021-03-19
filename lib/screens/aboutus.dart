@@ -35,39 +35,20 @@ class _AboutUsState extends State<AboutUs> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: GestureDetector(
-        onPanUpdate: (details) {
-          if (details.delta.dx > g.width * 0.02) {
-            if (widget.index != 0) {
-              Navigator.pop(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) => AboutUs(
-                    index: widget.index - 1,
-                  ),
-                  transitionsBuilder: (
-                    BuildContext context,
-                    Animation<double> animation,
-                    Animation<double> secondaryAnimation,
-                    Widget child,
-                  ) =>
-                      SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(-1, 0),
-                      end: Offset.zero,
-                    ).animate(animation),
-                    child: child,
-                  ),
-                ),
-              );
-            }
-          } else if (details.delta.dx < -(g.width * 0.02)) {
-            if (widget.index != 8) {
-              Navigator.push(
+      child: WillPopScope(
+        onWillPop: () {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+          return Future.value(false);
+        },
+        child: GestureDetector(
+          onPanUpdate: (details) {
+            if (details.delta.dx > g.width * 0.02) {
+              if (widget.index != 0) {
+                Navigator.pop(
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation1, animation2) => AboutUs(
-                      index: widget.index + 1,
+                      index: widget.index - 1,
                     ),
                     transitionsBuilder: (
                       BuildContext context,
@@ -77,18 +58,43 @@ class _AboutUsState extends State<AboutUs> {
                     ) =>
                         SlideTransition(
                       position: Tween<Offset>(
-                        begin: const Offset(1, 0),
+                        begin: const Offset(-1, 0),
                         end: Offset.zero,
                       ).animate(animation),
                       child: child,
                     ),
-                  ));
+                  ),
+                );
+              }
+            } else if (details.delta.dx < -(g.width * 0.02)) {
+              if (widget.index != 8) {
+                Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) => AboutUs(
+                        index: widget.index + 1,
+                      ),
+                      transitionsBuilder: (
+                        BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation,
+                        Widget child,
+                      ) =>
+                          SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(1, 0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      ),
+                    ));
+              }
             }
-          }
-        },
-        child: Scaffold(
-          appBar: ncAppBaer(),
-          body: lista(widget.index),
+          },
+          child: Scaffold(
+            appBar: ncAppBaer(),
+            body: lista(widget.index),
+          ),
         ),
       ),
     );
