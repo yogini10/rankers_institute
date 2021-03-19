@@ -32,6 +32,7 @@ class _AdmNoticeState extends State<AdmNotice> {
     }
   }
 
+  String error = '';
   File file;
   @override
   Widget build(BuildContext context) {
@@ -92,10 +93,31 @@ class _AdmNoticeState extends State<AdmNotice> {
                     SizedBox(
                       height: g.height * 0.03,
                     ),
+                    file != null
+                        ? Row(
+                            children: [
+                              Icon(
+                                Icons.image,
+                                color: Colors.red,
+                              ),
+                              Container(
+                                width: g.width * 0.62,
+                                child: Text(
+                                  p.basename(file.path),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Container(),
+                    SizedBox(
+                      height: g.height * 0.03,
+                    ),
                     Center(
                       child: RawMaterialButton(
                         onPressed: () async {
                           file = await FilePicker.getFile(type: FileType.image);
+                          setState(() {});
                         },
                         child: Container(
                           width: g.width * 0.5,
@@ -111,14 +133,25 @@ class _AdmNoticeState extends State<AdmNotice> {
                     Center(
                       child: RawMaterialButton(
                         onPressed: () async {
-                          if (file != null) {
-                            var url = await uploadFile(file);
-                            DatabaseServices(uid: g.uid)
-                                .addNotice(g.details.text, g.title.text, url);
+                          if (g.details.text.isNotEmpty &&
+                              g.title.text.isNotEmpty) {
+                            if (file != null) {
+                              var url = await uploadFile(file);
+                              DatabaseServices(uid: g.uid)
+                                  .addNotice(g.details.text, g.title.text, url);
+                            } else {
+                              DatabaseServices(uid: g.uid)
+                                  .addNotice(g.details.text, g.title.text, '');
+                            }
+                            g.details.clear();
+                            g.title.clear();
+                            Navigator.pop(context);
+                          } else {
+                            setState(() {
+                              error =
+                                  'Title or description must not be left blanck';
+                            });
                           }
-                          g.details.clear();
-                          g.title.clear();
-                          Navigator.pop(context);
                         },
                         child: Container(
                           width: g.width * 0.5,
@@ -129,6 +162,12 @@ class _AdmNoticeState extends State<AdmNotice> {
                           ),
                           child: Center(child: Text('Add')),
                         ),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        error,
+                        style: TextStyle(color: Colors.red),
                       ),
                     ),
                   ],
@@ -266,15 +305,17 @@ class _FullNoticeState extends State<FullNotice> {
                   left: g.width * 0.1,
                   right: g.width * 0.1,
                   bottom: g.height * 0.05),
-              child: Text(widget.notice['details']),
+              child: Container(child: Text(widget.notice['details'])),
             ),
             SizedBox(
               height: g.height * 0.05,
             ),
-            Container(
-              height: g.height * 0.2,
-              child: Image.network(widget.notice['fileID']),
-            )
+            widget.notice['fileID'] == ''
+                ? Container()
+                : Container(
+                    height: g.height * 0.2,
+                    child: Image.network(widget.notice['fileID']),
+                  )
           ],
         ),
       ),

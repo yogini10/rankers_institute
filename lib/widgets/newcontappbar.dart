@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rankers_institute/globals.dart' as g;
 
 AppBar ncAppBaer() {
   return AppBar(
@@ -11,6 +12,8 @@ AppBar ncAppBaer() {
               size: 30,
             ),
             onPressed: () {
+              g.stuEmail.clear();
+              g.stuContact.clear();
               Navigator.pop(context);
             });
       },
