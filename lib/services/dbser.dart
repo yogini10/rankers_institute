@@ -394,9 +394,7 @@ class DatabaseServices {
             .toList()
             .toSet()
             .toList());
-    //s.sort();
-    //.get("subjectID")
-    s.length == 0 ? print('hey') : print(s);
+    s.sort();
     return s;
   }
 
@@ -408,9 +406,7 @@ class DatabaseServices {
         .get()
         .then((value) =>
             value.docs.map((e) => e.get("testType")).toList().toSet().toList());
-    //s.sort();
-    //.get("testType")
-    print(s);
+    s.sort();
     return s;
   }
 

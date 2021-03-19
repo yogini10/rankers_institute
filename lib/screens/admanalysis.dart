@@ -138,6 +138,7 @@ class _AddTestDataState extends State<AddTestData> {
   bool isload = false;
   String subs;
   String tess;
+  String error = '';
   @override
   Widget build(BuildContext context) {
     return isload
@@ -147,152 +148,169 @@ class _AddTestDataState extends State<AddTestData> {
               setState(() {
                 isload = true;
               });
+              g.stuEmail.clear();
+              g.stuMarks.clear();
+              isload = false;
               Navigator.pop(context, false);
               return Future.value(false);
             },
-            child: Scaffold(
-              backgroundColor: Color(0xffcaf0f8).withOpacity(0.7),
-              body: Center(
-                child: Container(
-                  height: g.height * 0.8,
-                  width: g.width * 0.85,
-                  decoration: BoxDecoration(
-                    color: Color(0xffffffff).withOpacity(0.55),
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: g.height * 0.05,
-                      left: g.width * 0.075,
-                      right: g.width * 0.075,
+            child: GestureDetector(
+              onTap: () {
+                FocusScopeNode currentFocus = FocusScope.of(context);
+                if (!currentFocus.hasPrimaryFocus) {
+                  currentFocus.unfocus();
+                }
+              },
+              child: Scaffold(
+                backgroundColor: Color(0xffcaf0f8).withOpacity(0.7),
+                body: Center(
+                  child: Container(
+                    height: g.height * 0.8,
+                    width: g.width * 0.85,
+                    decoration: BoxDecoration(
+                      color: Color(0xffffffff).withOpacity(0.55),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
-                    child: ListView(
-                      children: [
-                        Center(
-                          child: Text(
-                            'Add Test Details',
-                            style: g.loginpgstyles(
-                              Color(0xff000000),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: g.height * 0.05,
+                        left: g.width * 0.075,
+                        right: g.width * 0.075,
+                      ),
+                      child: ListView(
+                        children: [
+                          Center(
+                            child: Text(
+                              'Add Test Details',
+                              style: g.loginpgstyles(
+                                Color(0xff000000),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: g.height * 0.05,
-                        ),
-                        Text('Student Email ID'),
-                        SizedBox(
-                          height: g.height * 0.01,
-                        ),
-                        ATSInpField(
-                          edit: g.stuEmail,
-                        ),
-                        SizedBox(
-                          height: g.height * 0.03,
-                        ),
-                        Text('Marks'),
-                        SizedBox(
-                          height: g.height * 0.01,
-                        ),
-                        ATSInpField(
-                          edit: g.stuMarks,
-                        ),
-                        SizedBox(
-                          height: g.height * 0.03,
-                        ),
-                        DropdownButton<String>(
-                          isExpanded: true,
-                          value: subs,
-                          elevation: 16,
-                          hint: Text('Subject'),
-                          style: g.loginpgstyles(
-                            Color(0xff000000),
+                          SizedBox(
+                            height: g.height * 0.05,
                           ),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              subs = newValue;
-                            });
-                          },
-                          items: widget.subs
-                              .map<DropdownMenuItem<String>>((value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: g.loginpgstyles(
-                                  Color(0xff000000),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                        SizedBox(
-                          height: g.height * 0.03,
-                        ),
-                        DropdownButton<String>(
-                          isExpanded: true,
-                          value: tess,
-                          elevation: 16,
-                          hint: Text('Test'),
-                          style: g.loginpgstyles(
-                            Color(0xff000000),
+                          Text('Student Email ID'),
+                          SizedBox(
+                            height: g.height * 0.01,
                           ),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              tess = newValue;
-                            });
-                          },
-                          items: widget.tests
-                              .map<DropdownMenuItem<String>>((value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: g.loginpgstyles(
-                                  Color(0xff000000),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                        SizedBox(
-                          height: g.height * 0.03,
-                        ),
-                        Center(
-                          child: RawMaterialButton(
-                            onPressed: () async {
-                              isload = true;
-                              await DatabaseServices(uid: g.uid).addMarks(
-                                  g.stuEmail.text,
-                                  g.stuMarks.text,
-                                  subs,
-                                  tess,
-                                  widget.clss);
-                              g.stuEmail.clear();
-                              g.stuMarks.clear();
-                              Navigator.pop(context);
-                              Navigator.pop(context);
+                          ATSInpField(
+                            edit: g.stuEmail,
+                          ),
+                          SizedBox(
+                            height: g.height * 0.03,
+                          ),
+                          Text('Marks'),
+                          SizedBox(
+                            height: g.height * 0.01,
+                          ),
+                          ATSInpField(
+                            edit: g.stuMarks,
+                          ),
+                          SizedBox(
+                            height: g.height * 0.03,
+                          ),
+                          DropdownButton<String>(
+                            isExpanded: true,
+                            value: subs,
+                            elevation: 16,
+                            hint: Text('Subject'),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                subs = newValue;
+                              });
                             },
-                            child: Container(
-                                width: g.width * 0.5,
-                                height: g.height * 0.055,
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
-                                  color: Color(0xff90e0ef),
+                            items: widget.subs
+                                .map<DropdownMenuItem<String>>((value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
                                 ),
-                                child: Center(
-                                  child: Text(
-                                    'Add Test Details',
-                                  ),
-                                )),
+                              );
+                            }).toList(),
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                            height: g.height * 0.03,
+                          ),
+                          DropdownButton<String>(
+                            isExpanded: true,
+                            value: tess,
+                            elevation: 16,
+                            hint: Text('Test'),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                tess = newValue;
+                              });
+                            },
+                            items: widget.tests
+                                .map<DropdownMenuItem<String>>((value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          SizedBox(
+                            height: g.height * 0.03,
+                          ),
+                          Center(
+                            child: RawMaterialButton(
+                              onPressed: () async {
+                                setState(() {
+                                  isload = true;
+                                });
+                                if (g.stuEmail.text.isNotEmpty &&
+                                    g.stuMarks.text.isNotEmpty &&
+                                    subs != null &&
+                                    tess != null) {
+                                  await DatabaseServices(uid: g.uid).addMarks(
+                                      g.stuEmail.text,
+                                      g.stuMarks.text,
+                                      subs,
+                                      tess,
+                                      widget.clss);
+
+                                  isload = false;
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                } else {
+                                  setState(() {
+                                    error = 'One or more fields are left empty';
+                                    isload = false;
+                                  });
+                                }
+                              },
+                              child: Container(
+                                  width: g.width * 0.5,
+                                  height: g.height * 0.055,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5)),
+                                    color: Color(0xff90e0ef),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Add Test Details',
+                                    ),
+                                  )),
+                            ),
+                          ),
+                          Center(
+                            child: Text(
+                              error,
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
+                resizeToAvoidBottomInset: false,
               ),
-              resizeToAvoidBottomInset: false,
             ),
           );
   }
