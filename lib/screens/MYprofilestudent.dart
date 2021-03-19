@@ -62,9 +62,13 @@ class _MYprofilestudentState extends State<MYprofilestudent> {
                         IconButton(
                             icon: FaIcon(FontAwesomeIcons.arrowRight),
                             onPressed: () async {
-                              g.stuGlob.name = g.stuName.text;
-                              await DatabaseServices(uid: g.uid)
-                                  .updateStuInfo(g.stuGlob, false);
+                              if (g.stuName.text.isNotEmpty) {
+                                setState(() {
+                                  g.stuGlob.name = g.stuName.text;
+                                });
+                                await DatabaseServices(uid: g.uid)
+                                    .updateStuInfo(g.stuGlob, false);
+                              }
                               setState(() {
                                 isEditName = false;
                               });
@@ -103,9 +107,13 @@ class _MYprofilestudentState extends State<MYprofilestudent> {
                         IconButton(
                             icon: FaIcon(FontAwesomeIcons.arrowRight),
                             onPressed: () async {
-                              g.userGlob.email = g.stuEmail.text;
-                              await DatabaseServices(uid: g.uid)
-                                  .updateUserInfo(g.userGlob, false);
+                              if (g.stuEmail.text.isNotEmpty) {
+                                setState(() {
+                                  g.userGlob.email = g.stuEmail.text;
+                                });
+                                await DatabaseServices(uid: g.uid)
+                                    .updateUserInfo(g.userGlob, false);
+                              }
                               setState(() {
                                 isEditEmail = false;
                               });
@@ -144,9 +152,13 @@ class _MYprofilestudentState extends State<MYprofilestudent> {
                         IconButton(
                             icon: FaIcon(FontAwesomeIcons.arrowRight),
                             onPressed: () async {
-                              g.stuGlob.contact = g.stuContact.text;
-                              await DatabaseServices(uid: g.uid)
-                                  .updateStuInfo(g.stuGlob, false);
+                              if (g.stuContact.text.isNotEmpty) {
+                                setState(() {
+                                  g.stuGlob.contact = g.stuContact.text;
+                                });
+                                await DatabaseServices(uid: g.uid)
+                                    .updateStuInfo(g.stuGlob, false);
+                              }
                               setState(() {
                                 isEditContact = false;
                               });

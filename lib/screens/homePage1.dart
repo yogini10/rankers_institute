@@ -187,7 +187,6 @@ class _HomePageState extends State<HomePage> {
                               if (g.userGlob.usertype == 'Teacher') {
                                 List allS = await DatabaseServices(uid: g.uid)
                                     .allSubClass();
-                                Navigator.pop(context);
                                 isload = false;
                                 Navigator.push(
                                     context,

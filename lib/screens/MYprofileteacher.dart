@@ -72,15 +72,20 @@ class _MYprofileteacherState extends State<MYprofileteacher> {
                           ),
                           IconButton(
                               icon: FaIcon(FontAwesomeIcons.arrowRight),
-                              onPressed: () {
+                              onPressed: () async {
+                                if (g.teaName.text.isNotEmpty) {
+                                  setState(() {
+                                    g.teaGlob.teacherName = g.teaName.text;
+                                  });
+                                  await DatabaseServices(uid: g.uid)
+                                      .updateTeaInfo(
+                                          Teacher(
+                                              tId: g.teaGlob.tId,
+                                              subject: sub,
+                                              teacherName: g.teaName.text),
+                                          false);
+                                }
                                 setState(() {
-                                  g.teaGlob.teacherName = g.teaName.text;
-                                  DatabaseServices(uid: g.uid).updateTeaInfo(
-                                      Teacher(
-                                          tId: g.teaGlob.tId,
-                                          subject: sub,
-                                          teacherName: g.teaName.text),
-                                      false);
                                   isEditName = false;
                                 });
                               })
@@ -117,16 +122,21 @@ class _MYprofileteacherState extends State<MYprofileteacher> {
                           ),
                           IconButton(
                               icon: FaIcon(FontAwesomeIcons.arrowRight),
-                              onPressed: () {
+                              onPressed: () async {
+                                if (g.teaEmail.text.isNotEmpty) {
+                                  setState(() {
+                                    g.userGlob.email = g.teaEmail.text;
+                                  });
+                                  await DatabaseServices(uid: g.uid)
+                                      .updateUserInfo(
+                                          User(
+                                              uid: g.teaGlob.tId,
+                                              email: g.teaEmail.text,
+                                              password: g.userGlob.password,
+                                              usertype: g.userGlob.usertype),
+                                          false);
+                                }
                                 setState(() {
-                                  g.userGlob.email = g.teaEmail.text;
-                                  DatabaseServices(uid: g.uid).updateUserInfo(
-                                      User(
-                                          uid: g.teaGlob.tId,
-                                          email: g.teaEmail.text,
-                                          password: g.userGlob.password,
-                                          usertype: g.userGlob.usertype),
-                                      false);
                                   isEditEmail = false;
                                 });
                               })

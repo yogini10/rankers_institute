@@ -210,11 +210,17 @@ class _NoticeState extends State<Notice> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(
-                        left: g.width * 0.1, top: g.height * 0.02),
-                    child: Text(
-                      map[index]['title'],
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+                        left: g.width * 0.1,
+                        top: g.height * 0.02,
+                        right: g.width * 0.1),
+                    child: Container(
+                      width: g.width * 0.7,
+                      child: Text(
+                        map[index]['title'],
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.w500),
+                      ),
                     ),
                   ),
                 ],
@@ -288,10 +294,14 @@ class _FullNoticeState extends State<FullNotice> {
                 ),
                 child: Row(
                   children: [
-                    Text(
-                      widget.notice['title'],
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+                    Container(
+                      width: g.width * 0.7,
+                      child: Text(
+                        widget.notice['title'],
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.w700),
+                      ),
                     ),
                   ],
                 ),
@@ -305,7 +315,12 @@ class _FullNoticeState extends State<FullNotice> {
                   left: g.width * 0.1,
                   right: g.width * 0.1,
                   bottom: g.height * 0.05),
-              child: Container(child: Text(widget.notice['details'])),
+              child: Container(
+                  width: g.width * 0.7,
+                  child: Text(
+                    widget.notice['details'],
+                    overflow: TextOverflow.clip,
+                  )),
             ),
             SizedBox(
               height: g.height * 0.05,
