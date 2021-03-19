@@ -127,15 +127,17 @@ class _ContactusState extends State<Contactus> {
                     SizedBox(
                       height: g.height * 0.025,
                     ),
-                    Text(
-                      'Contact no',
-                      style: TextStyle(
-                        fontFamily: 'Segoe UI',
-                        fontSize: 13,
-                        color: const Color(0xff707070),
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
+                    g.userGlob.usertype == 'Student'
+                        ? Text(
+                            'Contact no',
+                            style: TextStyle(
+                              fontFamily: 'Segoe UI',
+                              fontSize: 13,
+                              color: const Color(0xff707070),
+                            ),
+                            textAlign: TextAlign.left,
+                          )
+                        : Container(),
                     SizedBox(
                       height: g.height * 0.005,
                     ),
@@ -305,114 +307,124 @@ class _AdmContactState extends State<AdmContact> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: ncAppBaer(),
-        backgroundColor: const Color(0xffcaf0f8),
-        body: Padding(
-          padding: EdgeInsets.only(
-              top: g.height * 0.025, left: g.width * 0.1, right: g.width * 0.1),
-          child: ListView(
-            children: [
-              Center(
-                child: Container(
-                  width: g.width * 0.4,
-                  height: g.height * 0.2,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(g.width * 0.2),
-                    image: DecorationImage(
-                      image: const AssetImage('lib/assets/user.png'),
-                      fit: BoxFit.fill,
+      child: WillPopScope(
+        onWillPop: () {
+          g.stuEmail.clear();
+          g.stuContact.clear();
+          Navigator.pop(context, false);
+          return Future.value(false);
+        },
+        child: Scaffold(
+          appBar: ncAppBaer(),
+          backgroundColor: const Color(0xffcaf0f8),
+          body: Padding(
+            padding: EdgeInsets.only(
+                top: g.height * 0.025,
+                left: g.width * 0.1,
+                right: g.width * 0.1),
+            child: ListView(
+              children: [
+                Center(
+                  child: Container(
+                    width: g.width * 0.4,
+                    height: g.height * 0.2,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(g.width * 0.2),
+                      image: DecorationImage(
+                        image: const AssetImage('lib/assets/user.png'),
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: g.height * 0.075,
-              ),
-              isEditEmail
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: g.width * 0.6,
-                          child: TextField(
-                            controller: g.stuEmail,
-                            decoration:
-                                InputDecoration(border: InputBorder.none),
+                SizedBox(
+                  height: g.height * 0.075,
+                ),
+                isEditEmail
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: g.width * 0.6,
+                            child: TextField(
+                              controller: g.stuEmail,
+                              decoration:
+                                  InputDecoration(border: InputBorder.none),
+                            ),
                           ),
-                        ),
-                        IconButton(
-                            icon: FaIcon(FontAwesomeIcons.arrowRight),
-                            onPressed: () async {
-                              if (g.stuEmail.text.isNotEmpty) {
-                                g.email = g.stuEmail.text;
-                                await DatabaseServices(uid: g.uid)
-                                    .updateInfo(g.contact, g.email);
-                              }
-                              setState(() {
-                                isEditEmail = false;
-                              });
-                            })
-                      ],
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(g.email),
-                        IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () {
-                              setState(() {
-                                g.stuEmail.text = g.email;
-                                isEditEmail = true;
-                              });
-                            })
-                      ],
-                    ),
-              SizedBox(
-                height: g.height * 0.035,
-              ),
-              isEditContact
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: g.width * 0.6,
-                          child: TextField(
-                            controller: g.stuContact,
-                            decoration:
-                                InputDecoration(border: InputBorder.none),
+                          IconButton(
+                              icon: FaIcon(FontAwesomeIcons.arrowRight),
+                              onPressed: () async {
+                                if (g.stuEmail.text.isNotEmpty) {
+                                  g.email = g.stuEmail.text;
+                                  await DatabaseServices(uid: g.uid)
+                                      .updateInfo(g.contact, g.email);
+                                }
+                                setState(() {
+                                  isEditEmail = false;
+                                });
+                              })
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(g.email),
+                          IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: () {
+                                setState(() {
+                                  g.stuEmail.text = g.email;
+                                  isEditEmail = true;
+                                });
+                              })
+                        ],
+                      ),
+                SizedBox(
+                  height: g.height * 0.035,
+                ),
+                isEditContact
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: g.width * 0.6,
+                            child: TextField(
+                              controller: g.stuContact,
+                              decoration:
+                                  InputDecoration(border: InputBorder.none),
+                            ),
                           ),
-                        ),
-                        IconButton(
-                            icon: FaIcon(FontAwesomeIcons.arrowRight),
-                            onPressed: () async {
-                              if (g.stuContact.text.isNotEmpty) {
-                                g.contact = g.stuContact.text;
-                                await DatabaseServices(uid: g.uid)
-                                    .updateInfo(g.contact, g.email);
-                              }
-                              setState(() {
-                                isEditContact = false;
-                              });
-                            })
-                      ],
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(g.contact),
-                        IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () async {
-                              setState(() {
-                                g.stuContact.text = g.contact;
-                                isEditContact = true;
-                              });
-                            })
-                      ],
-                    ),
-            ],
+                          IconButton(
+                              icon: FaIcon(FontAwesomeIcons.arrowRight),
+                              onPressed: () async {
+                                if (g.stuContact.text.isNotEmpty) {
+                                  g.contact = g.stuContact.text;
+                                  await DatabaseServices(uid: g.uid)
+                                      .updateInfo(g.contact, g.email);
+                                }
+                                setState(() {
+                                  isEditContact = false;
+                                });
+                              })
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(g.contact),
+                          IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: () async {
+                                setState(() {
+                                  g.stuContact.text = g.contact;
+                                  isEditContact = true;
+                                });
+                              })
+                        ],
+                      ),
+              ],
+            ),
           ),
         ),
       ),
