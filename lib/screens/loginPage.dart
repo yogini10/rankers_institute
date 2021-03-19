@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                               g.uPass.clear();
                               if (result == null) {
                                 setState(() {
-                                  error = 'You are not registered!!!';
+                                  error = 'Invalid Email or Password!!!';
                                 });
                                 g.userGlob = await _auth.currentUser();
                                 setState(() {
