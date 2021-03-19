@@ -344,9 +344,11 @@ class _AdmContactState extends State<AdmContact> {
                         IconButton(
                             icon: FaIcon(FontAwesomeIcons.arrowRight),
                             onPressed: () async {
-                              g.email = g.stuEmail.text;
-                              await DatabaseServices(uid: g.uid)
-                                  .updateInfo(g.contact, g.email);
+                              if (g.stuEmail.text.isNotEmpty) {
+                                g.email = g.stuEmail.text;
+                                await DatabaseServices(uid: g.uid)
+                                    .updateInfo(g.contact, g.email);
+                              }
                               setState(() {
                                 isEditEmail = false;
                               });
@@ -385,9 +387,11 @@ class _AdmContactState extends State<AdmContact> {
                         IconButton(
                             icon: FaIcon(FontAwesomeIcons.arrowRight),
                             onPressed: () async {
-                              g.contact = g.stuContact.text;
-                              await DatabaseServices(uid: g.uid)
-                                  .updateInfo(g.contact, g.email);
+                              if (g.stuContact.text.isNotEmpty) {
+                                g.contact = g.stuContact.text;
+                                await DatabaseServices(uid: g.uid)
+                                    .updateInfo(g.contact, g.email);
+                              }
                               setState(() {
                                 isEditContact = false;
                               });
