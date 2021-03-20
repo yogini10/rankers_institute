@@ -45,7 +45,7 @@ class _AddUserState extends State<AddUser> {
                   });
                   List allC;
                   allC = await DatabaseServices(uid: g.uid).allClasses();
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) =>
@@ -81,11 +81,14 @@ class _AddUserState extends State<AddUser> {
                   setState(() {
                     isload = true;
                   });
-                  Navigator.pushReplacement(
+                  List allS = await DatabaseServices(uid: g.uid).allSubClass();
+                  Navigator.push(
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          AddTeachers(),
+                          AddTeachers(
+                        subs: allS,
+                      ),
                     ),
                   );
                 },
@@ -119,6 +122,9 @@ class _AddUserState extends State<AddUser> {
 }
 
 class AddTeachers extends StatefulWidget {
+  final List subs;
+
+  const AddTeachers({Key key, this.subs}) : super(key: key);
   @override
   _AddTeachersState createState() => _AddTeachersState();
 }
@@ -126,6 +132,8 @@ class AddTeachers extends StatefulWidget {
 class _AddTeachersState extends State<AddTeachers> {
   final AuthServices _auth = AuthServices();
   bool isload = false;
+  String subs;
+  String error = '';
   @override
   Widget build(BuildContext context) {
     return isload
@@ -135,6 +143,10 @@ class _AddTeachersState extends State<AddTeachers> {
               setState(() {
                 isload = true;
               });
+              g.teaContact.clear();
+              g.teaEmail.clear();
+              g.teaName.clear();
+              g.teaPass.clear();
               Navigator.pop(context, false);
               return Future.value(false);
             },
@@ -175,7 +187,6 @@ class _AddTeachersState extends State<AddTeachers> {
                                   g.teaEmail.clear();
                                   g.teaName.clear();
                                   g.teaPass.clear();
-                                  g.teaSubject.clear();
                                   Navigator.pushReplacement(
                                     context,
                                     PageRouteBuilder(
@@ -224,11 +235,26 @@ class _AddTeachersState extends State<AddTeachers> {
                           SizedBox(
                             height: g.height * 0.03,
                           ),
-                          Text('Subject'),
-                          SizedBox(
-                            height: g.height * 0.01,
+                          DropdownButton<String>(
+                            isExpanded: true,
+                            value: subs,
+                            elevation: 16,
+                            hint: Text('Subject'),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                subs = newValue;
+                              });
+                            },
+                            items: widget.subs
+                                .map<DropdownMenuItem<String>>((value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                ),
+                              );
+                            }).toList(),
                           ),
-                          ATSInpField(edit: g.teaSubject),
                           SizedBox(
                             height: g.height * 0.03,
                           ),
@@ -244,33 +270,46 @@ class _AddTeachersState extends State<AddTeachers> {
                             height: g.height * 0.075,
                           ),
                           Center(
+                            child: Text(
+                              error,
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                          Center(
                             child: RawMaterialButton(
                               onPressed: () async {
-                                isload = true;
-                                var c =
-                                    await _auth.registerWithEmailAndPassword(
-                                        g.teaEmail.text,
-                                        g.teaPass.text,
-                                        'Teacher');
-                                await DatabaseServices(uid: g.uid)
-                                    .updateTeaInfo(
-                                        Teacher(
-                                            teacherName: g.teaName.text,
-                                            subject: g.teaSubject.text,
-                                            tId: c.uid),
-                                        true);
-                                g.teaContact.clear();
-                                g.teaEmail.clear();
-                                g.teaName.clear();
-                                g.teaPass.clear();
-                                g.teaSubject.clear();
-                                Navigator.pushReplacement(
-                                  context,
-                                  PageRouteBuilder(
-                                      pageBuilder: (context, animation,
-                                              secondaryAnimation) =>
-                                          AdmHome()),
-                                );
+                                if (g.teaEmail.text.isEmpty ||
+                                    g.teaPass.text.isEmpty ||
+                                    g.teaName.text.isEmpty ||
+                                    subs == null ||
+                                    g.teaContact.text.isEmpty ||
+                                    !g.teaEmail.text.trim().endsWith('.com')) {
+                                  setState(() {
+                                    error = 'Invalid Entries';
+                                  });
+                                } else {
+                                  setState(() {
+                                    isload = true;
+                                  });
+                                  var c =
+                                      await _auth.registerWithEmailAndPassword(
+                                          g.teaEmail.text,
+                                          g.teaPass.text,
+                                          'Teacher');
+                                  await DatabaseServices(uid: g.uid)
+                                      .updateTeaInfo(
+                                          Teacher(
+                                              teacherName: g.teaName.text,
+                                              subject: subs,
+                                              tId: c.uid),
+                                          true);
+                                  g.teaContact.clear();
+                                  g.teaEmail.clear();
+                                  g.teaName.clear();
+                                  g.teaPass.clear();
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                }
                               },
                               child: Container(
                                 width: g.width * 0.5,
@@ -307,191 +346,212 @@ class _AddStudentsState extends State<AddStudents> {
   final AuthServices _auth = AuthServices();
   bool isload = false;
   String dropdownValue3;
+  String error = '';
   @override
   Widget build(BuildContext context) {
     return isload
         ? LoadingScreen()
-        : GestureDetector(
-            onTap: () {
-              FocusScopeNode currentFocus = FocusScope.of(context);
-              if (!currentFocus.hasPrimaryFocus) {
-                currentFocus.unfocus();
-              }
+        : WillPopScope(
+            onWillPop: () {
+              g.stuContact.clear();
+              g.stuEmail.clear();
+              g.stuID.clear();
+              g.stuName.clear();
+              g.stuPass.clear();
+              Navigator.pop(context);
+              return Future.value(false);
             },
-            child: Scaffold(
-              resizeToAvoidBottomInset: false,
-              backgroundColor: const Color(0xffcaf0f8),
-              body: Center(
-                child: Container(
-                  height: g.height * 0.8,
-                  width: g.width * 0.85,
-                  color: Color(0xffffffff).withOpacity(0.55),
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: g.height * 0,
-                      left: g.width * 0.075,
-                      right: g.width * 0.075,
-                    ),
-                    child: ListView(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            IconButton(
-                              icon: Icon(
-                                Icons.home,
-                                color: Colors.black,
-                                size: 30,
+            child: GestureDetector(
+              onTap: () {
+                FocusScopeNode currentFocus = FocusScope.of(context);
+                if (!currentFocus.hasPrimaryFocus) {
+                  currentFocus.unfocus();
+                }
+              },
+              child: Scaffold(
+                resizeToAvoidBottomInset: false,
+                backgroundColor: const Color(0xffcaf0f8),
+                body: Center(
+                  child: Container(
+                    height: g.height * 0.8,
+                    width: g.width * 0.85,
+                    color: Color(0xffffffff).withOpacity(0.55),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: g.height * 0,
+                        left: g.width * 0.075,
+                        right: g.width * 0.075,
+                      ),
+                      child: ListView(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              IconButton(
+                                icon: Icon(
+                                  Icons.home,
+                                  color: Colors.black,
+                                  size: 30,
+                                ),
+                                onPressed: () {
+                                  g.stuContact.clear();
+                                  g.stuEmail.clear();
+                                  g.stuID.clear();
+                                  g.stuName.clear();
+                                  g.stuPass.clear();
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
                               ),
-                              onPressed: () {
-                                g.stuContact.clear();
-                                g.stuEmail.clear();
-                                g.stuID.clear();
-                                g.stuName.clear();
-                                g.stuPass.clear();
-                                Navigator.pushReplacement(
-                                  context,
-                                  PageRouteBuilder(
-                                      pageBuilder: (context, animation,
-                                              secondaryAnimation) =>
-                                          AdmHome()),
-                                );
-                              },
-                            ),
-                            Expanded(child: Container()),
-                            Center(
-                              child: Text(
-                                'Add Student',
-                                style: g.loginpgstyles(
-                                  Color(0xff000000),
+                              Expanded(child: Container()),
+                              Center(
+                                child: Text(
+                                  'Add Student',
+                                  style: g.loginpgstyles(
+                                    Color(0xff000000),
+                                  ),
                                 ),
                               ),
-                            ),
-                            Expanded(child: Container()),
-                          ],
-                        ),
-                        SizedBox(
-                          height: g.height * 0.05,
-                        ),
-                        Text('Email'),
-                        SizedBox(
-                          height: g.height * 0.01,
-                        ),
-                        ATSInpField(
-                          edit: g.stuEmail,
-                        ),
-                        SizedBox(
-                          height: g.height * 0.03,
-                        ),
-                        Text('Password'),
-                        SizedBox(
-                          height: g.height * 0.01,
-                        ),
-                        ATSInpField(edit: g.stuPass),
-                        SizedBox(
-                          height: g.height * 0.03,
-                        ),
-                        Text('Name'),
-                        SizedBox(
-                          height: g.height * 0.01,
-                        ),
-                        ATSInpField(
-                          edit: g.stuName,
-                        ),
-                        SizedBox(
-                          height: g.height * 0.03,
-                        ),
-                        DropdownButton<String>(
-                          isExpanded: true,
-                          value: dropdownValue3,
-                          elevation: 16,
-                          hint: Text('Class'),
-                          style: g.loginpgstyles(
-                            Color(0xff000000),
+                              Expanded(child: Container()),
+                            ],
                           ),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              dropdownValue3 = newValue;
-                            });
-                          },
-                          items: widget.subs
-                              .map<DropdownMenuItem<String>>((value) {
-                            return DropdownMenuItem<String>(
-                              value: value['class'],
-                              child: Text(
-                                value['class'],
-                                style: g.loginpgstyles(
-                                  Color(0xff000000),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                        SizedBox(
-                          height: g.height * 0.03,
-                        ),
-                        Text('Contact no'),
-                        SizedBox(
-                          height: g.height * 0.01,
-                        ),
-                        ATSInpField(
-                          edit: g.stuContact,
-                        ),
-                        SizedBox(
-                          height: g.height * 0.03,
-                        ),
-                        Text('Roll no'),
-                        SizedBox(
-                          height: g.height * 0.01,
-                        ),
-                        ATSInpField(
-                          edit: g.stuID,
-                        ),
-                        SizedBox(
-                          height: g.height * 0.075,
-                        ),
-                        Center(
-                          child: RawMaterialButton(
-                            onPressed: () async {
-                              isload = true;
-                              var c = await _auth.registerWithEmailAndPassword(
-                                  g.stuEmail.text, g.stuPass.text, 'Student');
-                              await DatabaseServices(uid: g.uid).updateStuInfo(
-                                  Student(
-                                      classId: dropdownValue3,
-                                      contact: g.stuContact.text,
-                                      name: g.stuName.text,
-                                      rollNo: g.stuID.text,
-                                      stuId: c.uid),
-                                  true);
-                              await DatabaseServices(uid: g.uid)
-                                  .addFees(g.stuEmail.text, dropdownValue3);
-                              g.stuContact.clear();
-                              g.stuEmail.clear();
-                              g.stuID.clear();
-                              g.stuName.clear();
-                              g.stuPass.clear();
-                              Navigator.pushReplacement(
-                                context,
-                                PageRouteBuilder(
-                                    pageBuilder: (context, animation,
-                                            secondaryAnimation) =>
-                                        AdmHome()),
-                              );
+                          SizedBox(
+                            height: g.height * 0.05,
+                          ),
+                          Text('Email'),
+                          SizedBox(
+                            height: g.height * 0.01,
+                          ),
+                          ATSInpField(
+                            edit: g.stuEmail,
+                          ),
+                          SizedBox(
+                            height: g.height * 0.03,
+                          ),
+                          Text('Password'),
+                          SizedBox(
+                            height: g.height * 0.01,
+                          ),
+                          ATSInpField(edit: g.stuPass),
+                          SizedBox(
+                            height: g.height * 0.03,
+                          ),
+                          Text('Name'),
+                          SizedBox(
+                            height: g.height * 0.01,
+                          ),
+                          ATSInpField(
+                            edit: g.stuName,
+                          ),
+                          SizedBox(
+                            height: g.height * 0.03,
+                          ),
+                          DropdownButton<String>(
+                            isExpanded: true,
+                            value: dropdownValue3,
+                            elevation: 16,
+                            hint: Text('Class'),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                dropdownValue3 = newValue;
+                              });
                             },
-                            child: Container(
-                              width: g.width * 0.5,
-                              height: g.height * 0.055,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                color: Color(0xff90e0ef),
-                              ),
-                              child: Center(child: Text('Add Student')),
+                            items: widget.subs
+                                .map<DropdownMenuItem<String>>((value) {
+                              return DropdownMenuItem<String>(
+                                value: value['class'],
+                                child: Text(
+                                  value['class'],
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          SizedBox(
+                            height: g.height * 0.03,
+                          ),
+                          Text('Contact no'),
+                          SizedBox(
+                            height: g.height * 0.01,
+                          ),
+                          ATSInpField(
+                            edit: g.stuContact,
+                          ),
+                          SizedBox(
+                            height: g.height * 0.03,
+                          ),
+                          Text('Roll no'),
+                          SizedBox(
+                            height: g.height * 0.01,
+                          ),
+                          ATSInpField(
+                            edit: g.stuID,
+                          ),
+                          SizedBox(
+                            height: g.height * 0.05,
+                          ),
+                          Center(
+                            child: Text(
+                              error,
+                              style: TextStyle(color: Colors.red),
                             ),
                           ),
-                        ),
-                      ],
+                          Center(
+                            child: RawMaterialButton(
+                              onPressed: () async {
+                                if (dropdownValue3 == null ||
+                                    g.stuEmail.text.isEmpty ||
+                                    g.stuEmail.text.trim().endsWith('.com') ||
+                                    g.stuContact.text.isEmpty ||
+                                    num.tryParse(g.stuContact.text) == null ||
+                                    g.stuName.text.isEmpty ||
+                                    g.stuPass.text.isEmpty ||
+                                    g.stuID.text.isEmpty) {
+                                  setState(() {
+                                    error = 'Invalid entries';
+                                  });
+                                } else {
+                                  setState(() {
+                                    isload = true;
+                                  });
+                                  var c =
+                                      await _auth.registerWithEmailAndPassword(
+                                          g.stuEmail.text,
+                                          g.stuPass.text,
+                                          'Student');
+                                  await DatabaseServices(uid: g.uid)
+                                      .updateStuInfo(
+                                          Student(
+                                              classId: dropdownValue3,
+                                              contact: g.stuContact.text,
+                                              name: g.stuName.text,
+                                              rollNo: g.stuID.text,
+                                              stuId: c.uid),
+                                          true);
+                                  await DatabaseServices(uid: g.uid)
+                                      .addFees(g.stuEmail.text, dropdownValue3);
+                                  g.stuContact.clear();
+                                  g.stuEmail.clear();
+                                  g.stuID.clear();
+                                  g.stuName.clear();
+                                  g.stuPass.clear();
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: Container(
+                                width: g.width * 0.5,
+                                height: g.height * 0.055,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  color: Color(0xff90e0ef),
+                                ),
+                                child: Center(child: Text('Add Student')),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

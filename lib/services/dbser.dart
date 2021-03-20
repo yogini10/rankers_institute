@@ -20,15 +20,15 @@ class DatabaseServices {
   Future updateUserInfo(User user, bool isCreating) async {
     if (isCreating) {
       return await userCollection.doc(user.uid).set({
-        'email': user.email,
-        'password': user.password,
-        'usertype': user.usertype,
+        'email': user.email.trim(),
+        'password': user.password.trim(),
+        'usertype': user.usertype.trim(),
       });
     }
     return await userCollection.doc(user.uid).update({
-      'email': user.email,
-      'password': user.password,
-      'usertype': user.usertype,
+      'email': user.email.trim(),
+      'password': user.password.trim(),
+      'usertype': user.usertype.trim(),
     });
   }
 
@@ -37,22 +37,22 @@ class DatabaseServices {
     if (isCreating) {
       return await FirebaseFirestore.instance
           .collection('student')
-          .doc(student.stuId)
+          .doc(student.stuId.trim())
           .set({
-        'classID': student.classId,
-        'contact': student.contact,
-        'name': student.name,
-        'rollno': student.rollNo,
+        'classID': student.classId.trim(),
+        'contact': student.contact.trim(),
+        'name': student.name.trim(),
+        'rollno': student.rollNo.trim(),
       });
     }
     return await FirebaseFirestore.instance
         .collection('student')
-        .doc(student.stuId)
+        .doc(student.stuId.trim())
         .update({
-      'classID': student.classId,
-      'contact': student.contact,
-      'name': student.name,
-      'rollno': student.rollNo,
+      'classID': student.classId.trim(),
+      'contact': student.contact.trim(),
+      'name': student.name.trim(),
+      'rollno': student.rollNo.trim(),
     });
   }
 
@@ -61,46 +61,57 @@ class DatabaseServices {
     if (isCreating) {
       return await FirebaseFirestore.instance
           .collection('teacher')
-          .doc(tea.tId)
+          .doc(tea.tId.trim())
           .set({
-        'subject': tea.subject,
-        'teachername': tea.teacherName,
+        'subject': tea.subject.trim(),
+        'teachername': tea.teacherName.trim(),
       });
     }
     return await FirebaseFirestore.instance
         .collection('teacher')
-        .doc(tea.tId)
+        .doc(tea.tId.trim())
         .update({
-      'subject': tea.subject,
-      'teachername': tea.teacherName,
+      'subject': tea.subject.trim(),
+      'teachername': tea.teacherName.trim(),
     });
   }
 
   //add material
   Future updateMaterial(String clss, String link, String subject) async {
+    return await FirebaseFirestore.instance.collection('material').doc().set({
+      'subjectID': subject.trim(),
+      'classID': clss.trim(),
+      'materialLink': link.trim()
+    });
+  }
+
+  //get material
+  Future getMaterial(String clss, String subject) async {
     return await FirebaseFirestore.instance
         .collection('material')
-        .doc()
-        .set({'subjectID': subject, 'classID': clss, 'materialLink': link});
+        .where('subjectID', isEqualTo: subject.trim())
+        .where('classID', isEqualTo: clss.trim())
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
   }
 
   //addlec
   Future updateLecture(String link, String cls) async {
     var v = await FirebaseFirestore.instance
         .collection('currentLec')
-        .where('classID', isEqualTo: cls)
+        .where('classID', isEqualTo: cls.trim())
         .get();
     return await FirebaseFirestore.instance
         .collection('currentLec')
         .doc(v.docs[0].id)
-        .update({'link': link});
+        .update({'link': link.trim()});
   }
 
   //get link
   Future getLink(String cls) async {
     return await FirebaseFirestore.instance
         .collection('currentLec')
-        .where('classID', isEqualTo: cls)
+        .where('classID', isEqualTo: cls.trim())
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
   }
@@ -109,7 +120,7 @@ class DatabaseServices {
   Future addFees(String email, String clss) async {
     var v = await FirebaseFirestore.instance
         .collection('student')
-        .where('email', isEqualTo: email)
+        .where('email', isEqualTo: email.trim())
         .get();
     return await FirebaseFirestore.instance
         .collection('fees')
@@ -126,7 +137,7 @@ class DatabaseServices {
   Future updateFees(String email, int amtpaid) async {
     var v = await FirebaseFirestore.instance
         .collection('student')
-        .where('email', isEqualTo: email)
+        .where('email', isEqualTo: email.trim())
         .get();
     return await FirebaseFirestore.instance
         .collection('fees')
@@ -150,11 +161,11 @@ class DatabaseServices {
   //add doubt
   Future addDoubt(detail, dtitle, file, subject) async {
     return await FirebaseFirestore.instance.collection('doubt').doc().set({
-      'details': detail,
-      'dtitle': dtitle,
-      'studentID': g.uid,
-      'subject': subject,
-      'fileID': file,
+      'details': detail.trim(),
+      'dtitle': dtitle.trim(),
+      'studentID': g.uid.trim(),
+      'subject': subject.trim(),
+      'fileID': file.trim(),
       'isSolved': false
     });
   }
@@ -163,9 +174,9 @@ class DatabaseServices {
   Future addNotice(detail, dtitle, file) async {
     DateTime now = new DateTime.now();
     return await FirebaseFirestore.instance.collection('notices').doc().set({
-      'details': detail,
-      'title': dtitle,
-      'fileID': file,
+      'details': detail.trim(),
+      'title': dtitle.trim(),
+      'fileID': file.trim(),
       'date': now.day,
       'month': now.month,
       'year': now.year
@@ -184,7 +195,7 @@ class DatabaseServices {
   Future solDoubt(link) async {
     var v = await FirebaseFirestore.instance
         .collection('doubt')
-        .where('fileID', isEqualTo: link)
+        .where('fileID', isEqualTo: link.trim())
         .get()
         .then((value) => value.docs.map((e) => e).toList());
     return await FirebaseFirestore.instance
@@ -197,13 +208,13 @@ class DatabaseServices {
   Future addSoln(link, file) async {
     var v = await FirebaseFirestore.instance
         .collection('doubt')
-        .where('fileID', isEqualTo: link)
+        .where('fileID', isEqualTo: link.trim())
         .get()
         .then((value) => value.docs.map((e) => e).toList());
     return await FirebaseFirestore.instance
         .collection('solution')
         .doc(v[0].id)
-        .set({'doubtID': v[0].id, 'solFile': file, 'teacherID': g.uid});
+        .set({'doubtID': v[0].id, 'solFile': file.trim(), 'teacherID': g.uid});
   }
 
   //get doubts students
@@ -215,18 +226,26 @@ class DatabaseServices {
         .then((value) => value.docs.map((e) => e.data()).toList());
   }
 
+  //get doubt admin
+  Future<List> getDoubtAdm() async {
+    return await FirebaseFirestore.instance
+        .collection('doubt')
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+  }
+
   //get tests of student
   Future<List<TestData>> getTest(arg, value) async {
     var u = await FirebaseFirestore.instance
         .collection('test')
-        .where(arg, isEqualTo: value)
-        .where('classID', isEqualTo: g.stuGlob.classId)
+        .where(arg.trim(), isEqualTo: value.trim())
+        .where('classID', isEqualTo: g.stuGlob.classId.trim())
         .get()
         .then((value) => value.docs.map((e) => e.id).toList());
     var u1 = await FirebaseFirestore.instance
         .collection('test')
-        .where(arg, isEqualTo: value)
-        .where('classID', isEqualTo: g.stuGlob.classId)
+        .where(arg.trim(), isEqualTo: value.trim())
+        .where('classID', isEqualTo: g.stuGlob.classId.trim())
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
     if (u.isEmpty) {
@@ -244,7 +263,7 @@ class DatabaseServices {
       t = TestData(
           marks: int.parse(v[i]['marks']),
           test: u1[u.indexOf(v[i]['testID'])]['testType'],
-          sub: value);
+          sub: value.trim());
       ret.add(t);
     }
     return (ret);
@@ -254,7 +273,7 @@ class DatabaseServices {
   Future<List> getcls() async {
     return await FirebaseFirestore.instance
         .collection('subjects')
-        .where('subject', isEqualTo: g.teaGlob.subject)
+        .where('subject', isEqualTo: g.teaGlob.subject.trim())
         .get()
         .then((value) => value.docs.map((e) => e.data()['class']).toList());
   }
@@ -263,14 +282,14 @@ class DatabaseServices {
   Future<List> getTestt(arg, value) async {
     var u = await FirebaseFirestore.instance
         .collection('test')
-        .where(arg, isEqualTo: value)
-        .where('subjectID', isEqualTo: g.teaGlob.subject)
+        .where(arg.trim(), isEqualTo: value.trim())
+        .where('subjectID', isEqualTo: g.teaGlob.subject.trim())
         .get()
         .then((value) => value.docs.map((e) => e.id).toList());
     var u1 = await FirebaseFirestore.instance
         .collection('test')
-        .where(arg, isEqualTo: value)
-        .where('subjectID', isEqualTo: g.teaGlob.subject)
+        .where(arg.trim(), isEqualTo: value.trim())
+        .where('subjectID', isEqualTo: g.teaGlob.subject.trim())
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
     if (u.isEmpty) {
@@ -294,7 +313,7 @@ class DatabaseServices {
       t = TestTea(
           marks: int.parse(v[i]['marks']),
           test: u1[u.indexOf(v[i]['testID'])]['testType'],
-          classID: value,
+          classID: value.trim(),
           name: x['rollno']);
       ret.add(t);
       ret2.add(x['rollno']);
@@ -303,7 +322,7 @@ class DatabaseServices {
     for (int i = 0; i < ret2.length; i++) {
       List<TestTea> li = [];
       for (int j = 0; j < ret.length; j++) {
-        if (ret[j].name == ret2[i]) {
+        if (ret[j].name.trim() == ret2[i]) {
           li.add(ret[j]);
         }
       }
@@ -316,7 +335,7 @@ class DatabaseServices {
   Future<Map> getSoln(link) async {
     var v = await FirebaseFirestore.instance
         .collection('doubt')
-        .where('fileID', isEqualTo: link)
+        .where('fileID', isEqualTo: link.trim())
         .get()
         .then((value) => value.docs.map((e) => e).toList());
     return await FirebaseFirestore.instance
@@ -330,8 +349,8 @@ class DatabaseServices {
   Future<List> getDoubtTe() async {
     return await FirebaseFirestore.instance
         .collection('doubt')
-        .where('subject', isEqualTo: g.teaGlob.subject)
-        .where('isSolved', isEqualTo: false-)
+        .where('subject', isEqualTo: g.teaGlob.subject.trim())
+        .where('isSolved', isEqualTo: false)
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
   }
@@ -369,7 +388,7 @@ class DatabaseServices {
   Future<List> allSubs(String cls) async {
     return await FirebaseFirestore.instance
         .collection('subjects')
-        .where("class", isEqualTo: cls)
+        .where("class", isEqualTo: cls.trim())
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
   }
@@ -377,7 +396,7 @@ class DatabaseServices {
   Future<List> allSch(String cls) async {
     return await FirebaseFirestore.instance
         .collection("schedule ")
-        .where("class", isEqualTo: cls)
+        .where("class", isEqualTo: cls.trim())
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
   }
@@ -386,7 +405,7 @@ class DatabaseServices {
   Future<List> allTests(String cls) async {
     List s = await FirebaseFirestore.instance
         .collection("test")
-        .where("classID", isEqualTo: cls)
+        .where("classID", isEqualTo: cls.trim())
         .get()
         .then((value) => value.docs
             .map((e) => e.get("subjectID"))
@@ -401,7 +420,7 @@ class DatabaseServices {
   Future<List> allTeststes(String cls) async {
     List s = await FirebaseFirestore.instance
         .collection("test")
-        .where("classID", isEqualTo: cls)
+        .where("classID", isEqualTo: cls.trim())
         .get()
         .then((value) =>
             value.docs.map((e) => e.get("testType")).toList().toSet().toList());
@@ -447,14 +466,14 @@ class DatabaseServices {
     return await FirebaseFirestore.instance
         .collection('center')
         .doc(j.docs[0].id)
-        .update({'ctno': ctno, 'email': email});
+        .update({'ctno': ctno.trim(), 'email': email.trim()});
   }
 
   //add marks
   Future addMarks(email, marks, sub, test, cls) async {
     var u = await FirebaseFirestore.instance
         .collection('users')
-        .where('email', isEqualTo: email)
+        .where('email', isEqualTo: email.trim())
         .get();
     var t = await FirebaseFirestore.instance
         .collection('test')
@@ -466,10 +485,3 @@ class DatabaseServices {
         {'marks': marks, 'studentID': u.docs[0].id, 'testID': t.docs[0].id});
   }
 }
-
-//for only 5th standard
-
-// classColl
-//         .where('class', isEqualTo: '5th')
-//         .get()
-//         .then((value) => value.docs.map((e) => e.data()).toList());

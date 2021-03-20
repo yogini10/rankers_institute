@@ -181,10 +181,10 @@ class _HomePageState extends State<HomePage> {
                         ? ListTile(
                             title: Text('Your Profile'),
                             onTap: () async {
-                              setState(() {
-                                isload = true;
-                              });
                               if (g.userGlob.usertype == 'Teacher') {
+                                setState(() {
+                                  isload = true;
+                                });
                                 List allS = await DatabaseServices(uid: g.uid)
                                     .allSubClass();
                                 isload = false;
@@ -198,8 +198,9 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ));
                               } else if (g.userGlob.usertype == 'Student') {
-                                // List allS =
-                                //     await DatabaseServices(uid: g.uid).allSubClass();
+                                setState(() {
+                                  isload = true;
+                                });
                                 Navigator.pop(context);
                                 isload = false;
                                 Navigator.push(

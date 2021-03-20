@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
 import 'package:rankers_institute/services/dbser.dart';
+import 'package:rankers_institute/widgets/loading.dart';
 import 'package:rankers_institute/widgets/loginfield.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -261,141 +262,161 @@ class _NewDoubtState extends State<NewDoubt> {
 
   File file;
   String subs;
+  bool isload = false;
+  String error = '';
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: Scaffold(
-        resizeToAvoidBottomPadding: false,
-        backgroundColor: const Color(0xffcaf0f8),
-        body: Center(
-          child: Container(
-            width: g.width * 0.9,
-            height: g.height * 0.82,
-            decoration: BoxDecoration(
-              border: Border.all(width: 0.5),
-              borderRadius: BorderRadius.circular(g.width * 0.15),
-              color: Color(0xffffffff).withOpacity(0.55),
-            ),
-            padding: EdgeInsets.only(
-              top: g.height * 0.05,
-              left: g.width * 0.075,
-              right: g.width * 0.075,
-            ),
-            child: ListView(
-              children: [
-                Text(
-                  'Add Doubt',
-                  style: TextStyle(
-                    fontFamily: 'Segoe UI',
-                    fontSize: 24,
-                    color: const Color(0xff707070),
+    return isload
+        ? LoadingScreen()
+        : GestureDetector(
+            onTap: () {
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            },
+            child: Scaffold(
+              resizeToAvoidBottomPadding: false,
+              backgroundColor: const Color(0xffcaf0f8),
+              body: Center(
+                child: Container(
+                  width: g.width * 0.9,
+                  height: g.height * 0.82,
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 0.5),
+                    borderRadius: BorderRadius.circular(g.width * 0.15),
+                    color: Color(0xffffffff).withOpacity(0.55),
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: g.height * 0.035,
-                ),
-                Row(
-                  children: [
-                    Text('Title'),
-                  ],
-                ),
-                SizedBox(
-                  height: g.height * 0.01,
-                ),
-                ATSInpField(edit: g.title),
-                SizedBox(
-                  height: g.height * 0.03,
-                ),
-                Row(
-                  children: [
-                    Text('Description'),
-                  ],
-                ),
-                SizedBox(
-                  height: g.height * 0.01,
-                ),
-                ATSInpField(edit: g.details),
-                SizedBox(
-                  height: g.height * 0.03,
-                ),
-                DropdownButton<String>(
-                  isExpanded: true,
-                  value: subs,
-                  elevation: 16,
-                  hint: Text('Subject'),
-                  style: g.loginpgstyles(
-                    Color(0xff000000),
+                  padding: EdgeInsets.only(
+                    top: g.height * 0.05,
+                    left: g.width * 0.075,
+                    right: g.width * 0.075,
                   ),
-                  onChanged: (String newValue) {
-                    setState(() {
-                      subs = newValue;
-                    });
-                  },
-                  items: widget.subs.map<DropdownMenuItem<String>>((value) {
-                    return DropdownMenuItem<String>(
-                      value: value['subject'],
-                      child: Text(
-                        value['subject'],
+                  child: ListView(
+                    children: [
+                      Text(
+                        'Add Doubt',
+                        style: TextStyle(
+                          fontFamily: 'Segoe UI',
+                          fontSize: 24,
+                          color: const Color(0xff707070),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: g.height * 0.035,
+                      ),
+                      Row(
+                        children: [
+                          Text('Title'),
+                        ],
+                      ),
+                      SizedBox(
+                        height: g.height * 0.01,
+                      ),
+                      ATSInpField(edit: g.title),
+                      SizedBox(
+                        height: g.height * 0.03,
+                      ),
+                      Row(
+                        children: [
+                          Text('Description'),
+                        ],
+                      ),
+                      SizedBox(
+                        height: g.height * 0.01,
+                      ),
+                      ATSInpField(edit: g.details),
+                      SizedBox(
+                        height: g.height * 0.03,
+                      ),
+                      DropdownButton<String>(
+                        isExpanded: true,
+                        value: subs,
+                        elevation: 16,
+                        hint: Text('Subject'),
                         style: g.loginpgstyles(
                           Color(0xff000000),
                         ),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            subs = newValue;
+                          });
+                        },
+                        items:
+                            widget.subs.map<DropdownMenuItem<String>>((value) {
+                          return DropdownMenuItem<String>(
+                            value: value['subject'],
+                            child: Text(
+                              value['subject'],
+                              style: g.loginpgstyles(
+                                Color(0xff000000),
+                              ),
+                            ),
+                          );
+                        }).toList(),
                       ),
-                    );
-                  }).toList(),
-                ),
-                SizedBox(
-                  height: g.height * 0.03,
-                ),
-                Center(
-                  child: RawMaterialButton(
-                    onPressed: () async {
-                      file = await FilePicker.getFile();
-                    },
-                    child: Container(
-                      width: g.width * 0.5,
-                      height: g.height * 0.055,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        color: Color(0xff90e0ef),
+                      SizedBox(
+                        height: g.height * 0.03,
                       ),
-                      child: Center(child: Text('Choose a File')),
-                    ),
+                      Center(
+                        child: RawMaterialButton(
+                          onPressed: () async {
+                            file = await FilePicker.getFile();
+                          },
+                          child: Container(
+                            width: g.width * 0.5,
+                            height: g.height * 0.055,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              color: Color(0xff90e0ef),
+                            ),
+                            child: Center(child: Text('Choose a File')),
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: RawMaterialButton(
+                          onPressed: () async {
+                            if (file == null ||
+                                g.details.text.isEmpty ||
+                                g.title.text.isEmpty ||
+                                subs == null) {
+                              error = 'Something is missing';
+                            } else {
+                              setState(() {
+                                isload = true;
+                              });
+                              var url = await uploadFile(file);
+                              DatabaseServices(uid: g.uid).addDoubt(
+                                  g.details.text, g.title.text, url, subs);
+                              g.details.clear();
+                              g.title.clear();
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Container(
+                            width: g.width * 0.5,
+                            height: g.height * 0.055,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              color: Color(0xff90e0ef),
+                            ),
+                            child: Center(child: Text('Add the doubt')),
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Text(error, style: TextStyle(color: Colors.red)),
+                      ),
+                    ],
                   ),
                 ),
-                Center(
-                  child: RawMaterialButton(
-                    onPressed: () async {
-                      var url = await uploadFile(file);
-                      DatabaseServices(uid: g.uid)
-                          .addDoubt(g.details.text, g.title.text, url, subs);
-                      g.details.clear();
-                      g.title.clear();
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      width: g.width * 0.5,
-                      height: g.height * 0.055,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        color: Color(0xff90e0ef),
-                      ),
-                      child: Center(child: Text('Add the doubt')),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }

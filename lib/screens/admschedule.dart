@@ -31,7 +31,8 @@ class _AddUpdateScheduleState extends State<AddUpdateSchedule> {
                   .allSch(maps[index]['class']);
               allS = await DatabaseServices(uid: g.uid)
                   .allSubs(maps[index]['class']);
-              Navigator.pushReplacement(
+              isload = false;
+              Navigator.push(
                 context,
                 PageRouteBuilder(
                   pageBuilder: (context, animation, secondaryAnimation) =>
@@ -104,13 +105,7 @@ class _AddUpdateScheduleState extends State<AddUpdateSchedule> {
                     size: 40,
                   ),
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  AdmHome()),
-                    );
+                    Navigator.pop(context);
                   },
                 ),
               ),
@@ -133,6 +128,7 @@ class _AddorUpdateSchState extends State<AddorUpdateSch> {
   String dropdownValue;
   String dropdownValue2;
   String dropdownValue3;
+  String error = '';
   bool isload = false;
 
   @override
@@ -149,12 +145,8 @@ class _AddorUpdateSchState extends State<AddorUpdateSch> {
                 ),
                 onPressed: () {
                   isload = true;
-                  Navigator.pushReplacement(
-                    context,
-                    PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            AdmHome()),
-                  );
+                  Navigator.pop(context);
+                  Navigator.pop(context);
                 },
               ),
               backgroundColor: Colors.transparent,
@@ -295,19 +287,24 @@ class _AddorUpdateSchState extends State<AddorUpdateSch> {
                       Center(
                         child: RawMaterialButton(
                           onPressed: () async {
-                            isload = true;
-                            await DatabaseServices(uid: g.uid).updateSch(
-                                widget.subs[0]['class'],
-                                dropdownValue2,
-                                dropdownValue3 == null ? "" : dropdownValue3,
-                                dropdownValue);
-                            Navigator.pushReplacement(
-                              context,
-                              PageRouteBuilder(
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      AdmHome()),
-                            );
+                            if (dropdownValue == null ||
+                                dropdownValue2 == null ||
+                                dropdownValue3 == null) {
+                              setState(() {
+                                error = 'Some data is missing';
+                              });
+                            } else {
+                              setState(() {
+                                isload = true;
+                              });
+                              await DatabaseServices(uid: g.uid).updateSch(
+                                  widget.subs[0]['class'],
+                                  dropdownValue2,
+                                  dropdownValue3 == null ? "" : dropdownValue3,
+                                  dropdownValue);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            }
                           },
                           child: Container(
                             width: g.width * 0.5,
@@ -321,6 +318,12 @@ class _AddorUpdateSchState extends State<AddorUpdateSch> {
                           ),
                         ),
                       ),
+                      Center(
+                        child: Text(
+                          error,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      )
                     ],
                   ),
                 ),

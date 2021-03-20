@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rankers_institute/screens/adduser.dart';
 import 'package:rankers_institute/screens/addstudy.dart';
 import 'package:rankers_institute/screens/admanalysis.dart';
+import 'package:rankers_institute/screens/admdbt.dart';
 import 'package:rankers_institute/screens/admschedule.dart';
 import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/addlecture.dart';
@@ -204,7 +205,22 @@ class _AdmHomeState extends State<AdmHome> {
                           );
                         },
                       ),
-                      hpImage('10'),
+                      GestureDetector(
+                          onTap: () async {
+                            List allDbt;
+                            allDbt = await DatabaseServices(uid: g.uid)
+                                .getDoubtAdm();
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      AdmDoubt(
+                                        doubts: allDbt,
+                                      )),
+                            );
+                          },
+                          child: hpImage('10')),
                     ],
                   ),
                 ],

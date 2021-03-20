@@ -132,7 +132,7 @@ class _TeaHomeState extends State<TeaHome> {
                     height: g.height * 0.02,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
                           onTap: () async {
@@ -143,6 +143,7 @@ class _TeaHomeState extends State<TeaHome> {
                               context: context,
                               builder: (BuildContext context) {
                                 String classid;
+                                String error = '';
                                 return StatefulBuilder(
                                     builder: (context, setState) {
                                   return GestureDetector(
@@ -183,6 +184,13 @@ class _TeaHomeState extends State<TeaHome> {
                                                 );
                                               }).toList(),
                                             ),
+                                            Center(
+                                              child: Text(
+                                                error,
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                            )
                                           ],
                                         ),
                                       ),
@@ -191,10 +199,18 @@ class _TeaHomeState extends State<TeaHome> {
                                           child: Text('Add'),
                                           onPressed: () {
                                             g.leclink.clear();
-                                            DatabaseServices(uid: g.uid)
-                                                .updateLecture(
-                                                    g.leclink.text, classid);
-                                            Navigator.of(context).pop();
+                                            if (classid == null ||
+                                                g.leclink.text.isEmpty) {
+                                              setState(() {
+                                                error =
+                                                    'Please enter all the data';
+                                              });
+                                            } else {
+                                              DatabaseServices(uid: g.uid)
+                                                  .updateLecture(
+                                                      g.leclink.text, classid);
+                                              Navigator.of(context).pop();
+                                            }
                                           },
                                         ),
                                       ],
@@ -205,7 +221,6 @@ class _TeaHomeState extends State<TeaHome> {
                             );
                           },
                           child: hpImage('5')),
-                      hpImage('Online Lecture')
                     ],
                   ),
                 ],
