@@ -5,7 +5,6 @@ import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/test.dart';
 import 'package:rankers_institute/models/user.dart';
 import 'package:rankers_institute/globals.dart' as g;
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 class DatabaseServices {
   final String uid;
@@ -332,7 +331,7 @@ class DatabaseServices {
     return await FirebaseFirestore.instance
         .collection('doubt')
         .where('subject', isEqualTo: g.teaGlob.subject)
-        //.where('isSolved', isEqualTo: true)
+        .where('isSolved', isEqualTo: false-)
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
   }

@@ -130,6 +130,7 @@ class _AddManuallyState extends State<AddManually> {
     }
   }
 
+  String error = '';
   bool isload = false;
   String dropdownValue3;
   File file;
@@ -187,14 +188,7 @@ class _AddManuallyState extends State<AddManually> {
                           ],
                         ),
                         SizedBox(
-                          height: g.height * 0.05,
-                        ),
-                        Text(
-                          file == null ? "" : p.basename(file.path),
-                          style: g.loginpgstyles(Colors.black),
-                        ),
-                        SizedBox(
-                          height: g.height * 0.03,
+                          height: g.height * 0.08,
                         ),
                         Text(
                           widget.subs[0]['class'] + ' Class',
@@ -230,7 +224,10 @@ class _AddManuallyState extends State<AddManually> {
                           }).toList(),
                         ),
                         SizedBox(
-                          height: g.height * 0.1,
+                          height: g.height * 0.05,
+                        ),
+                        Text(
+                          file == null ? "" : p.basename(file.path),
                         ),
                         Center(
                           child: RawMaterialButton(
@@ -252,12 +249,26 @@ class _AddManuallyState extends State<AddManually> {
                         Center(
                           child: RawMaterialButton(
                             onPressed: () async {
-                              isload = true;
-                              var url = await uploadFile(file);
-                              DatabaseServices(uid: g.uid).updateMaterial(
-                                  widget.subs[0]['class'], url, dropdownValue3);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
+                              if (dropdownValue3 == null ||
+                                  dropdownValue3.isEmpty) {
+                                setState(() {
+                                  error = 'subject is empty';
+                                });
+                              }
+                              if (file == null || file.path.isNotEmpty) {
+                                setState(() {
+                                  error = 'no file selected';
+                                });
+                              } else {
+                                isload = true;
+                                var url = await uploadFile(file);
+                                DatabaseServices(uid: g.uid).updateMaterial(
+                                    widget.subs[0]['class'],
+                                    url,
+                                    dropdownValue3);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              }
                             },
                             child: Container(
                               width: g.width * 0.5,
@@ -269,6 +280,12 @@ class _AddManuallyState extends State<AddManually> {
                               ),
                               child: Center(child: Text('Add the material')),
                             ),
+                          ),
+                        ),
+                        Center(
+                          child: Text(
+                            error,
+                            style: TextStyle(color: Colors.red),
                           ),
                         ),
                       ],
