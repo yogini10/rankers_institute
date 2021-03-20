@@ -331,7 +331,7 @@ class DatabaseServices {
     return await FirebaseFirestore.instance
         .collection('doubt')
         .where('subject', isEqualTo: g.teaGlob.subject)
-        .where('isSolved', isEqualTo: false-)
+        .where('isSolved', isEqualTo: false)
         .get()
         .then((value) => value.docs.map((e) => e.data()).toList());
   }
