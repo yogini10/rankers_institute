@@ -30,7 +30,7 @@ class _TeaHomeState extends State<TeaHome> {
               padding: EdgeInsets.only(
                   left: g.width * 0.03,
                   right: g.width * 0.03,
-                  top: g.height * 0.02),
+                  top: g.height * 0.080),
               child: Column(
                 children: [
                   Row(
@@ -65,8 +65,12 @@ class _TeaHomeState extends State<TeaHome> {
                           child: hpImage('1')),
                       GestureDetector(
                           onTap: () async {
+                            setState(() {
+                              isload = true;
+                            });
                             List allS =
                                 await DatabaseServices(uid: g.uid).allClasses();
+                            isload = false;
                             Navigator.push(
                               context,
                               PageRouteBuilder(

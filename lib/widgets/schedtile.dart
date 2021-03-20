@@ -27,7 +27,7 @@ class _SchedTileState extends State<SchedTile> {
               blurRadius: 9,
             ),
           ],
-          color: const Color(0xffcaf0f8),
+          color: const Color(0xffaae5ff),
         ),
         child: Center(
           child: Text(widget.text),
