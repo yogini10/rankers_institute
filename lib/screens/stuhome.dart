@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:rankers_institute/screens/analysis.dart';
 import 'package:rankers_institute/screens/schedule.dart';
+import 'package:rankers_institute/screens/smsubs.dart';
 import 'package:rankers_institute/screens/studbt.dart';
 import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/screens/smclasses.dart';
@@ -96,15 +97,15 @@ class _StuHomeState extends State<StuHome> {
                             isload = true;
                           });
                           List allC;
-                          allC =
-                              await DatabaseServices(uid: g.uid).allClasses();
-
-                          Navigator.pushReplacement(
+                          allC = await DatabaseServices(uid: g.uid)
+                              .allSubs(g.stuGlob.classId);
+                          isload = false;
+                          Navigator.push(
                             context,
                             PageRouteBuilder(
                                 pageBuilder:
                                     (context, animation, secondaryAnimation) =>
-                                        SMClasses(
+                                        SMSub(
                                           list: allC,
                                         )),
                           );
@@ -133,7 +134,7 @@ class _StuHomeState extends State<StuHome> {
                     height: g.height * 0.02,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
                         onTap: () async {
@@ -175,7 +176,6 @@ class _StuHomeState extends State<StuHome> {
                         },
                         child: hpImage('5'),
                       ),
-                      hpImage('Online Lecture')
                     ],
                   ),
                 ],

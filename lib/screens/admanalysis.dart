@@ -265,7 +265,8 @@ class _AddTestDataState extends State<AddTestData> {
                                 if (g.stuEmail.text.isNotEmpty &&
                                     g.stuMarks.text.isNotEmpty &&
                                     subs != null &&
-                                    tess != null) {
+                                    tess != null &&
+                                    num.tryParse(g.stuMarks.text) == null) {
                                   await DatabaseServices(uid: g.uid).addMarks(
                                       g.stuEmail.text,
                                       g.stuMarks.text,
