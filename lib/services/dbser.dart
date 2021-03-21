@@ -469,6 +469,18 @@ class DatabaseServices {
         .update({'ctno': ctno.trim(), 'email': email.trim()});
   }
 
+  //delete Notice
+  Future deleteNotice(String link) async {
+    var v = await FirebaseFirestore.instance
+        .collection('notices')
+        .where('fileID', isEqualTo: link.trim())
+        .get();
+    return await FirebaseFirestore.instance
+        .collection('notices')
+        .doc(v.docs[0].id)
+        .delete();
+  }
+
   //add marks
   Future addMarks(email, marks, sub, test, cls) async {
     var u = await FirebaseFirestore.instance

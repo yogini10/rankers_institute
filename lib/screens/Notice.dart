@@ -4,9 +4,11 @@ import 'package:path/path.dart' as p;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/services/dbser.dart';
+import 'package:rankers_institute/widgets/loading.dart';
 import 'package:rankers_institute/widgets/loginfield.dart';
 import 'package:rankers_institute/widgets/newcontappbar.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:url_launcher/url_launcher.dart';
 
 class AdmNotice extends StatefulWidget {
   AdmNotice({
@@ -139,13 +141,12 @@ class _AdmNoticeState extends State<AdmNotice> {
                               var url = await uploadFile(file);
                               DatabaseServices(uid: g.uid)
                                   .addNotice(g.details.text, g.title.text, url);
-                            } else {
-                              DatabaseServices(uid: g.uid)
-                                  .addNotice(g.details.text, g.title.text, '');
+
+                              g.details.clear();
+                              g.title.clear();
+                              Navigator.pop(context);
+                              Navigator.pop(context);
                             }
-                            g.details.clear();
-                            g.title.clear();
-                            Navigator.pop(context);
                           } else {
                             setState(() {
                               error =
@@ -184,12 +185,13 @@ class _AdmNoticeState extends State<AdmNotice> {
 class Notice extends StatefulWidget {
   final List mylist;
 
-  const Notice({Key key, this.mylist}) : super(key: key);
+  Notice({Key key, this.mylist}) : super(key: key);
   @override
   _NoticeState createState() => _NoticeState();
 }
 
 class _NoticeState extends State<Notice> {
+  bool isload = false;
   List<Widget> list(List map) {
     return List.generate(map.length, (index) {
       return ListTile(
@@ -202,7 +204,7 @@ class _NoticeState extends State<Notice> {
                       )));
         },
         title: Container(
-          height: g.height * 0.1,
+          height: g.height * 0.15,
           color: Colors.white,
           child: Column(
             children: [
@@ -226,6 +228,7 @@ class _NoticeState extends State<Notice> {
                 ],
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: EdgeInsets.only(
@@ -237,6 +240,40 @@ class _NoticeState extends State<Notice> {
                         '-' +
                         map[index]['year'].toString()),
                   ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        right: g.width * 0.1, top: g.height * 0.02),
+                    child: g.userGlob.usertype == 'Admin'
+                        ? IconButton(
+                            iconSize: 20,
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.black,
+                            ),
+                            onPressed: () async {
+                              isload = true;
+                              await FirebaseStorage.instance
+                                  .refFromURL(map[index]['fileID'])
+                                  .delete();
+                              await DatabaseServices(uid: g.uid)
+                                  .deleteNotice(map[index]['fileID']);
+                              g.allss = await DatabaseServices(uid: g.uid)
+                                  .getNotices();
+                              isload = false;
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (context, animation1, animation2) =>
+                                            Notice(
+                                      mylist: g.allss,
+                                    ),
+                                  ));
+                            },
+                          )
+                        : Container(),
+                  )
                 ],
               )
             ],
@@ -248,20 +285,53 @@ class _NoticeState extends State<Notice> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: ncAppBaer(),
-        backgroundColor: const Color(0xffcaf0f8),
-        body: widget.mylist.length == 0
-            ? Center(
-                child: Text('No Notice for you'),
-              )
-            : ListView(
-                padding: EdgeInsets.only(top: g.height * 0.03),
-                children: list(widget.mylist),
-              ),
-      ),
-    );
+    return g.userGlob.usertype != 'Admin'
+        ? SafeArea(
+            child: isload
+                ? LoadingScreen()
+                : Scaffold(
+                    appBar: ncAppBaer(),
+                    backgroundColor: const Color(0xffcaf0f8),
+                    body: widget.mylist.length == 0
+                        ? Center(
+                            child: Text('No Notice for you'),
+                          )
+                        : ListView(
+                            padding: EdgeInsets.only(top: g.height * 0.03),
+                            children: list(widget.mylist),
+                          ),
+                  ),
+          )
+        : SafeArea(
+            child: isload
+                ? LoadingScreen()
+                : Scaffold(
+                    appBar: ncAppBaer(),
+                    backgroundColor: const Color(0xffcaf0f8),
+                    body: widget.mylist.length == 0
+                        ? Center(
+                            child: Text('No Notice for you'),
+                          )
+                        : ListView(
+                            padding: EdgeInsets.only(top: g.height * 0.03),
+                            children: list(widget.mylist),
+                          ),
+                    floatingActionButton: FloatingActionButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  AdmNotice(),
+                            ));
+                      },
+                      child: Icon(
+                        Icons.add,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+          );
   }
 }
 

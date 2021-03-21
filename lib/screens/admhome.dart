@@ -5,7 +5,6 @@ import 'package:rankers_institute/screens/admanalysis.dart';
 import 'package:rankers_institute/screens/admdbt.dart';
 import 'package:rankers_institute/screens/admschedule.dart';
 import 'package:rankers_institute/services/dbser.dart';
-import 'package:rankers_institute/widgets/addlecture.dart';
 import 'package:rankers_institute/widgets/hpimg.dart';
 import 'package:rankers_institute/widgets/loading.dart';
 import 'package:rankers_institute/globals.dart' as g;
