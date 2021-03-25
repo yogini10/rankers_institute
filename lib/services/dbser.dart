@@ -135,7 +135,6 @@ class DatabaseServices {
 
   //update fees details
   Future updateFees(String name, String email, int amtpaid) async {
-    print(email.trim() + 'hello');
     var v = await FirebaseFirestore.instance
         .collection('users')
         .where('email', isEqualTo: email.trim())
@@ -158,10 +157,11 @@ class DatabaseServices {
     if (w.data()['amtpaid'] + amtpaid > w.data()['amttotal']) {
       return 'Please check the amount to be inserted';
     }
-    return await FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('fees')
         .doc(v.docs[0].id)
-        .update({'amtpaid': amtpaid});
+        .update({'amtpaid': w.data()['amtpaid'] + amtpaid});
+    return '';
   }
 
   //get current user
@@ -502,17 +502,41 @@ class DatabaseServices {
 
   //add marks
   Future addMarks(email, marks, sub, test, cls) async {
-    var u = await FirebaseFirestore.instance
+    var v = await FirebaseFirestore.instance
         .collection('users')
         .where('email', isEqualTo: email.trim())
+        .where('usertype', isEqualTo: 'Student')
         .get();
+    if (v.docs.isEmpty) {
+      return 'Invalid email';
+    }
+    var l = await FirebaseFirestore.instance
+        .collection('student')
+        .doc(v.docs[0].id)
+        .get();
+    if (l.data()['classID'] != cls) {
+      return 'Given Student is not in choden class';
+    }
+    if (int.parse(marks) > 100) {
+      return 'Please enter appropriate marks';
+    }
     var t = await FirebaseFirestore.instance
         .collection('test')
         .where('classID', isEqualTo: cls)
         .where('subjectID', isEqualTo: sub)
         .where('testType', isEqualTo: test)
         .get();
+    var u = await FirebaseFirestore.instance
+        .collection('marks')
+        .where('studentID', isEqualTo: v.docs[0].id)
+        .where('testID', isEqualTo: t.docs[0].id)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+    if (u.isNotEmpty) {
+      return 'Cannot Overrite pre-existing data';
+    }
     await FirebaseFirestore.instance.collection('marks').doc().set(
-        {'marks': marks, 'studentID': u.docs[0].id, 'testID': t.docs[0].id});
+        {'marks': marks, 'studentID': v.docs[0].id, 'testID': t.docs[0].id});
+    return '';
   }
 }
