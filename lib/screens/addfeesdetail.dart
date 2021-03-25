@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
-import 'package:rankers_institute/screens/admhome.dart';
 import 'package:rankers_institute/services/dbser.dart';
 import 'package:rankers_institute/widgets/loading.dart';
 import 'package:rankers_institute/widgets/loginfield.dart';
@@ -114,13 +113,28 @@ class _AddFeesdetailState extends State<AddFeesdetail> {
                                   setState(() {
                                     isload = true;
                                   });
-                                  await DatabaseServices(uid: g.uid).updateFees(
-                                      g.stuEmail.text,
-                                      int.parse(g.stuAmtPaid.text));
-                                  g.stuName.clear();
-                                  g.stuEmail.clear();
-                                  g.stuAmtPaid.clear();
-                                  Navigator.pop(context);
+                                  var v = await DatabaseServices(uid: g.uid)
+                                      .updateFees(
+                                          g.stuName.text,
+                                          g.stuEmail.text,
+                                          int.parse(g.stuAmtPaid.text));
+                                  if (v == '') {
+                                    setState(() {
+                                      error = v;
+                                    });
+                                    g.stuName.clear();
+                                    g.stuEmail.clear();
+                                    g.stuAmtPaid.clear();
+                                    Navigator.pop(context);
+                                  } else {
+                                    isload = false;
+                                    g.stuName.clear();
+                                    g.stuEmail.clear();
+                                    g.stuAmtPaid.clear();
+                                    setState(() {
+                                      error = v;
+                                    });
+                                  }
                                 }
                               },
                               child: Container(

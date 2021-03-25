@@ -134,11 +134,30 @@ class DatabaseServices {
   }
 
   //update fees details
-  Future updateFees(String email, int amtpaid) async {
+  Future updateFees(String name, String email, int amtpaid) async {
+    print(email.trim() + 'hello');
     var v = await FirebaseFirestore.instance
-        .collection('student')
+        .collection('users')
         .where('email', isEqualTo: email.trim())
+        .where('usertype', isEqualTo: 'Student')
         .get();
+    if (v.docs.isEmpty) {
+      return 'Invalid email';
+    }
+    var u = await FirebaseFirestore.instance
+        .collection('student')
+        .doc(v.docs[0].id)
+        .get();
+    if (u.data()['name'] != name) {
+      return 'Student Name and Email does not match';
+    }
+    var w = await FirebaseFirestore.instance
+        .collection('fees')
+        .doc(v.docs[0].id)
+        .get();
+    if (w.data()['amtpaid'] + amtpaid > w.data()['amttotal']) {
+      return 'Please check the amount to be inserted';
+    }
     return await FirebaseFirestore.instance
         .collection('fees')
         .doc(v.docs[0].id)
