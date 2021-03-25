@@ -287,8 +287,6 @@ class _AddTestDataState extends State<AddTestData> {
                                     isload = false;
                                     g.stuEmail.clear();
                                     g.stuMarks.clear();
-                                    subs = null;
-                                    tess = null;
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                   }
