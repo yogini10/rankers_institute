@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:rankers_institute/models/admin.dart';
 import 'package:rankers_institute/models/students.dart';
 import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/test.dart';
@@ -31,6 +32,22 @@ class DatabaseServices {
       'password': user.password.trim(),
       'usertype': user.usertype.trim(),
     });
+  }
+
+  //add admin
+  Future addAdmin(Admin adm, String uid) async {
+    var l = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: adm.email.trim())
+        .get();
+    if (l.docs.isNotEmpty) {
+      return 'Email already exists';
+    }
+    await FirebaseFirestore.instance
+        .collection('admin')
+        .doc(uid)
+        .set({'name': adm.contact, 'contact': adm.name});
+    return '';
   }
 
   //update student info
