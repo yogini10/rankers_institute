@@ -152,7 +152,10 @@ class _MYprofilestudentState extends State<MYprofilestudent> {
                         IconButton(
                             icon: FaIcon(FontAwesomeIcons.arrowRight),
                             onPressed: () async {
-                              if (g.stuContact.text.isNotEmpty) {
+                              if (g.stuContact.text.isNotEmpty &&
+                                  num.tryParse(g.stuContact.text.trim()) !=
+                                      null &&
+                                  g.stuContact.text.trim().length != 10) {
                                 setState(() {
                                   g.stuGlob.contact = g.stuContact.text;
                                 });

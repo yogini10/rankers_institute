@@ -335,9 +335,6 @@ class _NewDoubtState extends State<NewDoubt> {
                         value: subs,
                         elevation: 16,
                         hint: Text('Subject'),
-                        style: g.loginpgstyles(
-                          Color(0xff000000),
-                        ),
                         onChanged: (String newValue) {
                           setState(() {
                             subs = newValue;
@@ -349,9 +346,6 @@ class _NewDoubtState extends State<NewDoubt> {
                             value: value['subject'],
                             child: Text(
                               value['subject'],
-                              style: g.loginpgstyles(
-                                Color(0xff000000),
-                              ),
                             ),
                           );
                         }).toList(),
@@ -359,6 +353,22 @@ class _NewDoubtState extends State<NewDoubt> {
                       SizedBox(
                         height: g.height * 0.03,
                       ),
+                      file != null
+                          ? Center(
+                              child: Row(children: [
+                                Icon(
+                                  Icons.file_present,
+                                  color: Colors.red,
+                                ),
+                                Container(
+                                    width: g.width * 0.65,
+                                    child: Text(
+                                      p.basename(file.path),
+                                      overflow: TextOverflow.ellipsis,
+                                    ))
+                              ]),
+                            )
+                          : Container(),
                       Center(
                         child: RawMaterialButton(
                           onPressed: () async {
@@ -379,11 +389,16 @@ class _NewDoubtState extends State<NewDoubt> {
                       Center(
                         child: RawMaterialButton(
                           onPressed: () async {
-                            if (file == null ||
-                                g.details.text.isEmpty ||
+                            if (g.details.text.isEmpty ||
                                 g.title.text.isEmpty ||
                                 subs == null) {
-                              error = 'Something is missing';
+                              setState(() {
+                                error = 'Invalid entries...';
+                              });
+                            } else if (file == null) {
+                              setState(() {
+                                error = 'File is missing';
+                              });
                             } else {
                               setState(() {
                                 isload = true;
