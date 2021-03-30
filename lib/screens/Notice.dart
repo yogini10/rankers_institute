@@ -8,7 +8,6 @@ import 'package:rankers_institute/widgets/loading.dart';
 import 'package:rankers_institute/widgets/loginfield.dart';
 import 'package:rankers_institute/widgets/newcontappbar.dart';
 import 'package:rankers_institute/globals.dart' as g;
-import 'package:url_launcher/url_launcher.dart';
 
 class AdmNotice extends StatefulWidget {
   AdmNotice({
@@ -144,6 +143,7 @@ class _AdmNoticeState extends State<AdmNotice> {
 
                               g.details.clear();
                               g.title.clear();
+
                               Navigator.pop(context);
                               Navigator.pop(context);
                             }

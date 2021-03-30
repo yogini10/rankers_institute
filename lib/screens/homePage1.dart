@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
     try {
       update();
     } catch (e) {
-      print('hello');
+      return LoadingScreen();
     }
     //safe are not letting screen behind status bar
     return isload
@@ -131,13 +131,9 @@ class _HomePageState extends State<HomePage> {
                             context,
                             PageRouteBuilder(
                               pageBuilder: (context, animation1, animation2) =>
-                                  g.userGlob.usertype == 'Admin'
-                                      ? Notice(
-                                          mylist: allC,
-                                        )
-                                      : Notice(
-                                          mylist: allC,
-                                        ),
+                                  Notice(
+                                mylist: allC,
+                              ),
                             ));
                       },
                       title: Text('Notice Board'),

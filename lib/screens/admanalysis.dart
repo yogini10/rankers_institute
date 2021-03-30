@@ -266,18 +266,35 @@ class _AddTestDataState extends State<AddTestData> {
                                     g.stuMarks.text.isNotEmpty &&
                                     subs != null &&
                                     tess != null &&
-                                    num.tryParse(g.stuMarks.text) == null) {
-                                  await DatabaseServices(uid: g.uid).addMarks(
-                                      g.stuEmail.text,
-                                      g.stuMarks.text,
-                                      subs,
-                                      tess,
-                                      widget.clss);
-
-                                  isload = false;
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
+                                    num.tryParse(g.stuMarks.text) != null) {
+                                  var v = await DatabaseServices(uid: g.uid)
+                                      .addMarks(
+                                          g.stuEmail.text,
+                                          g.stuMarks.text,
+                                          subs,
+                                          tess,
+                                          widget.clss);
+                                  if (v != '') {
+                                    setState(() {
+                                      error = v;
+                                      isload = false;
+                                      subs = null;
+                                      tess = null;
+                                      g.stuEmail.clear();
+                                      g.stuMarks.clear();
+                                    });
+                                  } else {
+                                    isload = false;
+                                    g.stuEmail.clear();
+                                    g.stuMarks.clear();
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  }
                                 } else {
+                                  g.stuEmail.clear();
+                                  g.stuMarks.clear();
+                                  subs = null;
+                                  tess = null;
                                   setState(() {
                                     error = 'One or more fields are left empty';
                                     isload = false;

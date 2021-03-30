@@ -117,61 +117,83 @@ class _AdmHomeState extends State<AdmHome> {
                             context: context,
                             builder: (BuildContext context) {
                               String classid;
+                              String error = '';
                               return StatefulBuilder(
                                   builder: (context, setState) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    FocusScopeNode currentFocus =
-                                        FocusScope.of(context);
-                                    if (!currentFocus.hasPrimaryFocus) {
-                                      currentFocus.unfocus();
-                                    }
+                                return WillPopScope(
+                                  onWillPop: () {
+                                    g.leclink.clear();
+                                    Navigator.pop(context);
+                                    return Future.value(false);
                                   },
-                                  child: AlertDialog(
-                                    title: Text('Add Lecture'),
-                                    content: SingleChildScrollView(
-                                      child: ListBody(
-                                        children: <Widget>[
-                                          TxtField(
-                                            ctrl: g.leclink,
-                                            hint: "Lecture Link",
-                                          ),
-                                          DropdownButton<String>(
-                                            isExpanded: true,
-                                            value: classid,
-                                            elevation: 16,
-                                            hint: Text('Class'),
-                                            onChanged: (String newValue) {
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      FocusScopeNode currentFocus =
+                                          FocusScope.of(context);
+                                      if (!currentFocus.hasPrimaryFocus) {
+                                        currentFocus.unfocus();
+                                      }
+                                    },
+                                    child: AlertDialog(
+                                      title: Text('Add Lecture'),
+                                      content: SingleChildScrollView(
+                                        child: ListBody(
+                                          children: <Widget>[
+                                            TxtField(
+                                              ctrl: g.leclink,
+                                              hint: "Lecture Link",
+                                            ),
+                                            DropdownButton<String>(
+                                              isExpanded: true,
+                                              value: classid,
+                                              elevation: 16,
+                                              hint: Text('Class'),
+                                              onChanged: (String newValue) {
+                                                setState(() {
+                                                  classid = newValue;
+                                                });
+                                              },
+                                              items: allC.map<
+                                                      DropdownMenuItem<String>>(
+                                                  (value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value['class'],
+                                                  child: Text(
+                                                    value['class'],
+                                                  ),
+                                                );
+                                              }).toList(),
+                                            ),
+                                            Center(
+                                              child: Text(
+                                                error,
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          child: Text('Add'),
+                                          onPressed: () {
+                                            if (classid == null ||
+                                                g.leclink.text.isEmpty) {
                                               setState(() {
-                                                classid = newValue;
+                                                error = 'some fields are empty';
                                               });
-                                            },
-                                            items: allC
-                                                .map<DropdownMenuItem<String>>(
-                                                    (value) {
-                                              return DropdownMenuItem<String>(
-                                                value: value['class'],
-                                                child: Text(
-                                                  value['class'],
-                                                ),
-                                              );
-                                            }).toList(),
-                                          ),
-                                        ],
-                                      ),
+                                            } else {
+                                              DatabaseServices(uid: g.uid)
+                                                  .updateLecture(
+                                                      g.leclink.text, classid);
+                                              g.leclink.clear();
+                                              Navigator.of(context).pop();
+                                            }
+                                          },
+                                        ),
+                                      ],
                                     ),
-                                    actions: <Widget>[
-                                      FlatButton(
-                                        child: Text('Add'),
-                                        onPressed: () {
-                                          g.leclink.clear();
-                                          DatabaseServices(uid: g.uid)
-                                              .updateLecture(
-                                                  g.leclink.text, classid);
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
                                   ),
                                 );
                               });

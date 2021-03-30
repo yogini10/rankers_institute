@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:rankers_institute/models/admin.dart';
 import 'package:rankers_institute/models/students.dart';
 import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/test.dart';
@@ -30,6 +32,22 @@ class DatabaseServices {
       'password': user.password.trim(),
       'usertype': user.usertype.trim(),
     });
+  }
+
+  //add admin user
+  Future addAdmin(Admin adm, String uid) async {
+    var l = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: adm.email.trim())
+        .get();
+    if (l.docs.isNotEmpty) {
+      return 'Email already exists';
+    }
+    await FirebaseFirestore.instance
+        .collection('admin')
+        .doc(uid)
+        .set({'name': adm.contact, 'contact': adm.name});
+    return '';
   }
 
   //update student info
@@ -119,7 +137,7 @@ class DatabaseServices {
   //add fees details
   Future addFees(String email, String clss) async {
     var v = await FirebaseFirestore.instance
-        .collection('student')
+        .collection('users')
         .where('email', isEqualTo: email.trim())
         .get();
     return await FirebaseFirestore.instance
@@ -134,15 +152,34 @@ class DatabaseServices {
   }
 
   //update fees details
-  Future updateFees(String email, int amtpaid) async {
+  Future updateFees(String name, String email, int amtpaid) async {
     var v = await FirebaseFirestore.instance
-        .collection('student')
+        .collection('users')
         .where('email', isEqualTo: email.trim())
+        .where('usertype', isEqualTo: 'Student')
         .get();
-    return await FirebaseFirestore.instance
+    if (v.docs.isEmpty) {
+      return 'Invalid email';
+    }
+    var u = await FirebaseFirestore.instance
+        .collection('student')
+        .doc(v.docs[0].id)
+        .get();
+    if (u.data()['name'] != name) {
+      return 'Student Name and Email does not match';
+    }
+    var w = await FirebaseFirestore.instance
         .collection('fees')
         .doc(v.docs[0].id)
-        .update({'amtpaid': amtpaid});
+        .get();
+    if (w.data()['amtpaid'] + amtpaid > w.data()['amttotal']) {
+      return 'Please check the amount to be inserted';
+    }
+    await FirebaseFirestore.instance
+        .collection('fees')
+        .doc(v.docs[0].id)
+        .update({'amtpaid': w.data()['amtpaid'] + amtpaid});
+    return '';
   }
 
   //get current user
@@ -475,25 +512,143 @@ class DatabaseServices {
         .collection('notices')
         .where('fileID', isEqualTo: link.trim())
         .get();
+    FirebaseStorage.instance.refFromURL(v.docs[0]['fileID']).delete();
     return await FirebaseFirestore.instance
         .collection('notices')
         .doc(v.docs[0].id)
         .delete();
   }
 
+  //get all users
+  Future getAllUsers() async {
+    return await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isNotEqualTo: g.userGlob.email)
+        .get();
+  }
+
+  //delete user
+  Future delUser(id) async {
+    return await FirebaseFirestore.instance
+        .collection('users')
+        .doc(id)
+        .delete();
+  }
+
+  //delete teacher
+  Future delTeacher(id) async {
+    return await FirebaseFirestore.instance
+        .collection('teacher')
+        .doc(id)
+        .delete();
+  }
+
+  //delete admin user
+  Future delAdmin(id) async {
+    return await FirebaseFirestore.instance
+        .collection('admin')
+        .doc(id)
+        .delete();
+  }
+
+  //delete student user
+  Future delStudent(id) async {
+    return await FirebaseFirestore.instance
+        .collection('student')
+        .doc(id)
+        .delete();
+  }
+
+  //delete fees details
+  Future delFees(id) async {
+    return await FirebaseFirestore.instance.collection('fees').doc(id).delete();
+  }
+
+  //deletedoubts
+  Future delDoubt(id) async {
+    List l = await FirebaseFirestore.instance
+        .collection('doubt')
+        .where('studentID', isEqualTo: id)
+        .get()
+        .then((value) => value.docs.map((e) => e.id).toList());
+    if (l.isNotEmpty) {
+      for (int i = 0; i < l.length; i++) {
+        try {
+          var v = await FirebaseFirestore.instance
+              .collection('solution')
+              .doc(l[i])
+              .get()
+              .then((value) => value.data());
+          FirebaseStorage.instance.refFromURL(v['solFile']).delete();
+          await FirebaseFirestore.instance
+              .collection('solution')
+              .doc(l[i])
+              .delete();
+        } catch (e) {
+          return;
+        }
+        var u = await FirebaseFirestore.instance
+            .collection('doubt')
+            .doc(l[i])
+            .get()
+            .then((value) => value.data());
+        FirebaseStorage.instance.refFromURL(u['fileID']).delete();
+        await FirebaseFirestore.instance.collection('doubt').doc(l[i]).delete();
+      }
+    }
+  }
+
+  //delete marks of student
+  Future delMarks(id) async {
+    var v = await FirebaseFirestore.instance
+        .collection('marks')
+        .where('studentID', isEqualTo: id)
+        .get()
+        .then((value) => value.docs.map((e) => e.id).toList());
+    if (v.isNotEmpty) {
+      for (int i = 0; i < v.length; i++) {
+        await FirebaseFirestore.instance.collection('marks').doc(v[i]).delete();
+      }
+    }
+  }
+
   //add marks
   Future addMarks(email, marks, sub, test, cls) async {
-    var u = await FirebaseFirestore.instance
+    var v = await FirebaseFirestore.instance
         .collection('users')
         .where('email', isEqualTo: email.trim())
+        .where('usertype', isEqualTo: 'Student')
         .get();
+    if (v.docs.isEmpty) {
+      return 'Invalid email';
+    }
+    var l = await FirebaseFirestore.instance
+        .collection('student')
+        .doc(v.docs[0].id)
+        .get();
+    if (l.data()['classID'] != cls) {
+      return 'Given Student is not in choden class';
+    }
+    if (int.parse(marks) > 100) {
+      return 'Please enter appropriate marks';
+    }
     var t = await FirebaseFirestore.instance
         .collection('test')
         .where('classID', isEqualTo: cls)
         .where('subjectID', isEqualTo: sub)
         .where('testType', isEqualTo: test)
         .get();
+    var u = await FirebaseFirestore.instance
+        .collection('marks')
+        .where('studentID', isEqualTo: v.docs[0].id)
+        .where('testID', isEqualTo: t.docs[0].id)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+    if (u.isNotEmpty) {
+      return 'Cannot Overrite pre-existing data';
+    }
     await FirebaseFirestore.instance.collection('marks').doc().set(
-        {'marks': marks, 'studentID': u.docs[0].id, 'testID': t.docs[0].id});
+        {'marks': marks, 'studentID': v.docs[0].id, 'testID': t.docs[0].id});
+    return '';
   }
 }

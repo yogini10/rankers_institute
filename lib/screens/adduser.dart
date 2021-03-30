@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rankers_institute/globals.dart' as g;
+import 'package:rankers_institute/models/admin.dart';
 import 'package:rankers_institute/models/students.dart';
 import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/user.dart';
@@ -78,6 +79,183 @@ class _AddUserState extends State<AddUser> {
               ),
               RawMaterialButton(
                 onPressed: () async {
+                  var allC;
+                  allC = await DatabaseServices(uid: g.uid).getAllUsers();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      String error = '';
+                      final AuthServices _auth = AuthServices();
+                      bool isload = false;
+                      return StatefulBuilder(builder: (context, setState) {
+                        return WillPopScope(
+                          onWillPop: () {
+                            g.teaEmail.clear();
+                            g.teaName.clear();
+                            g.teaPass.clear();
+                            g.teaContact.clear();
+                            Navigator.pop(context);
+                            return Future.value(false);
+                          },
+                          child: GestureDetector(
+                            onTap: () {
+                              FocusScopeNode currentFocus =
+                                  FocusScope.of(context);
+                              if (!currentFocus.hasPrimaryFocus) {
+                                currentFocus.unfocus();
+                              }
+                            },
+                            child: isload
+                                ? LoadingScreen()
+                                : AlertDialog(
+                                    title: Text('Add an admin'),
+                                    content: SingleChildScrollView(
+                                      child: ListBody(
+                                        children: <Widget>[
+                                          SizedBox(
+                                            height: g.height * 0.01,
+                                          ),
+                                          Text('Email'),
+                                          SizedBox(
+                                            height: g.height * 0.01,
+                                          ),
+                                          ATSInpField(edit: g.teaEmail),
+                                          SizedBox(
+                                            height: g.height * 0.03,
+                                          ),
+                                          Text('Password'),
+                                          SizedBox(
+                                            height: g.height * 0.01,
+                                          ),
+                                          ATSInpField(edit: g.teaPass),
+                                          SizedBox(
+                                            height: g.height * 0.03,
+                                          ),
+                                          Text('Name'),
+                                          SizedBox(
+                                            height: g.height * 0.01,
+                                          ),
+                                          ATSInpField(edit: g.teaName),
+                                          SizedBox(
+                                            height: g.height * 0.03,
+                                          ),
+                                          Text('Contact no'),
+                                          SizedBox(
+                                            height: g.height * 0.01,
+                                          ),
+                                          ATSInpField(edit: g.teaContact),
+                                          Center(
+                                            child: Text(
+                                              error,
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                          child: Text('Add'),
+                                          onPressed: () async {
+                                            if (g.teaEmail.text.isEmpty ||
+                                                g.teaPass.text.isEmpty ||
+                                                g.teaName.text.isEmpty ||
+                                                g.teaContact.text.isEmpty ||
+                                                g.teaContact.text
+                                                        .trim()
+                                                        .length !=
+                                                    10 ||
+                                                !g.teaEmail.text
+                                                    .trim()
+                                                    .endsWith('.com') ||
+                                                num.tryParse(
+                                                        g.teaContact.text) ==
+                                                    null) {
+                                              setState(() {
+                                                error = 'Invalid Entries';
+                                              });
+                                            } else {
+                                              setState(() {
+                                                isload = true;
+                                              });
+                                              try {} catch (e) {
+                                                setState(() {
+                                                  isload = false;
+                                                  error =
+                                                      'Something went wrong try again';
+                                                });
+                                              }
+                                              var c = await _auth
+                                                  .registerWithEmailAndPassword(
+                                                      g.teaEmail.text,
+                                                      g.teaPass.text,
+                                                      'Admin');
+                                              if (c == null) {
+                                                setState(() {
+                                                  isload = false;
+                                                  error =
+                                                      'Error while registering!! Try again';
+                                                });
+                                              } else {
+                                                var h = await DatabaseServices(
+                                                        uid: g.uid)
+                                                    .addAdmin(
+                                                        Admin(
+                                                            admId: c.uid,
+                                                            contact: g
+                                                                .teaContact
+                                                                .text,
+                                                            email:
+                                                                g.teaEmail.text,
+                                                            name:
+                                                                g.teaName.text),
+                                                        c.uid);
+                                                if (h != '') {
+                                                  setState(() {
+                                                    isload = false;
+                                                    error = h;
+                                                  });
+                                                }
+                                                g.teaContact.clear();
+                                                g.teaEmail.clear();
+                                                g.teaName.clear();
+                                                g.teaPass.clear();
+                                                Navigator.pop(context);
+                                              }
+                                            }
+                                          }),
+                                    ],
+                                  ),
+                          ),
+                        );
+                      });
+                    },
+                  );
+                },
+                child: Center(
+                  child: Container(
+                    height: g.height * 0.07,
+                    width: g.width * 0.70,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                          width: 3.0, color: const Color(0x96707070)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Add Admin',
+                        style: g.loginpgstyles(Colors.black),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: g.height * 0.1,
+              ),
+              RawMaterialButton(
+                onPressed: () async {
                   setState(() {
                     isload = true;
                   });
@@ -104,6 +282,162 @@ class _AddUserState extends State<AddUser> {
                     child: Center(
                       child: Text(
                         'Add Teacher',
+                        style: g.loginpgstyles(Colors.black),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: g.height * 0.1,
+              ),
+              RawMaterialButton(
+                onPressed: () async {
+                  var allC;
+                  allC = await DatabaseServices(uid: g.uid).getAllUsers();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      String classid;
+                      String error = '';
+                      var user;
+                      bool isload = false;
+                      return StatefulBuilder(builder: (context, setState) {
+                        return WillPopScope(
+                          onWillPop: () {
+                            g.leclink.clear();
+                            Navigator.pop(context);
+                            return Future.value(false);
+                          },
+                          child: GestureDetector(
+                            onTap: () {
+                              FocusScopeNode currentFocus =
+                                  FocusScope.of(context);
+                              if (!currentFocus.hasPrimaryFocus) {
+                                currentFocus.unfocus();
+                              }
+                            },
+                            child: isload
+                                ? LoadingScreen()
+                                : AlertDialog(
+                                    title: Text('Delete a user'),
+                                    content: SingleChildScrollView(
+                                      child: ListBody(
+                                        children: <Widget>[
+                                          SizedBox(
+                                            height: g.height * 0.01,
+                                          ),
+                                          DropdownButton<String>(
+                                            isExpanded: true,
+                                            value: classid,
+                                            elevation: 16,
+                                            hint: Text('User Email'),
+                                            onChanged: (String newValue) {
+                                              setState(() {
+                                                classid = newValue;
+                                              });
+                                            },
+                                            items: allC.docs
+                                                .map<DropdownMenuItem<String>>(
+                                                    (value) {
+                                              return DropdownMenuItem<String>(
+                                                onTap: () {
+                                                  setState(() {
+                                                    user = value;
+                                                    classid =
+                                                        value.data()['email'];
+                                                  });
+                                                },
+                                                value: value.data()['email'],
+                                                child: Text(
+                                                  value.data()['email'],
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              error,
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        child: Text('Delete'),
+                                        onPressed: () {
+                                          if (classid == null || user == null) {
+                                            setState(() {
+                                              error = 'some fields are empty';
+                                            });
+                                          } else {
+                                            setState(() {
+                                              isload = true;
+                                            });
+                                            if (user.data()['usertype'] ==
+                                                'Admin') {
+                                              DatabaseServices(uid: g.uid)
+                                                  .delAdmin(user.id);
+                                              DatabaseServices(uid: g.uid)
+                                                  .delUser(user.id);
+                                              AuthServices().delete(
+                                                  user.data()['email'],
+                                                  user.data()['password']);
+                                            } else if (user
+                                                    .data()['usertype'] ==
+                                                'Teacher') {
+                                              DatabaseServices(uid: g.uid)
+                                                  .delTeacher(user.id);
+                                              DatabaseServices(uid: g.uid)
+                                                  .delUser(user.id);
+                                              AuthServices().delete(
+                                                  user.data()['email'],
+                                                  user.data()['password']);
+                                            } else if (user
+                                                    .data()['usertype'] ==
+                                                'Student') {
+                                              DatabaseServices(uid: g.uid)
+                                                  .delMarks(user.id);
+                                              DatabaseServices(uid: g.uid)
+                                                  .delFees(user.id);
+                                              DatabaseServices(uid: g.uid)
+                                                  .delDoubt(user.id);
+                                              DatabaseServices(uid: g.uid)
+                                                  .delStudent(user.id);
+                                              DatabaseServices(uid: g.uid)
+                                                  .delUser(user.id);
+                                              AuthServices().delete(
+                                                  user.data()['email'],
+                                                  user.data()['password']);
+                                            }
+                                            isload = false;
+                                            Navigator.of(context).pop();
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                        );
+                      });
+                    },
+                  );
+                },
+                child: Center(
+                  child: Container(
+                    height: g.height * 0.07,
+                    width: g.width * 0.70,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                          width: 3.0, color: const Color(0x96707070)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Delete User',
                         style: g.loginpgstyles(Colors.black),
                       ),
                     ),
@@ -187,13 +521,8 @@ class _AddTeachersState extends State<AddTeachers> {
                                   g.teaEmail.clear();
                                   g.teaName.clear();
                                   g.teaPass.clear();
-                                  Navigator.pushReplacement(
-                                    context,
-                                    PageRouteBuilder(
-                                        pageBuilder: (context, animation,
-                                                secondaryAnimation) =>
-                                            AdmHome()),
-                                  );
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
                                 },
                               ),
                               Expanded(child: Container()),
@@ -233,7 +562,7 @@ class _AddTeachersState extends State<AddTeachers> {
                           ),
                           ATSInpField(edit: g.teaName),
                           SizedBox(
-                            height: g.height * 0.03,
+                            height: g.height * 0.01,
                           ),
                           DropdownButton<String>(
                             isExpanded: true,
@@ -283,7 +612,9 @@ class _AddTeachersState extends State<AddTeachers> {
                                     g.teaName.text.isEmpty ||
                                     subs == null ||
                                     g.teaContact.text.isEmpty ||
-                                    !g.teaEmail.text.trim().endsWith('.com')) {
+                                    g.teaContact.text.trim().length != 10 ||
+                                    !g.teaEmail.text.trim().endsWith('.com') ||
+                                    num.tryParse(g.teaContact.text) == null) {
                                   setState(() {
                                     error = 'Invalid Entries';
                                   });
@@ -291,24 +622,37 @@ class _AddTeachersState extends State<AddTeachers> {
                                   setState(() {
                                     isload = true;
                                   });
+                                  try {} catch (e) {
+                                    setState(() {
+                                      isload = false;
+                                      error = 'Something went wrong try again';
+                                    });
+                                  }
                                   var c =
                                       await _auth.registerWithEmailAndPassword(
                                           g.teaEmail.text,
                                           g.teaPass.text,
                                           'Teacher');
-                                  await DatabaseServices(uid: g.uid)
-                                      .updateTeaInfo(
-                                          Teacher(
-                                              teacherName: g.teaName.text,
-                                              subject: subs,
-                                              tId: c.uid),
-                                          true);
-                                  g.teaContact.clear();
-                                  g.teaEmail.clear();
-                                  g.teaName.clear();
-                                  g.teaPass.clear();
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
+                                  if (c == null) {
+                                    setState(() {
+                                      isload = false;
+                                      error = 'Error!! Try again later';
+                                    });
+                                  } else {
+                                    await DatabaseServices(uid: g.uid)
+                                        .updateTeaInfo(
+                                            Teacher(
+                                                teacherName: g.teaName.text,
+                                                subject: subs,
+                                                tId: c.uid),
+                                            true);
+                                    g.teaContact.clear();
+                                    g.teaEmail.clear();
+                                    g.teaName.clear();
+                                    g.teaPass.clear();
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  }
                                 }
                               },
                               child: Container(
@@ -500,9 +844,10 @@ class _AddStudentsState extends State<AddStudents> {
                               onPressed: () async {
                                 if (dropdownValue3 == null ||
                                     g.stuEmail.text.isEmpty ||
-                                    g.stuEmail.text.trim().endsWith('.com') ||
+                                    !g.stuEmail.text.trim().endsWith('.com') ||
                                     g.stuContact.text.isEmpty ||
                                     num.tryParse(g.stuContact.text) == null ||
+                                    g.stuContact.text.trim().length != 10 ||
                                     g.stuName.text.isEmpty ||
                                     g.stuPass.text.isEmpty ||
                                     g.stuID.text.isEmpty) {

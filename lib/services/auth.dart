@@ -54,7 +54,7 @@ class AuthServices {
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
       f.UserCredential result = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
+          email: email.trim(), password: password.trim());
       f.User user = result.user;
       return userInApp(user);
     } catch (e) {
@@ -73,7 +73,8 @@ class AuthServices {
     f.User user;
     try {
       f.UserCredential result = await f.FirebaseAuth.instanceFor(app: app)
-          .createUserWithEmailAndPassword(email: email, password: password);
+          .createUserWithEmailAndPassword(
+              email: email.trim(), password: password.trim());
       user = result.user;
       DatabaseServices(uid: user.uid).updateUserInfo(
           m.User(
@@ -84,6 +85,7 @@ class AuthServices {
           true);
     } catch (e) {
       await app.delete();
+      print(e);
       return null;
     }
     await app.delete();
@@ -103,6 +105,34 @@ class AuthServices {
       return await _auth.signOut();
     } catch (e) {
       return null;
+    }
+  }
+
+  //delete account
+  Future delete(email, password) async {
+    String e, p;
+    e = g.userGlob.email;
+    p = g.userGlob.password;
+    FirebaseApp app = await Firebase.initializeApp(
+        name: 'Secondary', options: Firebase.app().options);
+    f.User user;
+    try {
+      f.UserCredential result = await f.FirebaseAuth.instanceFor(app: app)
+          .signInWithEmailAndPassword(
+              email: email.trim(), password: password.trim());
+      user = result.user;
+      user.delete();
+    } catch (e) {
+      await app.delete();
+      return null;
+    }
+    await app.delete();
+    try {
+      f.UserCredential result2 =
+          await _auth.signInWithEmailAndPassword(email: e, password: p);
+      f.User user2 = result2.user;
+    } catch (e) {
+      print('hello');
     }
   }
 }
