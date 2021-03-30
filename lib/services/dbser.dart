@@ -34,7 +34,7 @@ class DatabaseServices {
     });
   }
 
-  //add admin
+  //add admin user
   Future addAdmin(Admin adm, String uid) async {
     var l = await FirebaseFirestore.instance
         .collection('users')
