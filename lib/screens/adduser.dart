@@ -110,6 +110,162 @@ class _AddUserState extends State<AddUser> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: g.height * 0.1,
+              ),
+              RawMaterialButton(
+                onPressed: () async {
+                  var allC;
+                  allC = await DatabaseServices(uid: g.uid).getAllUsers();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      String classid;
+                      String error = '';
+                      var user;
+                      bool isload = false;
+                      return StatefulBuilder(builder: (context, setState) {
+                        return WillPopScope(
+                          onWillPop: () {
+                            g.leclink.clear();
+                            Navigator.pop(context);
+                            return Future.value(false);
+                          },
+                          child: GestureDetector(
+                            onTap: () {
+                              FocusScopeNode currentFocus =
+                                  FocusScope.of(context);
+                              if (!currentFocus.hasPrimaryFocus) {
+                                currentFocus.unfocus();
+                              }
+                            },
+                            child: isload
+                                ? LoadingScreen()
+                                : AlertDialog(
+                                    title: Text('Delete a user'),
+                                    content: SingleChildScrollView(
+                                      child: ListBody(
+                                        children: <Widget>[
+                                          SizedBox(
+                                            height: g.height * 0.01,
+                                          ),
+                                          DropdownButton<String>(
+                                            isExpanded: true,
+                                            value: classid,
+                                            elevation: 16,
+                                            hint: Text('User Email'),
+                                            onChanged: (String newValue) {
+                                              setState(() {
+                                                classid = newValue;
+                                              });
+                                            },
+                                            items: allC.docs
+                                                .map<DropdownMenuItem<String>>(
+                                                    (value) {
+                                              return DropdownMenuItem<String>(
+                                                onTap: () {
+                                                  setState(() {
+                                                    user = value;
+                                                    classid =
+                                                        value.data()['email'];
+                                                  });
+                                                },
+                                                value: value.data()['email'],
+                                                child: Text(
+                                                  value.data()['email'],
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              error,
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        child: Text('Delete'),
+                                        onPressed: () {
+                                          if (classid == null || user == null) {
+                                            setState(() {
+                                              error = 'some fields are empty';
+                                            });
+                                          } else {
+                                            setState(() {
+                                              isload = true;
+                                            });
+                                            if (user.data()['usertype'] ==
+                                                'Admin') {
+                                              DatabaseServices(uid: g.uid)
+                                                  .delAdmin(user.id);
+                                              DatabaseServices(uid: g.uid)
+                                                  .delUser(user.id);
+                                              AuthServices().delete(
+                                                  user.data()['email'],
+                                                  user.data()['password']);
+                                            } else if (user
+                                                    .data()['usertype'] ==
+                                                'Teacher') {
+                                              DatabaseServices(uid: g.uid)
+                                                  .delTeacher(user.id);
+                                              DatabaseServices(uid: g.uid)
+                                                  .delUser(user.id);
+                                              AuthServices().delete(
+                                                  user.data()['email'],
+                                                  user.data()['password']);
+                                            } else if (user
+                                                    .data()['usertype'] ==
+                                                'Student') {
+                                              DatabaseServices(uid: g.uid)
+                                                  .delMarks(user.id);
+                                              DatabaseServices(uid: g.uid)
+                                                  .delFees(user.id);
+                                              DatabaseServices(uid: g.uid)
+                                                  .delDoubt(user.id);
+                                              DatabaseServices(uid: g.uid)
+                                                  .delStudent(user.id);
+                                              DatabaseServices(uid: g.uid)
+                                                  .delUser(user.id);
+                                              AuthServices().delete(
+                                                  user.data()['email'],
+                                                  user.data()['password']);
+                                            }
+                                            isload = false;
+                                            Navigator.of(context).pop();
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                        );
+                      });
+                    },
+                  );
+                },
+                child: Center(
+                  child: Container(
+                    height: g.height * 0.07,
+                    width: g.width * 0.70,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                          width: 3.0, color: const Color(0x96707070)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Delete User',
+                        style: g.loginpgstyles(Colors.black),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               Expanded(
                 child: Container(),
               ),
@@ -233,7 +389,7 @@ class _AddTeachersState extends State<AddTeachers> {
                           ),
                           ATSInpField(edit: g.teaName),
                           SizedBox(
-                            height: g.height * 0.03,
+                            height: g.height * 0.01,
                           ),
                           DropdownButton<String>(
                             isExpanded: true,
@@ -283,7 +439,8 @@ class _AddTeachersState extends State<AddTeachers> {
                                     g.teaName.text.isEmpty ||
                                     subs == null ||
                                     g.teaContact.text.isEmpty ||
-                                    !g.teaEmail.text.trim().endsWith('.com')) {
+                                    !g.teaEmail.text.trim().endsWith('.com') ||
+                                    num.tryParse(g.teaContact.text) == null) {
                                   setState(() {
                                     error = 'Invalid Entries';
                                   });
@@ -291,6 +448,12 @@ class _AddTeachersState extends State<AddTeachers> {
                                   setState(() {
                                     isload = true;
                                   });
+                                  try {} catch (e) {
+                                    setState(() {
+                                      isload = false;
+                                      error = 'Something went wrong try again';
+                                    });
+                                  }
                                   var c =
                                       await _auth.registerWithEmailAndPassword(
                                           g.teaEmail.text,
@@ -500,7 +663,7 @@ class _AddStudentsState extends State<AddStudents> {
                               onPressed: () async {
                                 if (dropdownValue3 == null ||
                                     g.stuEmail.text.isEmpty ||
-                                    g.stuEmail.text.trim().endsWith('.com') ||
+                                    !g.stuEmail.text.trim().endsWith('.com') ||
                                     g.stuContact.text.isEmpty ||
                                     num.tryParse(g.stuContact.text) == null ||
                                     g.stuName.text.isEmpty ||

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:rankers_institute/models/students.dart';
 import 'package:rankers_institute/models/teachers.dart';
 import 'package:rankers_institute/models/test.dart';
@@ -119,7 +120,7 @@ class DatabaseServices {
   //add fees details
   Future addFees(String email, String clss) async {
     var v = await FirebaseFirestore.instance
-        .collection('student')
+        .collection('users')
         .where('email', isEqualTo: email.trim())
         .get();
     return await FirebaseFirestore.instance
@@ -494,10 +495,104 @@ class DatabaseServices {
         .collection('notices')
         .where('fileID', isEqualTo: link.trim())
         .get();
+    FirebaseStorage.instance.refFromURL(v.docs[0]['fileID']).delete();
     return await FirebaseFirestore.instance
         .collection('notices')
         .doc(v.docs[0].id)
         .delete();
+  }
+
+  //get all users
+  Future getAllUsers() async {
+    return await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isNotEqualTo: g.userGlob.email)
+        .get();
+  }
+
+  //delete user
+  Future delUser(id) async {
+    return await FirebaseFirestore.instance
+        .collection('users')
+        .doc(id)
+        .delete();
+  }
+
+  //delete teacher
+  Future delTeacher(id) async {
+    return await FirebaseFirestore.instance
+        .collection('teacher')
+        .doc(id)
+        .delete();
+  }
+
+  //delete admin user
+  Future delAdmin(id) async {
+    return await FirebaseFirestore.instance
+        .collection('admin')
+        .doc(id)
+        .delete();
+  }
+
+  //delete student user
+  Future delStudent(id) async {
+    return await FirebaseFirestore.instance
+        .collection('student')
+        .doc(id)
+        .delete();
+  }
+
+  //delete fees details
+  Future delFees(id) async {
+    return await FirebaseFirestore.instance.collection('fees').doc(id).delete();
+  }
+
+  //deletedoubts
+  Future delDoubt(id) async {
+    List l = await FirebaseFirestore.instance
+        .collection('doubt')
+        .where('studentID', isEqualTo: id)
+        .get()
+        .then((value) => value.docs.map((e) => e.id).toList());
+    if (l.isNotEmpty) {
+      for (int i = 0; i < l.length; i++) {
+        try {
+          var v = await FirebaseFirestore.instance
+              .collection('solution')
+              .doc(l[i])
+              .get()
+              .then((value) => value.data());
+          FirebaseStorage.instance.refFromURL(v['solFile']).delete();
+          await FirebaseFirestore.instance
+              .collection('solution')
+              .doc(l[i])
+              .delete();
+        } catch (e) {
+          return;
+        }
+        var u = await FirebaseFirestore.instance
+            .collection('doubt')
+            .doc(l[i])
+            .get()
+            .then((value) => value.data());
+        FirebaseStorage.instance.refFromURL(u['fileID']).delete();
+        await FirebaseFirestore.instance.collection('doubt').doc(l[i]).delete();
+      }
+    }
+  }
+
+  //delete marks of student
+  Future delMarks(id) async {
+    var v = await FirebaseFirestore.instance
+        .collection('marks')
+        .where('studentID', isEqualTo: id)
+        .get()
+        .then((value) => value.docs.map((e) => e.id).toList());
+    if (v.isNotEmpty) {
+      for (int i = 0; i < v.length; i++) {
+        await FirebaseFirestore.instance.collection('marks').doc(v[i]).delete();
+      }
+    }
   }
 
   //add marks
