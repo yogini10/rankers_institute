@@ -255,7 +255,7 @@ class _AddManuallyState extends State<AddManually> {
                                   error = 'subject is empty';
                                 });
                               }
-                              if (file == null || file.path.isNotEmpty) {
+                              if (file == null || file.path.isEmpty) {
                                 setState(() {
                                   error = 'no file selected';
                                 });
